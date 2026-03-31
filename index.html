@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gitub Analysis for You</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Noto+Sans+TC:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero">
+        <button class="theme-toggle" id="themeToggle" type="button" aria-pressed="false">
+          <span class="theme-toggle__icon" aria-hidden="true"></span>
+          <span class="theme-toggle__label" id="themeToggleLabel">深色模式</span>
+        </button>
+        <div class="hero__content">
+          <div class="brand-mark">
+            <img src="./assets/title_icon.jpg" alt="Gitub Analysis for You icon" />
+            <div>
+              <p class="brand-mark__title" aria-label="Gitub Analysis for You">
+                <span class="brand-mark__title-full">Gitub Analysis for You</span>
+                <span class="brand-mark__title-short" aria-hidden="true">
+                  <span class="brand-mark__title-letter brand-mark__title-letter--g">G</span>
+                  <span class="brand-mark__title-letter brand-mark__title-letter--a">A</span>
+                  <span class="brand-mark__title-letter brand-mark__title-letter--y">Y</span>
+                </span>
+              </p>
+            </div>
+          </div>
+          <p class="hero__kicker">從資料中篩出真正值得研究的 repository</p>
+          <h1>讓使用者不只找到專案，而是更快看懂哪些專案值得投入時間。</h1>
+          <p class="hero__description">
+            把搜尋、技術分類、活躍度與主題標籤整合在同一頁，幫助使用者快速比較不同 GitHub 專案的價值、熱度與更新狀態。
+          </p>
+          <div class="hero__stats" id="heroStats">
+            <article class="hero-stat">
+              <span class="hero-stat__label">專案總數</span>
+              <strong id="projectTotal">--</strong>
+            </article>
+            <article class="hero-stat">
+              <span class="hero-stat__label">熱門語言</span>
+              <strong id="topLanguage">--</strong>
+            </article>
+            <article class="hero-stat">
+              <span class="hero-stat__label">熱門主題</span>
+              <strong id="topTopic">--</strong>
+            </article>
+          </div>
+        </div>
+      </header>
+
+      <main class="layout">
+        <section class="search-panel">
+          <div class="search-box">
+            <label class="search-box__label" for="searchInput">搜尋專案</label>
+            <p class="search-box__hint">可搜尋專案名稱、擁有者、描述內容或 topics。</p>
+            <div class="search-box__field">
+              <input
+                id="searchInput"
+                type="search"
+                placeholder="例如：minecraft、rust、dashboard、agent"
+              />
+            </div>
+          </div>
+
+          <div class="toolbar">
+            <div class="filter-group">
+              <span class="filter-group__label">依語言篩選</span>
+              <div class="chips" id="categoryChips"></div>
+            </div>
+
+            <div class="filter-group">
+              <span class="filter-group__label">依主題篩選</span>
+              <div class="chips chips--soft" id="topicChips"></div>
+            </div>
+
+            <div class="sort-group">
+              <label for="sortSelect">排序</label>
+              <div class="sort-select-wrap">
+                <select id="sortSelect">
+                  <option value="stars">依熱門程度</option>
+                  <option value="forks">依 Fork 數</option>
+                  <option value="watchers">依 Watching 數</option>
+                  <option value="updated_at">最近更新</option>
+                  <option value="title">名稱 A-Z</option>
+                </select>
+                <span class="sort-select-wrap__arrow" aria-hidden="true"></span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="results-panel">
+          <div class="results-header">
+            <div>
+              <p class="results-header__eyebrow">Discovery Board</p>
+              <h2>值得優先查看的 GitHub 專案</h2>
+              <p class="results-header__description" id="resultsSummary">
+                根據目前條件整理出最值得先打開研究的專案。
+              </p>
+            </div>
+            <div class="results-actions">
+              <div class="view-switch-wrap">
+                <button
+                  class="view-switch"
+                  id="viewSwitch"
+                  type="button"
+                  aria-label="切換檢視模式"
+                  aria-expanded="false"
+                >
+                  <span class="view-switch__icon" aria-hidden="true">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                  </span>
+                  <span class="view-switch__label">檢視</span>
+                  <span class="view-switch__arrow" aria-hidden="true"></span>
+                </button>
+                <div class="view-menu hidden" id="viewMenu">
+                  <button class="view-menu__item is-active" data-view="grid" type="button">卡片檢視</button>
+                  <button class="view-menu__item" data-view="list" type="button">列表檢視</button>
+                  <button class="view-menu__item" data-view="compact" type="button">簡單檢視</button>
+                </div>
+              </div>
+              <p class="results-count" id="resultsCount"></p>
+            </div>
+          </div>
+
+          <div class="project-grid" id="projectGrid"></div>
+          <div class="empty-state hidden" id="emptyState">
+            <h3>找不到符合條件的專案</h3>
+            <p>可以換一組關鍵字、改看其他語言，或先把 topic 篩選清掉。</p>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
