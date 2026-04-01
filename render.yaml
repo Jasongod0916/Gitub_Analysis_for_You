@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: gitub-analysis-for-you
+    env: python
+    plan: free
+    buildCommand: ""
+    startCommand: python server.py
+    envVars:
+      - key: ENABLE_DB_SYNC
+        value: "0"

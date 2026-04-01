@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import mimetypes
+import os
 import shutil
 import sqlite3
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -12,8 +13,9 @@ from urllib.parse import parse_qs, urlparse
 ROOT_DIR = Path(__file__).resolve().parent
 DB_PATH = ROOT_DIR / "data" / "tools.db"
 SYNC_CONFIG_PATH = ROOT_DIR / "db-sync.json"
-HOST = "127.0.0.1"
-PORT = 3000
+HOST = os.environ.get("HOST", "0.0.0.0")
+PORT = int(os.environ.get("PORT", "3000"))
+ENABLE_DB_SYNC = os.environ.get("ENABLE_DB_SYNC", "1") == "1"
 
 
 def load_sync_source() -> Path | None:
@@ -33,6 +35,9 @@ def load_sync_source() -> Path | None:
 
 
 def sync_database_if_needed() -> None:
+    if not ENABLE_DB_SYNC:
+        return
+
     source_path = load_sync_source()
     if source_path is None or not source_path.exists():
         return
