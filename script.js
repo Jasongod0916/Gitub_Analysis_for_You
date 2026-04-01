@@ -187,15 +187,15 @@ function createStatusPill(label, tone = "muted") {
 
 function buildSummaryText(filteredProjects) {
   if (filteredProjects.length === 0) {
-    return "目前沒有符合條件的專案，建議先放寬關鍵字或 topic 條件。";
+    return "目前沒有符合條件的項目，建議放寬關鍵字或 topic 條件。";
   }
 
   const topProject = filteredProjects[0];
   if (state.viewMode === "compact") {
-    return `簡單檢視會優先保留名稱、描述、語言、星星數與更新時間，幫助使用者快速判斷 ${topProject.name} 是否值得先點進去。`;
+    return `簡單檢視聚焦名稱、描述、語言、星星數與更新時間，方便快速瀏覽 ${topProject.name}。`;
   }
 
-  return `目前共找到 ${filteredProjects.length} 個候選專案，優先推薦先查看 ${topProject.name}，因為它在目前條件下兼具熱度與可讀性。`;
+  return `目前共整理出 ${filteredProjects.length} 個項目，建議優先查看 ${topProject.name}。`;
 }
 
 function renderProjects() {
@@ -225,7 +225,7 @@ function renderProjects() {
             ${createMetric("Forks", project.forks)}
             ${createMetric("Watching", project.watchers)}
           </div>
-          <p class="card__readme">${highlightText(project.description || "目前沒有描述內容。")}</p>
+          <p class="card__readme">${highlightText(project.description || "暫無介紹內容。")}</p>
           <div class="status-row">
             ${createStatusPill(project.archived ? "Archived" : "Active", project.archived ? "muted" : "good")}
             ${createStatusPill(project.visibility || "public", "muted")}
@@ -277,7 +277,7 @@ async function loadProjects() {
     emptyState.classList.remove("hidden");
     emptyState.innerHTML = `
       <h3>無法連接資料庫</h3>
-      <p>請確認本機伺服器是否已經透過 start-server.bat 啟動。</p>
+      <p>請確認本機伺服器已透過 start-server.bat 啟動。</p>
     `;
   }
 }

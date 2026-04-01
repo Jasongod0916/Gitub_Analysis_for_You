@@ -14,7 +14,7 @@ C:\githubProject\start-server.bat
 
 啟動後，打開：
 
-[http://localhost:3000](http://localhost:3000)
+[http://127.0.0.1:3000](http://127.0.0.1:3000)
 
 ## 部署到 Render
 
