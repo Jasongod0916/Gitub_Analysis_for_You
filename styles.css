@@ -217,10 +217,6 @@ body {
   color: #ffd166;
 }
 
-:root[data-theme="dark"] .brand-mark__title-letter--n {
-  color: #fff0c2;
-}
-
 .results-header__eyebrow {
   margin: 0 0 10px;
   font-family: "Manrope", sans-serif;
