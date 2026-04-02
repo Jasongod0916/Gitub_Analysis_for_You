@@ -3,7 +3,6 @@ from __future__ import annotations
 import json
 import mimetypes
 import os
-import shutil
 import sqlite3
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -11,55 +10,20 @@ from urllib.parse import parse_qs, urlparse
 
 
 ROOT_DIR = Path(__file__).resolve().parent
-DB_PATH = ROOT_DIR / "data" / "tools.db"
-SYNC_CONFIG_PATH = ROOT_DIR / "db-sync.json"
+DATA_DIR = ROOT_DIR / "data"
 HOST = os.environ.get("HOST", "0.0.0.0")
 PORT = int(os.environ.get("PORT", "3000"))
-ENABLE_DB_SYNC = os.environ.get("ENABLE_DB_SYNC", "1") == "1"
 
 
-def load_sync_source() -> Path | None:
-    if not SYNC_CONFIG_PATH.exists():
-        return None
-
-    try:
-        config = json.loads(SYNC_CONFIG_PATH.read_text(encoding="utf-8"))
-    except (json.JSONDecodeError, OSError):
-        return None
-
-    source_path = (config.get("source_db_path") or "").strip()
-    if not source_path:
-        return None
-
-    return Path(source_path)
-
-
-def sync_database_if_needed() -> None:
-    if not ENABLE_DB_SYNC:
-        return
-
-    source_path = load_sync_source()
-    if source_path is None or not source_path.exists():
-        return
-
-    DB_PATH.parent.mkdir(parents=True, exist_ok=True)
-
-    if not DB_PATH.exists():
-        shutil.copy2(source_path, DB_PATH)
-        return
-
-    source_stat = source_path.stat()
-    target_stat = DB_PATH.stat()
-    is_newer = source_stat.st_mtime > target_stat.st_mtime
-    size_changed = source_stat.st_size != target_stat.st_size
-
-    if is_newer or size_changed:
-        shutil.copy2(source_path, DB_PATH)
+def resolve_database_path() -> Path:
+    db_files = sorted(DATA_DIR.glob("*.db"))
+    if not db_files:
+        raise FileNotFoundError(f"No .db file found in {DATA_DIR}")
+    return db_files[0]
 
 
 def fetch_tools() -> list[dict]:
-    sync_database_if_needed()
-    connection = sqlite3.connect(DB_PATH)
+    connection = sqlite3.connect(resolve_database_path())
     connection.row_factory = sqlite3.Row
     cursor = connection.cursor()
     rows = cursor.execute(
