@@ -29,62 +29,51 @@ def fetch_tools() -> list[dict]:
     rows = cursor.execute(
         """
         SELECT
-          t.id,
-          t.github_id,
-          t.name,
-          t.full_name,
-          t.owner,
-          t.description,
-          t.html_url,
-          t.homepage,
-          t.stars,
-          t.forks,
-          t.watchers,
-          t.open_issues,
-          t.language,
-          t.license,
-          t.archived,
-          t.disabled,
-          t.visibility,
-          t.created_at,
-          t.updated_at,
-          t.pushed_at,
-          t.default_branch,
-          COALESCE(GROUP_CONCAT(tt.topic, '|'), '') AS topics
-        FROM tools t
-        LEFT JOIN tool_topics tt ON tt.tool_id = t.id
-        GROUP BY t.id
-        ORDER BY t.stars DESC, t.id DESC
+          id,
+          repo_id,
+          title,
+          language,
+          forks,
+          stars,
+          watching,
+          readme,
+          url,
+          fetched_at
+        FROM github_repos
+        ORDER BY stars DESC, id DESC
         """
     ).fetchall()
     connection.close()
 
     tools = []
     for row in rows:
+      full_name = row["title"] or ""
+      name = full_name.split("/")[-1] if "/" in full_name else full_name
+      owner = full_name.split("/")[0] if "/" in full_name else ""
       tools.append(
           {
               "id": row["id"],
-              "github_id": row["github_id"],
-              "name": row["name"],
-              "full_name": row["full_name"],
-              "owner": row["owner"],
-              "description": row["description"] or "",
-              "html_url": row["html_url"] or "",
-              "homepage": row["homepage"] or "",
+              "github_id": row["repo_id"],
+              "name": name,
+              "full_name": full_name,
+              "owner": owner,
+              "description": row["readme"] or "",
+              "html_url": row["url"] or "",
+              "homepage": "",
               "stars": row["stars"] or 0,
               "forks": row["forks"] or 0,
-              "watchers": row["watchers"] or 0,
-              "open_issues": row["open_issues"] or 0,
+              "watchers": row["watching"] or 0,
+              "open_issues": 0,
               "language": row["language"] or "Unknown",
-              "license": row["license"] or "No license",
-              "archived": bool(row["archived"]),
-              "disabled": bool(row["disabled"]),
-              "visibility": row["visibility"] or "unknown",
-              "created_at": row["created_at"] or "",
-              "updated_at": row["updated_at"] or "",
-              "pushed_at": row["pushed_at"] or "",
-              "default_branch": row["default_branch"] or "",
-              "topics": [topic for topic in (row["topics"] or "").split("|") if topic],
+              "license": "Unknown",
+              "archived": False,
+              "disabled": False,
+              "visibility": "public",
+              "created_at": row["fetched_at"] or "",
+              "updated_at": row["fetched_at"] or "",
+              "pushed_at": row["fetched_at"] or "",
+              "default_branch": "",
+              "topics": [],
           }
       )
     return tools

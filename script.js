@@ -4,6 +4,7 @@ const state = {
   topic: "All",
   sortBy: "stars",
   viewMode: "grid",
+  categoriesExpanded: false,
   projects: [],
 };
 
@@ -54,9 +55,18 @@ function formatDate(value) {
 }
 
 function getCategories() {
+  const counts = new Map();
+
+  state.projects.forEach((project) => {
+    const language = project.language || "Unknown";
+    counts.set(language, (counts.get(language) || 0) + 1);
+  });
+
   return [
     "All",
-    ...new Set(state.projects.map((project) => project.language || "Unknown")),
+    ...Array.from(counts.entries())
+      .sort((first, second) => second[1] - first[1])
+      .map(([language]) => language),
   ];
 }
 
@@ -101,7 +111,12 @@ function renderHeroStats() {
 function renderCategoryChips() {
   categoryChips.innerHTML = "";
 
-  getCategories().forEach((category) => {
+  const categories = getCategories();
+  const visibleCategories = state.categoriesExpanded
+    ? categories
+    : [categories[0], ...categories.slice(1, 6)];
+
+  visibleCategories.forEach((category) => {
     const button = document.createElement("button");
     button.type = "button";
     button.className = `chip${state.category === category ? " is-active" : ""}`;
@@ -113,6 +128,18 @@ function renderCategoryChips() {
     });
     categoryChips.appendChild(button);
   });
+
+  if (categories.length > 6) {
+    const toggleButton = document.createElement("button");
+    toggleButton.type = "button";
+    toggleButton.className = "chip chip--ghost";
+    toggleButton.textContent = state.categoriesExpanded ? "收合" : "更多";
+    toggleButton.addEventListener("click", () => {
+      state.categoriesExpanded = !state.categoriesExpanded;
+      renderCategoryChips();
+    });
+    categoryChips.appendChild(toggleButton);
+  }
 }
 
 function renderTopicChips() {
