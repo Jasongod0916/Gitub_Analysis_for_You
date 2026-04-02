@@ -151,7 +151,8 @@ class AppHandler(BaseHTTPRequestHandler):
 
 if __name__ == "__main__":
     server = ThreadingHTTPServer((HOST, PORT), AppHandler)
-    print(f"Serving Gitub Analysis for You at http://{HOST}:{PORT}")
+    display_host = "127.0.0.1" if HOST == "0.0.0.0" else HOST
+    print(f"Serving Gitub Analysis for You at http://{display_host}:{PORT}")
     try:
         server.serve_forever()
     except KeyboardInterrupt:
