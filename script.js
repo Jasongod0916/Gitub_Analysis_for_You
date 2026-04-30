@@ -5,6 +5,7 @@ const state = {
   sortBy: "stars",
   viewMode: "grid",
   categoriesExpanded: false,
+  topicsExpanded: false,
   projects: [],
 };
 
@@ -83,7 +84,6 @@ function getTopTopics() {
     "All",
     ...Array.from(counts.entries())
       .sort((first, second) => second[1] - first[1])
-      .slice(0, 8)
       .map(([topic]) => topic),
   ];
 }
@@ -145,7 +145,12 @@ function renderCategoryChips() {
 function renderTopicChips() {
   topicChips.innerHTML = "";
 
-  getTopTopics().forEach((topic) => {
+  const topics = getTopTopics();
+  const visibleTopics = state.topicsExpanded
+    ? topics
+    : [topics[0], ...topics.slice(1, 9)];
+
+  visibleTopics.forEach((topic) => {
     const button = document.createElement("button");
     button.type = "button";
     button.className = `chip${state.topic === topic ? " is-active" : ""}`;
@@ -157,6 +162,18 @@ function renderTopicChips() {
     });
     topicChips.appendChild(button);
   });
+
+  if (topics.length > 9) {
+    const toggleButton = document.createElement("button");
+    toggleButton.type = "button";
+    toggleButton.className = "chip chip--ghost";
+    toggleButton.textContent = state.topicsExpanded ? "收合" : "更多";
+    toggleButton.addEventListener("click", () => {
+      state.topicsExpanded = !state.topicsExpanded;
+      renderTopicChips();
+    });
+    topicChips.appendChild(toggleButton);
+  }
 }
 
 function getFilteredProjects() {
