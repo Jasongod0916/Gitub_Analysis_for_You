@@ -161,6 +161,14 @@
   position: relative;
 }
 
+.pie-chart::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
 .language-list {
   display: grid;
   gap: 10px;
@@ -217,11 +225,16 @@
 }
 
 :root[data-theme="dark"] .pie-chart {
-  border-color: rgba(255, 138, 31, 0.08);
+  border-color: rgba(255, 138, 31, 0.06);
   box-shadow:
-    inset 0 0 0 1px rgba(255, 138, 31, 0.12),
-    inset 0 -18px 30px rgba(0, 0, 0, 0.12),
-    0 16px 38px rgba(0, 0, 0, 0.28);
+    inset 0 0 0 1px rgba(255, 138, 31, 0.08),
+    0 18px 40px rgba(0, 0, 0, 0.22);
+}
+
+:root[data-theme="dark"] .pie-chart::after {
+  box-shadow:
+    inset 0 18px 22px rgba(255, 255, 255, 0.04),
+    inset 0 -14px 20px rgba(0, 0, 0, 0.08);
 }
 
 :root[data-theme="dark"] .language-swatch {
