@@ -3,51 +3,98 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Statistics | GitHub Analysis for You</title>
+    <title>GitHub 排行榜 | GitHub Analysis for You</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Noto+Sans+TC:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="./analytics.css" />
   </head>
   <body>
-    <div class="page-shell">
-      <header class="hero">
+    <div class="page-shell rankings-shell">
+      <header class="hero rankings-hero">
+        <button class="theme-toggle" id="themeToggle" type="button" aria-pressed="false">
+          <span class="theme-toggle__icon" aria-hidden="true"></span>
+          <span class="theme-toggle__label" id="themeToggleLabel">亮色模式</span>
+        </button>
         <div class="hero__content">
           <div class="brand-mark">
             <img src="./assets/title_icon.jpg" alt="GitHub Analysis for You icon" />
             <div>
               <p class="brand-mark__title" aria-label="GitHub Analysis for You">
                 <span class="brand-mark__title-full">GitHub Analysis for You</span>
+                <span class="brand-mark__title-short" aria-hidden="true">
+                  <span class="brand-mark__title-letter brand-mark__title-letter--g">G</span>
+                  <span class="brand-mark__title-letter brand-mark__title-letter--a">A</span>
+                  <span class="brand-mark__title-letter brand-mark__title-letter--y">Y</span>
+                </span>
               </p>
             </div>
           </div>
-          <p class="hero__kicker">Statistics Placeholder</p>
-          <h1>統計分析頁面占位區</h1>
+          <p class="hero__kicker">GitHub Ranking Board</p>
+          <h1>作者貢獻排行榜</h1>
           <p class="hero__description">
-            此頁預留給圖表、排行與 GA 串接使用，以下內容僅作為可滾動的測試區塊。
+            依照 tools.db 中收錄的 repository owner 統計專案數，整理出目前貢獻量最高的作者，
+            並同步呈現資料庫裡的程式語言分布。
           </p>
+          <div class="hero__stats" id="rankingStats">
+            <article class="hero-stat">
+              <span class="hero-stat__label">收錄專案</span>
+              <strong id="totalTools">--</strong>
+            </article>
+            <article class="hero-stat">
+              <span class="hero-stat__label">排行榜作者</span>
+              <strong id="authorCount">--</strong>
+            </article>
+            <article class="hero-stat">
+              <span class="hero-stat__label">主要語言</span>
+              <strong id="topLanguage">--</strong>
+            </article>
+          </div>
         </div>
       </header>
 
-      <main class="results-panel placeholder-page">
-        <p>測試</p>
-        <p>測試</p>
-        <p>測試</p>
-        <p>測試</p>
-        <p>測試</p>
-        <p>測試</p>
-        <p>測試</p>
-        <p>測試</p>
-        <p>測試</p>
-        <p>測試</p>
-        <p>測試</p>
-        <p>測試</p>
-        <p>測試</p>
-        <p>測試</p>
-        <p>測試</p>
-        <p>測試</p>
-        <p>測試</p>
-        <p>測試</p>
-        <p>測試</p>
-        <p>測試</p>
+      <main class="rankings-layout">
+        <section class="results-panel ranking-panel">
+          <div class="results-header ranking-header">
+            <div>
+              <p class="results-header__eyebrow">Top Contributors</p>
+              <h2>作者貢獻排名</h2>
+              <p class="results-header__description" id="rankingSummary">
+                正在讀取 tools.db 的作者資料...
+              </p>
+            </div>
+            <a class="ranking-link" href="./index.html">回到探索頁</a>
+          </div>
+          <div class="leaderboard" id="leaderboard"></div>
+          <div class="empty-state hidden" id="rankingEmpty">
+            <h3>目前沒有排行榜資料</h3>
+            <p>請確認 data/tools.db 內是否有 tools 資料表與 owner 欄位。</p>
+          </div>
+        </section>
+
+        <section class="results-panel chart-panel">
+          <div class="results-header ranking-header">
+            <div>
+              <p class="results-header__eyebrow">Language Mix</p>
+              <h2>程式種類分布</h2>
+              <p class="results-header__description" id="chartSummary">
+                以 tools.db 中每個 repository 的 language 欄位計算。
+              </p>
+            </div>
+          </div>
+
+          <div class="chart-grid">
+            <div class="pie-chart" id="languagePie" aria-label="程式種類圓餅圖" role="img"></div>
+            <div class="language-list" id="languageList"></div>
+          </div>
+        </section>
       </main>
     </div>
+
+    <script src="./analytics.js"></script>
   </body>
 </html>
