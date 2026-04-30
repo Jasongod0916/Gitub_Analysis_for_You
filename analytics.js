@@ -16,16 +16,16 @@ const themeToggle = document.querySelector("#themeToggle");
 const themeToggleLabel = document.querySelector("#themeToggleLabel");
 
 const chartColors = [
-  "#00b894",
-  "#ff9f1c",
-  "#3b82f6",
-  "#ff3366",
-  "#8b5cf6",
-  "#22c55e",
-  "#ff6b35",
-  "#06b6d4",
-  "#ec4899",
-  "#facc15",
+  "#1c7c72",
+  "#d8891c",
+  "#4578d4",
+  "#d95f5f",
+  "#7a63c9",
+  "#5e9d6c",
+  "#c96f3c",
+  "#4f9bb3",
+  "#b86a8c",
+  "#d1b15a",
 ];
 
 function applyTheme(theme) {
