@@ -90,11 +90,87 @@ def fetch_tools() -> list[dict]:
     return tools
 
 
+def fetch_rankings() -> dict:
+    connection = sqlite3.connect(resolve_database_path())
+    connection.row_factory = sqlite3.Row
+    cursor = connection.cursor()
+
+    owner_rows = cursor.execute(
+        """
+        SELECT
+          owner,
+          COUNT(*) AS repo_count,
+          COALESCE(SUM(stars), 0) AS stars,
+          COALESCE(SUM(forks), 0) AS forks,
+          COALESCE(SUM(watchers), 0) AS watchers,
+          MAX(updated_at) AS latest_update,
+          GROUP_CONCAT(name, '|') AS projects
+        FROM tools
+        WHERE owner IS NOT NULL AND TRIM(owner) != ''
+        GROUP BY owner
+        ORDER BY repo_count DESC, stars DESC, owner COLLATE NOCASE ASC
+        LIMIT 20
+        """
+    ).fetchall()
+
+    language_rows = cursor.execute(
+        """
+        SELECT
+          COALESCE(NULLIF(TRIM(language), ''), 'Unknown') AS language,
+          COUNT(*) AS repo_count,
+          COALESCE(SUM(stars), 0) AS stars
+        FROM tools
+        GROUP BY COALESCE(NULLIF(TRIM(language), ''), 'Unknown')
+        ORDER BY repo_count DESC, stars DESC, language COLLATE NOCASE ASC
+        """
+    ).fetchall()
+
+    total_tools = cursor.execute("SELECT COUNT(*) FROM tools").fetchone()[0]
+    connection.close()
+
+    authors = []
+    for index, row in enumerate(owner_rows, start=1):
+        authors.append(
+            {
+                "rank": index,
+                "owner": row["owner"],
+                "repo_count": row["repo_count"] or 0,
+                "stars": row["stars"] or 0,
+                "forks": row["forks"] or 0,
+                "watchers": row["watchers"] or 0,
+                "latest_update": row["latest_update"] or "",
+                "projects": [name for name in (row["projects"] or "").split("|") if name][:5],
+            }
+        )
+
+    languages = [
+        {
+            "language": row["language"],
+            "repo_count": row["repo_count"] or 0,
+            "stars": row["stars"] or 0,
+        }
+        for row in language_rows
+    ]
+
+    return {
+        "authors": authors,
+        "languages": languages,
+        "summary": {
+            "total_tools": total_tools,
+            "author_count": len(authors),
+            "language_count": len(languages),
+        },
+    }
+
+
 class AppHandler(BaseHTTPRequestHandler):
     def do_GET(self) -> None:
         parsed_url = urlparse(self.path)
         if parsed_url.path == "/api/tools":
             self.handle_tools_api(parsed_url.query)
+            return
+        if parsed_url.path == "/api/rankings":
+            self.handle_rankings_api()
             return
 
         self.serve_static_file(parsed_url.path)
@@ -119,6 +195,14 @@ class AppHandler(BaseHTTPRequestHandler):
             ]
 
         body = json.dumps({"items": tools}, ensure_ascii=False).encode("utf-8")
+        self.send_response(200)
+        self.send_header("Content-Type", "application/json; charset=utf-8")
+        self.send_header("Content-Length", str(len(body)))
+        self.end_headers()
+        self.wfile.write(body)
+
+    def handle_rankings_api(self) -> None:
+        body = json.dumps(fetch_rankings(), ensure_ascii=False).encode("utf-8")
         self.send_response(200)
         self.send_header("Content-Type", "application/json; charset=utf-8")
         self.send_header("Content-Length", str(len(body)))
