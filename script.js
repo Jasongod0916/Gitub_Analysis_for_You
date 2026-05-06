@@ -6,14 +6,17 @@ const state = {
   viewMode: "grid",
   categoriesExpanded: false,
   topicsExpanded: false,
+  currentPage: 1,
   projects: [],
 };
+const PAGE_SIZE = 25;
 
 const searchInput = document.querySelector("#searchInput");
 const sortSelect = document.querySelector("#sortSelect");
 const categoryChips = document.querySelector("#categoryChips");
 const topicChips = document.querySelector("#topicChips");
 const projectGrid = document.querySelector("#projectGrid");
+const pagination = document.querySelector("#pagination");
 const emptyState = document.querySelector("#emptyState");
 const resultsCount = document.querySelector("#resultsCount");
 const resultsSummary = document.querySelector("#resultsSummary");
@@ -123,6 +126,7 @@ function renderCategoryChips() {
     button.textContent = category;
     button.addEventListener("click", () => {
       state.category = category;
+      state.currentPage = 1;
       renderCategoryChips();
       renderProjects();
     });
@@ -157,6 +161,7 @@ function renderTopicChips() {
     button.textContent = topic;
     button.addEventListener("click", () => {
       state.topic = topic;
+      state.currentPage = 1;
       renderTopicChips();
       renderProjects();
     });
@@ -244,6 +249,10 @@ function buildSummaryText(filteredProjects) {
 
 function renderProjects() {
   const filteredProjects = getFilteredProjects();
+  const totalPages = Math.max(1, Math.ceil(filteredProjects.length / PAGE_SIZE));
+  state.currentPage = Math.min(state.currentPage, totalPages);
+  const startIndex = (state.currentPage - 1) * PAGE_SIZE;
+  const paginatedProjects = filteredProjects.slice(startIndex, startIndex + PAGE_SIZE);
 
   resultsCount.textContent = `共 ${filteredProjects.length} 筆結果`;
   resultsSummary.textContent = buildSummaryText(filteredProjects);
@@ -252,11 +261,11 @@ function renderProjects() {
   viewMenuItems.forEach((item) => {
     item.classList.toggle("is-active", item.dataset.view === state.viewMode);
   });
-  projectGrid.innerHTML = filteredProjects
+  projectGrid.innerHTML = paginatedProjects
     .map(
       (project, index) => `
         <article class="card is-entering" style="animation-delay: ${index * 70}ms">
-          <div class="card__rank">Top ${index + 1}</div>
+          <div class="card__rank">Top ${startIndex + index + 1}</div>
           <div class="card__top">
             <div>
               <h3 class="card__title">${project.name}</h3>
@@ -299,8 +308,40 @@ function renderProjects() {
     )
     .join("");
 
+  renderPagination(filteredProjects.length, totalPages);
   emptyState.classList.toggle("hidden", filteredProjects.length > 0);
   projectGrid.classList.toggle("hidden", filteredProjects.length === 0);
+}
+
+function renderPagination(totalItems, totalPages) {
+  if (totalItems === 0 || totalPages <= 1) {
+    pagination.classList.add("hidden");
+    pagination.innerHTML = "";
+    return;
+  }
+
+  pagination.classList.remove("hidden");
+  const startItem = (state.currentPage - 1) * PAGE_SIZE + 1;
+  const endItem = Math.min(state.currentPage * PAGE_SIZE, totalItems);
+
+  const pageButtons = [];
+  for (let page = 1; page <= totalPages; page += 1) {
+    const isActive = page === state.currentPage ? " is-active" : "";
+    pageButtons.push(
+      `<button class="pagination__button${isActive}" type="button" data-page="${page}">${page}</button>`
+    );
+  }
+
+  pagination.innerHTML = `
+    <button class="pagination__button" type="button" data-page="prev" ${
+      state.currentPage === 1 ? "disabled" : ""
+    }>上一頁</button>
+    <span class="pagination__info">第 ${startItem}-${endItem} 筆，共 ${totalItems} 筆</span>
+    ${pageButtons.join("")}
+    <button class="pagination__button" type="button" data-page="next" ${
+      state.currentPage === totalPages ? "disabled" : ""
+    }>下一頁</button>
+  `;
 }
 
 async function loadProjects() {
@@ -328,12 +369,33 @@ async function loadProjects() {
 
 searchInput.addEventListener("input", (event) => {
   state.query = event.target.value;
+  state.currentPage = 1;
   renderProjects();
 });
 
 sortSelect.addEventListener("change", (event) => {
   state.sortBy = event.target.value;
+  state.currentPage = 1;
   renderProjects();
+});
+
+pagination.addEventListener("click", (event) => {
+  const button = event.target.closest(".pagination__button");
+  if (!button || button.disabled) return;
+
+  const { page } = button.dataset;
+  const totalPages = Math.max(1, Math.ceil(getFilteredProjects().length / PAGE_SIZE));
+
+  if (page === "prev") {
+    state.currentPage = Math.max(1, state.currentPage - 1);
+  } else if (page === "next") {
+    state.currentPage = Math.min(totalPages, state.currentPage + 1);
+  } else {
+    state.currentPage = Number(page);
+  }
+
+  renderProjects();
+  window.scrollTo({ top: 0, behavior: "smooth" });
 });
 
 viewSwitch.addEventListener("click", () => {
