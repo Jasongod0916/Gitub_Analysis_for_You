@@ -192,29 +192,8 @@ body {
   display: none;
 }
 
-.brand-mark__title-letter {
-  display: inline-block;
-}
-
 :root[data-theme="dark"] .brand-mark__title-full {
-  display: none;
-}
-
-:root[data-theme="dark"] .brand-mark__title-short {
-  display: inline-block;
-  letter-spacing: 0.02em;
-}
-
-:root[data-theme="dark"] .brand-mark__title-letter--g {
-  color: #ff7a00;
-}
-
-:root[data-theme="dark"] .brand-mark__title-letter--a {
-  color: #ffb347;
-}
-
-:root[data-theme="dark"] .brand-mark__title-letter--y {
-  color: #ffd166;
+  display: inline;
 }
 
 .results-header__eyebrow {
