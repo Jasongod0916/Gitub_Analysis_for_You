@@ -22,7 +22,9 @@
         </button>
         <div class="hero__content">
           <div class="brand-mark">
-            <img src="./assets/title_icon.jpg" alt="GitHub Analysis for You icon" />
+            <a href="./index.html" aria-label="回到主頁">
+              <img src="./assets/title_icon.jpg" alt="GitHub Analysis for You icon" />
+            </a>
             <div>
               <p class="brand-mark__title" aria-label="GitHub Analysis for You">
                 <span class="brand-mark__title-full">GitHub Analysis for You</span>
@@ -34,7 +36,6 @@
               </p>
             </div>
           </div>
-          <p class="hero__kicker">GitHub Ranking Board</p>
           <h1>作者貢獻排行榜</h1>
           <p class="hero__description">
             依照 tools.db 中收錄的 repository owner 統計專案數，整理出目前貢獻量最高的作者，
@@ -58,24 +59,6 @@
       </header>
 
       <main class="rankings-layout">
-        <section class="results-panel ranking-panel">
-          <div class="results-header ranking-header">
-            <div>
-              <p class="results-header__eyebrow">Top Contributors</p>
-              <h2>作者貢獻排名</h2>
-              <p class="results-header__description" id="rankingSummary">
-                正在讀取 tools.db 的作者資料...
-              </p>
-            </div>
-            <a class="ranking-link" href="./index.html">回到探索頁</a>
-          </div>
-          <div class="leaderboard" id="leaderboard"></div>
-          <div class="empty-state hidden" id="rankingEmpty">
-            <h3>目前沒有排行榜資料</h3>
-            <p>請確認 data/tools.db 內是否有 tools 資料表與 owner 欄位。</p>
-          </div>
-        </section>
-
         <section class="results-panel chart-panel">
           <div class="results-header ranking-header">
             <div>
@@ -90,6 +73,24 @@
           <div class="chart-grid">
             <div class="pie-chart" id="languagePie" aria-label="程式種類圓餅圖" role="img"></div>
             <div class="language-list" id="languageList"></div>
+          </div>
+        </section>
+
+        <section class="results-panel ranking-panel">
+          <div class="results-header ranking-header">
+            <div>
+              <p class="results-header__eyebrow">Top Contributors</p>
+              <h2>作者貢獻排名</h2>
+              <p class="results-header__description" id="rankingSummary">
+                正在讀取 tools.db 的作者資料...
+              </p>
+            </div>
+            <a class="ranking-link" href="./index.html">探索頁</a>
+          </div>
+          <div class="leaderboard" id="leaderboard"></div>
+          <div class="empty-state hidden" id="rankingEmpty">
+            <h3>目前沒有排行榜資料</h3>
+            <p>請確認 data/tools.db 內是否有 tools 資料表與 owner 欄位。</p>
           </div>
         </section>
       </main>

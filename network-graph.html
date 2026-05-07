@@ -37,12 +37,12 @@
             <div class="results-header graph-section-header">
               <div>
                 <p class="results-header__eyebrow">Explore</p>
-                <h2>選擇核心專案</h2>
+                <h2>探索專案關聯</h2>
                 <p class="results-header__description">
-                  先選一個 repo 當中心節點，再看它周圍最像的一圈。
+                  以專案、主題與語言的交集為基礎，查看彼此之間的連結。
                 </p>
               </div>
-              <a class="graph-back-link" href="./index.html">回首頁</a>
+              <a class="graph-back-link" href="./index.html">探索頁</a>
             </div>
 
             <form class="graph-search" id="graphSearchForm">
@@ -51,22 +51,22 @@
                 <input
                   id="graphSearchInput"
                   type="search"
-                  placeholder="例如：python、freeCodeCamp、system design"
+                  placeholder="試試搜尋：Python、freeCodeCamp、system design"
                   list="projectSuggestions"
                   autocomplete="off"
                 />
-                <button class="graph-search__button" type="submit">定位</button>
+                <button class="graph-search__button" type="submit">搜尋</button>
               </div>
               <datalist id="projectSuggestions"></datalist>
               <p class="graph-search__hint" id="graphSearchHint">
-                會優先對應名稱、owner、language 與 topic。
+                可搜尋專案名稱、擁有者、語言與主題。
               </p>
             </form>
           </div>
 
           <div class="graph-sidebar__section">
             <div class="graph-filter-row">
-              <label class="search-box__label" for="graphNodeRange">視圖密度</label>
+              <label class="search-box__label" for="graphNodeRange">節點數量</label>
               <span class="graph-filter-row__value" id="graphNodeRangeValue">24 個節點</span>
             </div>
             <input id="graphNodeRange" type="range" min="16" max="42" step="2" value="24" />
@@ -92,34 +92,34 @@
           <div class="results-header graph-stage-header">
             <div>
               <p class="results-header__eyebrow">Visual Graph</p>
-              <h2 id="graphHeadline">關聯圖載入中...</h2>
+              <h2 id="graphHeadline">正在整理關聯圖...</h2>
               <p class="results-header__description" id="graphSummary">
-                依 shared topics、language 與描述交集計算 repo 之間的距離。
+                依 shared topics、language 與 owner 關係整理 repo 之間的連結。
               </p>
             </div>
             <div class="graph-legend">
-              <span><i class="graph-legend__dot graph-legend__dot--root"></i>中心 repo</span>
+              <span><i class="graph-legend__dot graph-legend__dot--root"></i>目前 repo</span>
               <span><i class="graph-legend__dot graph-legend__dot--neighbor"></i>關聯 repo</span>
             </div>
           </div>
 
           <div class="graph-stage__toolbar">
-            <p class="graph-stage__hint">拖曳平移 · 滾輪縮放 · 雙擊背景重設視角</p>
-            <button class="graph-stage__reset" id="graphResetView" type="button">重設視角</button>
+            <p class="graph-stage__hint">可拖曳節點、縮放畫面，並點選節點查看詳細資訊。</p>
+            <button class="graph-stage__reset" id="graphResetView" type="button">重設視圖</button>
           </div>
 
           <div class="graph-stage" id="graphStage">
             <svg class="graph-canvas" id="graphCanvas" viewBox="0 0 960 720" preserveAspectRatio="xMidYMid meet"></svg>
-            <div class="graph-stage__loading" id="graphLoading">正在建立 repo 關聯圖...</div>
+            <div class="graph-stage__loading" id="graphLoading">正在載入 repo 關聯圖...</div>
           </div>
         </section>
 
         <aside class="results-panel graph-detail-panel">
           <div class="graph-detail" id="graphDetail">
             <p class="results-header__eyebrow">Selected Repo</p>
-            <h2>等待資料載入...</h2>
+            <h2>選擇一個專案...</h2>
             <p class="results-header__description">
-              右側會顯示目前中心節點的摘要、統計與主要連結依據。
+              點選左側或圖中的節點後，這裡會顯示專案摘要與關聯資訊。
             </p>
           </div>
         </aside>
