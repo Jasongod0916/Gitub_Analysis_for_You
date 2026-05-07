@@ -4,50 +4,128 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Network Graph | GitHub Analysis for You</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Noto+Sans+TC:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="./network-graph.css" />
   </head>
   <body>
-    <div class="page-shell">
-      <header class="hero">
-        <div class="hero__content">
-          <div class="brand-mark">
-            <img src="./assets/title_icon.jpg" alt="GitHub Analysis for You icon" />
+    <div class="page-shell graph-shell">
+      <div class="graph-topbar">
+        <a class="graph-brand" href="./index.html" aria-label="GitHub Analysis for You homepage">
+          <img src="./assets/title_icon.jpg" alt="" />
+          <span>GitHub Analysis for You</span>
+        </a>
+        <div class="graph-topbar__stats" aria-label="Graph summary">
+          <span>Repos <strong id="graphTotalTools">--</strong></span>
+          <span>Nodes <strong id="graphVisibleNodes">--</strong></span>
+          <span>Links <strong id="graphVisibleEdges">--</strong></span>
+        </div>
+        <button class="theme-toggle graph-theme-toggle" id="themeToggle" type="button" aria-pressed="false">
+          <span class="theme-toggle__icon" aria-hidden="true"></span>
+          <span class="theme-toggle__label" id="themeToggleLabel">深色模式</span>
+        </button>
+      </div>
+
+      <main class="graph-layout">
+        <aside class="results-panel graph-sidebar">
+          <div class="graph-sidebar__section">
+            <div class="results-header graph-section-header">
+              <div>
+                <p class="results-header__eyebrow">Explore</p>
+                <h2>選擇核心專案</h2>
+                <p class="results-header__description">
+                  先選一個 repo 當中心節點，再看它周圍最像的一圈。
+                </p>
+              </div>
+              <a class="graph-back-link" href="./index.html">回首頁</a>
+            </div>
+
+            <form class="graph-search" id="graphSearchForm">
+              <label class="search-box__label" for="graphSearchInput">搜尋 repo / owner / topic</label>
+              <div class="graph-search__field">
+                <input
+                  id="graphSearchInput"
+                  type="search"
+                  placeholder="例如：python、freeCodeCamp、system design"
+                  list="projectSuggestions"
+                  autocomplete="off"
+                />
+                <button class="graph-search__button" type="submit">定位</button>
+              </div>
+              <datalist id="projectSuggestions"></datalist>
+              <p class="graph-search__hint" id="graphSearchHint">
+                會優先對應名稱、owner、language 與 topic。
+              </p>
+            </form>
+          </div>
+
+          <div class="graph-sidebar__section">
+            <div class="graph-filter-row">
+              <label class="search-box__label" for="graphNodeRange">視圖密度</label>
+              <span class="graph-filter-row__value" id="graphNodeRangeValue">24 個節點</span>
+            </div>
+            <input id="graphNodeRange" type="range" min="16" max="42" step="2" value="24" />
+          </div>
+
+          <div class="graph-sidebar__section">
+            <div class="graph-chip-row" id="graphFocusTopics"></div>
+          </div>
+
+          <div class="graph-sidebar__section">
+            <div class="graph-list__header">
+              <div>
+                <p class="results-header__eyebrow">Related Repos</p>
+                <h3>關聯清單</h3>
+              </div>
+              <span class="graph-list__meta" id="graphRelationCount">--</span>
+            </div>
+            <div class="graph-list" id="graphRelationList"></div>
+          </div>
+        </aside>
+
+        <section class="results-panel graph-stage-panel">
+          <div class="results-header graph-stage-header">
             <div>
-              <p class="brand-mark__title" aria-label="GitHub Analysis for You">
-                <span class="brand-mark__title-full">GitHub Analysis for You</span>
+              <p class="results-header__eyebrow">Visual Graph</p>
+              <h2 id="graphHeadline">關聯圖載入中...</h2>
+              <p class="results-header__description" id="graphSummary">
+                依 shared topics、language 與描述交集計算 repo 之間的距離。
               </p>
             </div>
+            <div class="graph-legend">
+              <span><i class="graph-legend__dot graph-legend__dot--root"></i>中心 repo</span>
+              <span><i class="graph-legend__dot graph-legend__dot--neighbor"></i>關聯 repo</span>
+            </div>
           </div>
-          <p class="hero__kicker">Graph Placeholder</p>
-          <h1>關聯圖頁面占位區</h1>
-          <p class="hero__description">
-            此頁預留給關聯圖與互動視覺串接使用，以下內容僅作為可滾動的測試區塊。
-          </p>
-        </div>
-      </header>
 
-      <main class="results-panel placeholder-page">
-        <p>測試</p>
-        <p>測試</p>
-        <p>測試</p>
-        <p>測試</p>
-        <p>測試</p>
-        <p>測試</p>
-        <p>測試</p>
-        <p>測試</p>
-        <p>測試</p>
-        <p>測試</p>
-        <p>測試</p>
-        <p>測試</p>
-        <p>測試</p>
-        <p>測試</p>
-        <p>測試</p>
-        <p>測試</p>
-        <p>測試</p>
-        <p>測試</p>
-        <p>測試</p>
-        <p>測試</p>
+          <div class="graph-stage__toolbar">
+            <p class="graph-stage__hint">拖曳平移 · 滾輪縮放 · 雙擊背景重設視角</p>
+            <button class="graph-stage__reset" id="graphResetView" type="button">重設視角</button>
+          </div>
+
+          <div class="graph-stage" id="graphStage">
+            <svg class="graph-canvas" id="graphCanvas" viewBox="0 0 960 720" preserveAspectRatio="xMidYMid meet"></svg>
+            <div class="graph-stage__loading" id="graphLoading">正在建立 repo 關聯圖...</div>
+          </div>
+        </section>
+
+        <aside class="results-panel graph-detail-panel">
+          <div class="graph-detail" id="graphDetail">
+            <p class="results-header__eyebrow">Selected Repo</p>
+            <h2>等待資料載入...</h2>
+            <p class="results-header__description">
+              右側會顯示目前中心節點的摘要、統計與主要連結依據。
+            </p>
+          </div>
+        </aside>
       </main>
     </div>
+
+    <script src="./network-graph.js"></script>
   </body>
 </html>
