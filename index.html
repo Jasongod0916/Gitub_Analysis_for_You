@@ -57,10 +57,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
               </p>
             </div>
           </div>
-          <p class="hero__kicker">精選值得關注的 repository</p>
-          <h1>歡迎探索更清晰、更高效的 GitHub 專案分析體驗。</h1>
+          <h1>快速找到值得深入查看的 GitHub 專案。</h1>
           <p class="hero__description">
-            將搜尋、技術分類、活躍度與主題標籤整合於同一頁，讓每次查找都更直觀。
+            輸入技術、主題或專案名稱，快速縮小範圍，找到更適合現在需求的 GitHub 專案。
           </p>
           <div class="hero__stats" id="heroStats">
             <article class="hero-stat">
@@ -83,12 +82,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <a class="feature-link" href="./analytics.html" target="_blank" rel="noreferrer">
           <p class="feature-link__eyebrow">Insights</p>
           <h2>統計分析</h2>
-          <p>查看熱門專案、趨勢變化與關鍵排行，快速掌握整體概況。</p>
+          <p>查看熱門排行與趨勢。</p>
         </a>
         <a class="feature-link" href="./network-graph.html" target="_blank" rel="noreferrer">
           <p class="feature-link__eyebrow">Connections</p>
           <h2>關聯圖</h2>
-          <p>探索專案、技術與標籤之間的連結，從不同角度理解資料脈絡。</p>
+          <p>查看專案與標籤的連結。</p>
         </a>
       </section>
 
@@ -101,7 +100,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
               <input
                 id="searchInput"
                 type="search"
-                placeholder="例如：minecraft、rust、dashboard、agent"
+                placeholder="試試搜尋：React、Python、dashboard、AI tool"
               />
             </div>
           </div>
@@ -117,19 +116,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
               <div class="chips chips--soft" id="topicChips"></div>
             </div>
 
-            <div class="sort-group">
-              <label for="sortSelect">排序</label>
-              <div class="sort-select-wrap">
-                <select id="sortSelect">
-                  <option value="stars">依熱門程度</option>
-                  <option value="forks">依 Fork 數</option>
-                  <option value="watchers">依 Watching 數</option>
-                  <option value="updated_at">最近更新</option>
-                  <option value="title">名稱 A-Z</option>
-                </select>
-                <span class="sort-select-wrap__arrow" aria-hidden="true"></span>
-              </div>
-            </div>
           </div>
         </section>
 
@@ -143,26 +129,40 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
               </p>
             </div>
             <div class="results-actions">
-              <div class="view-switch-wrap">
-                <button
-                  class="view-switch"
-                  id="viewSwitch"
-                  type="button"
-                  aria-label="切換檢視模式"
-                  aria-expanded="false"
-                >
-                  <span class="view-switch__icon" aria-hidden="true">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                  </span>
-                  <span class="view-switch__label">檢視</span>
-                  <span class="view-switch__arrow" aria-hidden="true"></span>
-                </button>
-                <div class="view-menu hidden" id="viewMenu">
-                  <button class="view-menu__item is-active" data-view="grid" type="button">卡片檢視</button>
-                  <button class="view-menu__item" data-view="list" type="button">列表檢視</button>
-                  <button class="view-menu__item" data-view="compact" type="button">簡單檢視</button>
+              <div class="results-toolbar">
+                <div class="sort-group sort-group--inline">
+                  <div class="sort-select-wrap">
+                    <select id="sortSelect">
+                      <option value="stars">依熱門程度</option>
+                      <option value="forks">依 Fork 數</option>
+                      <option value="watchers">依 Watching 數</option>
+                      <option value="updated_at">最近更新</option>
+                      <option value="title">名稱 A-Z</option>
+                    </select>
+                    <span class="sort-select-wrap__arrow" aria-hidden="true"></span>
+                  </div>
+                </div>
+                <div class="view-switch-wrap">
+                  <button
+                    class="view-switch"
+                    id="viewSwitch"
+                    type="button"
+                    aria-label="切換檢視模式"
+                    aria-expanded="false"
+                  >
+                    <span class="view-switch__icon" aria-hidden="true">
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                    </span>
+                    <span class="view-switch__label">檢視</span>
+                    <span class="view-switch__arrow" aria-hidden="true"></span>
+                  </button>
+                  <div class="view-menu hidden" id="viewMenu">
+                    <button class="view-menu__item is-active" data-view="grid" type="button">卡片檢視</button>
+                    <button class="view-menu__item" data-view="list" type="button">列表檢視</button>
+                    <button class="view-menu__item" data-view="compact" type="button">簡單檢視</button>
+                  </div>
                 </div>
               </div>
               <p class="results-count" id="resultsCount"></p>
