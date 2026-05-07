@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+Disallow: /api/
+Disallow: /data/
+
+Sitemap: https://gitub-analysis-for-you.onrender.com/sitemap.xml
