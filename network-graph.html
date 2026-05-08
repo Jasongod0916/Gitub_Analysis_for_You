@@ -31,11 +31,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <img src="./assets/title_icon.jpg" alt="" />
           <span>GitHub Analysis for You</span>
         </a>
-        <div class="graph-topbar__stats" aria-label="Graph summary">
-          <span>Repos <strong id="graphTotalTools">--</strong></span>
-          <span>Nodes <strong id="graphVisibleNodes">--</strong></span>
-          <span>Links <strong id="graphVisibleEdges">--</strong></span>
-        </div>
         <button class="theme-toggle graph-theme-toggle" id="themeToggle" type="button" aria-pressed="false">
           <span class="theme-toggle__icon" aria-hidden="true"></span>
           <span class="theme-toggle__label" id="themeToggleLabel">深色模式</span>
@@ -77,10 +72,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
           <div class="graph-sidebar__section">
             <div class="graph-filter-row">
-              <label class="search-box__label" for="graphNodeRange">節點數量</label>
-              <span class="graph-filter-row__value" id="graphNodeRangeValue">24 個節點</span>
+              <label class="search-box__label" for="graphNodeRange">關聯節點數</label>
+              <span class="graph-filter-row__value" id="graphNodeRangeValue">12 個關聯 repo</span>
             </div>
-            <input id="graphNodeRange" type="range" min="16" max="42" step="2" value="24" />
+            <input id="graphNodeRange" type="range" min="1" max="41" step="1" value="12" />
           </div>
 
           <div class="graph-sidebar__section">
@@ -108,19 +103,26 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 依 shared topics、language 與 owner 關係整理 repo 之間的連結。
               </p>
             </div>
-            <div class="graph-legend">
-              <span><i class="graph-legend__dot graph-legend__dot--root"></i>目前 repo</span>
-              <span><i class="graph-legend__dot graph-legend__dot--neighbor"></i>關聯 repo</span>
+            <div class="graph-stage-meta">
+              <div class="graph-stage-stats" aria-label="Current graph stats">
+                <span>Repos <strong id="graphTotalTools">--</strong></span>
+                <span>Nodes <strong id="graphVisibleNodes">--</strong></span>
+                <span>Links <strong id="graphVisibleEdges">--</strong></span>
+              </div>
             </div>
           </div>
 
           <div class="graph-stage__toolbar">
-            <p class="graph-stage__hint">可拖曳節點、縮放畫面，並點選節點查看詳細資訊。</p>
-            <button class="graph-stage__reset" id="graphResetView" type="button">重設視圖</button>
+            <p class="graph-stage__hint">滾輪縮放，點擊節點查看詳細資訊。</p>
           </div>
 
           <div class="graph-stage" id="graphStage">
+            <div class="graph-legend">
+              <span><i class="graph-legend__dot graph-legend__dot--root"></i>目前 repo</span>
+              <span><i class="graph-legend__dot graph-legend__dot--neighbor"></i>關聯 repo</span>
+            </div>
             <svg class="graph-canvas" id="graphCanvas" viewBox="0 0 960 720" preserveAspectRatio="xMidYMid meet"></svg>
+            <button class="graph-stage__reset" id="graphResetView" type="button">預設</button>
             <div class="graph-stage__loading" id="graphLoading">正在載入 repo 關聯圖...</div>
           </div>
         </section>

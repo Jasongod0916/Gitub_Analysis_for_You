@@ -5,7 +5,7 @@ const graphState = {
   rootTool: null,
   visibleNodes: [],
   visibleEdges: [],
-  visibleRange: 24,
+  visibleRange: 12,
   colorByLanguage: false,
   camera: {
     scale: 1,
@@ -389,13 +389,13 @@ function buildNeighborhood(rootTool) {
     .filter((item) => item.score > 0.4)
     .sort((a, b) => b.score - a.score || (b.tool.stars || 0) - (a.tool.stars || 0));
 
-  const primary = scored.slice(0, graphState.visibleRange - 1);
+  const primary = scored.slice(0, graphState.visibleRange);
   const filler = getFallbackNeighbors(
     rootTool,
     primary,
-    Math.max(0, graphState.visibleRange - 1 - primary.length)
+    Math.max(0, graphState.visibleRange - primary.length)
   );
-  const neighbors = [...primary, ...filler].slice(0, graphState.visibleRange - 1);
+  const neighbors = [...primary, ...filler].slice(0, graphState.visibleRange);
 
   const nodes = [
     {
@@ -554,10 +554,10 @@ function getGraphBounds(positions) {
   let maxY = -Infinity;
 
   positions.forEach((point) => {
-    minX = Math.min(minX, point.x - point.radius - 34);
-    minY = Math.min(minY, point.y - point.radius - 48);
-    maxX = Math.max(maxX, point.x + point.radius + 34);
-    maxY = Math.max(maxY, point.y + point.radius + 54);
+    minX = Math.min(minX, point.x - point.radius - 20);
+    minY = Math.min(minY, point.y - point.radius - 28);
+    maxX = Math.max(maxX, point.x + point.radius + 20);
+    maxY = Math.max(maxY, point.y + point.radius + 32);
   });
 
   return { minX, minY, maxX, maxY };
@@ -568,7 +568,7 @@ function resetCamera(bounds) {
   const height = graphState.canvasSize.height;
   const boundsWidth = Math.max(bounds.maxX - bounds.minX, 1);
   const boundsHeight = Math.max(bounds.maxY - bounds.minY, 1);
-  const scale = clamp(Math.min(width / boundsWidth, height / boundsHeight) * 0.92, 0.58, 1.2);
+  const scale = clamp(Math.min(width / boundsWidth, height / boundsHeight) * 1.65, 0.98, 1.92);
   const graphCenterX = (bounds.minX + bounds.maxX) / 2;
   const graphCenterY = (bounds.minY + bounds.maxY) / 2;
 
@@ -630,7 +630,7 @@ function renderFocusTopics() {
 
 function renderRelationList() {
   const neighbors = graphState.visibleNodes.filter((node) => !node.isRoot);
-  graphRelationCount.textContent = `${neighbors.length} 個鄰近 repo`;
+  graphRelationCount.textContent = `${neighbors.length} 個關聯 repo`;
 
   graphRelationList.innerHTML = neighbors
     .sort((a, b) => b.score - a.score || (b.tool.stars || 0) - (a.tool.stars || 0))
@@ -685,7 +685,7 @@ function renderDetail() {
         <strong>${formatNumber(tool.forks)}</strong>
         <span>Forks</span>
       </div>
-      <div class="graph-detail__metric">
+      <div class="graph-detail__metric graph-detail__metric--date">
         <strong>${formatDate(tool.updated_at)}</strong>
         <span>Updated</span>
       </div>
@@ -770,8 +770,8 @@ function renderHeadline() {
   const topNeighbor = neighbors[0];
   graphHeadline.textContent = `${graphState.rootTool.name} 的關聯圖`;
   graphSummary.textContent = topNeighbor
-    ? `目前以 ${graphState.rootTool.name} 為中心，最接近的鄰近 repo 是 ${topNeighbor.tool.name}；你也可以點任何節點重新展開一圈。`
-    : `目前以 ${graphState.rootTool.name} 為中心，但這個 repo 在資料庫裡暫時沒有足夠的相似節點可展開。`;
+    ? `中心：${graphState.rootTool.name}\n最接近：${topNeighbor.tool.name}\n可點任一節點重新展開`
+    : `中心：${graphState.rootTool.name}\n目前沒有足夠的相似 repo 可展開`;
 }
 
 function renderCanvas() {
@@ -979,7 +979,7 @@ function focusTool(tool, options = {}) {
     graphSearchInput.value = tool.name;
   }
 
-  graphSearchHint.textContent = `目前以 ${tool.name} 為中心，共展開 ${nodes.length - 1} 個相似 repo。`;
+  graphSearchHint.textContent = "";
   renderEverything();
 }
 
@@ -1026,7 +1026,7 @@ graphSearchForm.addEventListener("submit", (event) => {
 
 graphNodeRange.addEventListener("input", (event) => {
   graphState.visibleRange = Number(event.target.value);
-  graphNodeRangeValue.textContent = `${graphState.visibleRange} 個節點`;
+  graphNodeRangeValue.textContent = `${graphState.visibleRange} 個關聯 repo`;
 
   if (graphState.rootTool) {
     focusTool(graphState.rootTool, { preserveQuery: true });
@@ -1067,6 +1067,6 @@ window.addEventListener("resize", () => {
 });
 
 graphNodeRange.value = String(graphState.visibleRange);
-graphNodeRangeValue.textContent = `${graphState.visibleRange} 個節點`;
+graphNodeRangeValue.textContent = `${graphState.visibleRange} 個關聯 repo`;
 applyTheme(localStorage.getItem("gafy-theme") || "light");
 loadGraph();

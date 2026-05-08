@@ -11,11 +11,14 @@ const state = {
 };
 const PAGE_SIZE = 25;
 
+const heroSearchForm = document.querySelector("#heroSearchForm");
+const heroSearchInput = document.querySelector("#heroSearchInput");
 const searchInput = document.querySelector("#searchInput");
 const sortSelect = document.querySelector("#sortSelect");
 const categoryChips = document.querySelector("#categoryChips");
 const topicChips = document.querySelector("#topicChips");
 const projectGrid = document.querySelector("#projectGrid");
+const resultsPanel = document.querySelector(".results-panel");
 const pagination = document.querySelector("#pagination");
 const emptyState = document.querySelector("#emptyState");
 const resultsCount = document.querySelector("#resultsCount");
@@ -109,6 +112,23 @@ function renderHeroStats() {
   topTopic.textContent = getMostCommon(
     state.projects.flatMap((project) => project.topics || [])
   );
+}
+
+function syncSearchInputs(nextQuery, source = "shared") {
+  if (source !== "hero" && heroSearchInput) {
+    heroSearchInput.value = nextQuery;
+  }
+
+  if (source !== "panel" && searchInput) {
+    searchInput.value = nextQuery;
+  }
+}
+
+function setQuery(nextQuery, source = "shared") {
+  state.query = nextQuery;
+  state.currentPage = 1;
+  syncSearchInputs(nextQuery, source);
+  renderProjects();
 }
 
 function renderCategoryChips() {
@@ -367,10 +387,18 @@ async function loadProjects() {
   }
 }
 
+heroSearchInput.addEventListener("input", (event) => {
+  setQuery(event.target.value, "hero");
+});
+
+heroSearchForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+  setQuery(heroSearchInput.value, "hero");
+  resultsPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+});
+
 searchInput.addEventListener("input", (event) => {
-  state.query = event.target.value;
-  state.currentPage = 1;
-  renderProjects();
+  setQuery(event.target.value, "panel");
 });
 
 sortSelect.addEventListener("change", (event) => {
