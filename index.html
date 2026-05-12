@@ -4,25 +4,32 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-TKR6Z4LD');</script>
-<!-- End Google Tag Manager -->
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-87LQB5DWWX"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-87LQB5DWWX');
-</script>
-    <title>No.1最好用的開源專案排行榜與搜尋工具｜熱門工具、程式語言分類、活躍度分析</title>
+    <script>
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != "dataLayer" ? "&l=" + l : "";
+        j.async = true;
+        j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, "script", "dataLayer", "GTM-TKR6Z4LD");
+    </script>
+    <!-- End Google Tag Manager -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-87LQB5DWWX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "G-87LQB5DWWX");
+    </script>
+    <title>GitHub Analysis for You | 更快找到值得深入看的 GitHub 專案</title>
     <meta
-  name="description"
-  content="GitHub Analysis for You 整理 GitHub 上熱門開源專案，提供專案搜尋、語言分類、主題篩選、Stars、Forks、Watching 與更新時間排序，幫助開發者快速找到值得關注的 repository。"
+      name="description"
+      content="用搜尋、篩選、關聯圖與統計分析，幫你更快找到值得深入看的 GitHub repository。"
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -34,30 +41,41 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   </head>
   <body data-clarity-page="home">
     <!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TKR6Z4LD"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
+    <noscript>
+      <iframe
+        src="https://www.googletagmanager.com/ns.html?id=GTM-TKR6Z4LD"
+        height="0"
+        width="0"
+        style="display: none; visibility: hidden"
+      ></iframe>
+    </noscript>
+    <!-- End Google Tag Manager (noscript) -->
     <div class="page-shell">
       <header class="hero">
         <button class="theme-toggle" id="themeToggle" type="button" aria-pressed="false">
           <span class="theme-toggle__icon" aria-hidden="true"></span>
-          <span class="theme-toggle__label" id="themeToggleLabel">深色模式</span>
+          <span class="theme-toggle__label" id="themeToggleLabel">切換深色</span>
         </button>
         <div class="hero__content">
           <div class="brand-mark">
-            <a href="./index.html" aria-label="回到主頁">
-              <img src="./assets/title_icon.jpg" alt="GitHub Analysis for You icon" />
-            </a>
-            <div>
-              <p class="brand-mark__title" aria-label="GitHub Analysis for You">
-                <span class="brand-mark__title-full">GitHub Analysis for You</span>
-                <span class="brand-mark__title-short" aria-hidden="true">
-                  <span class="brand-mark__title-letter brand-mark__title-letter--g">G</span>
-                  <span class="brand-mark__title-letter brand-mark__title-letter--a">A</span>
-                  <span class="brand-mark__title-letter brand-mark__title-letter--y">Y</span>
-                </span>
-              </p>
+            <div class="brand-mark__identity">
+              <a href="./index.html" aria-label="回到主頁">
+                <img src="./assets/title_icon.jpg" alt="GitHub Analysis for You icon" />
+              </a>
+              <div>
+                <p class="brand-mark__title" aria-label="GitHub Analysis for You">
+                  <span class="brand-mark__title-full">GitHub Analysis for You</span>
+                  <span class="brand-mark__title-short" aria-hidden="true">
+                    <span class="brand-mark__title-letter brand-mark__title-letter--g">G</span>
+                    <span class="brand-mark__title-letter brand-mark__title-letter--a">A</span>
+                    <span class="brand-mark__title-letter brand-mark__title-letter--y">Y</span>
+                  </span>
+                </p>
+              </div>
             </div>
+            <nav class="top-nav top-nav--hero" aria-label="Secondary">
+              <a class="top-nav__link" href="./about.html">About</a>
+            </nav>
           </div>
           <h1>快速找到值得深入查看的 GitHub 專案。</h1>
           <p class="hero__description">
@@ -93,16 +111,37 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </header>
 
       <section class="feature-nav">
-        <a class="feature-link feature-link--primary" href="./network-graph.html" target="_blank" rel="noopener noreferrer">
+        <a
+          class="feature-link feature-link--primary"
+          href="./network-graph.html"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="開始探索關聯圖"
+        >
           <p class="feature-link__eyebrow">Connections</p>
-          <h2>關聯圖</h2>
-          <p>從搜尋結果延伸探索相關 repo、topic、language 與技術脈絡。</p>
-          <span class="feature-link__cta">進入關聯探索</span>
+          <div class="feature-link__header">
+            <h2>探索專案關聯</h2>
+          </div>
+          <p>查看目前結果延伸出的相似 repo、topic 與 language 關聯，繼續往外探索技術脈絡。</p>
+          <div class="feature-link__footer">
+            <span class="feature-link__cta">開始探索關聯圖 <span aria-hidden="true">→</span></span>
+          </div>
         </a>
-        <a class="feature-link feature-link--secondary" href="./analytics.html" target="_blank" rel="noopener noreferrer">
+        <a
+          class="feature-link feature-link--secondary"
+          href="./analytics.html"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="查看統計分析"
+        >
           <p class="feature-link__eyebrow">Insights</p>
-          <h2>統計分析</h2>
-          <p>查看熱門排行、分布與整體趨勢，作為輔助判斷。</p>
+          <div class="feature-link__header">
+            <h2>查看統計分析</h2>
+          </div>
+          <p>查看熱門排行、分布與整體趨勢，快速掌握目前結果的整體輪廓。</p>
+          <div class="feature-link__footer">
+            <span class="feature-link__cta feature-link__cta--ghost">打開統計分析 <span aria-hidden="true">→</span></span>
+          </div>
         </a>
       </section>
 
@@ -122,15 +161,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
           <div class="toolbar">
             <div class="filter-group">
-              <span class="filter-group__label">依語言篩選</span>
+              <span class="filter-group__label">語言篩選</span>
               <div class="chips" id="categoryChips"></div>
             </div>
 
             <div class="filter-group">
-              <span class="filter-group__label">依主題篩選</span>
+              <span class="filter-group__label">熱門主題</span>
               <div class="chips chips--soft" id="topicChips"></div>
             </div>
-
           </div>
         </section>
 
@@ -151,8 +189,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                       <option value="stars">依熱門程度</option>
                       <option value="forks">依 Fork 數</option>
                       <option value="watchers">依 Watching 數</option>
-                      <option value="updated_at">最近更新</option>
-                      <option value="title">名稱 A-Z</option>
+                      <option value="updated_at">依最近更新</option>
+                      <option value="title">依名稱 A-Z</option>
                     </select>
                     <span class="sort-select-wrap__arrow" aria-hidden="true"></span>
                   </div>
@@ -186,8 +224,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <div class="project-grid" id="projectGrid"></div>
           <div class="pagination hidden" id="pagination"></div>
           <div class="empty-state hidden" id="emptyState">
-            <h3>找不到符合條件的專案</h3>
-            <p>建議調整關鍵字、語言或 topic 篩選後再試一次。</p>
+            <h3>目前找不到符合條件的專案</h3>
+            <p>試著調整關鍵字、切換語言或放寬主題篩選，通常能找到新的方向。</p>
           </div>
         </section>
       </main>
@@ -195,5 +233,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     <script src="./clarity.js"></script>
     <script src="./script.js"></script>
+    <script src="./theme-label-fix.js"></script>
   </body>
 </html>

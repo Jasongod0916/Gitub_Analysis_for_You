@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Google Tag Manager -->
+    <script>
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != "dataLayer" ? "&l=" + l : "";
+        j.async = true;
+        j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, "script", "dataLayer", "GTM-TKR6Z4LD");
+    </script>
+    <!-- End Google Tag Manager -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-87LQB5DWWX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "G-87LQB5DWWX");
+    </script>
+    <title>About | GitHub Analysis for You</title>
+    <meta
+      name="description"
+      content="了解 GitHub Analysis for You 為什麼存在、怎麼使用，以及首頁搜尋、關聯圖、統計分析三個頁面如何搭配。"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Noto+Sans+TC:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body data-clarity-page="about">
+    <!-- Google Tag Manager (noscript) -->
+    <noscript>
+      <iframe
+        src="https://www.googletagmanager.com/ns.html?id=GTM-TKR6Z4LD"
+        height="0"
+        width="0"
+        style="display: none; visibility: hidden"
+      ></iframe>
+    </noscript>
+    <!-- End Google Tag Manager (noscript) -->
+    <div class="about-page-shell">
+      <header class="hero about-hero">
+        <button class="theme-toggle" id="themeToggle" type="button" aria-pressed="false">
+          <span class="theme-toggle__icon" aria-hidden="true"></span>
+          <span class="theme-toggle__label" id="themeToggleLabel">切換深色</span>
+        </button>
+        <div class="hero__content">
+          <div class="brand-mark">
+            <div class="brand-mark__identity">
+              <a href="./index.html" aria-label="回到主頁">
+                <img src="./assets/title_icon.jpg" alt="GitHub Analysis for You icon" />
+              </a>
+              <div>
+                <p class="brand-mark__title" aria-label="GitHub Analysis for You">
+                  <span class="brand-mark__title-full">GitHub Analysis for You</span>
+                  <span class="brand-mark__title-short" aria-hidden="true">
+                    <span class="brand-mark__title-letter brand-mark__title-letter--g">G</span>
+                    <span class="brand-mark__title-letter brand-mark__title-letter--a">A</span>
+                    <span class="brand-mark__title-letter brand-mark__title-letter--y">Y</span>
+                  </span>
+                </p>
+              </div>
+            </div>
+            <nav class="top-nav top-nav--hero" aria-label="Secondary">
+              <a class="top-nav__link" href="./index.html">Home</a>
+              <a class="top-nav__link" href="./about.html" aria-current="page">About</a>
+            </nav>
+          </div>
+          <h1>這不是另一個 GitHub 排行榜，而是一個幫你更快看懂脈絡的探索入口。</h1>
+          <p class="hero__description">
+            GitHub 上的資訊很多，但真正麻煩的通常不是找不到專案，而是不知道下一步該點哪裡、哪些值得花時間看。
+            這個網站就是為了把那段判斷成本降下來。
+          </p>
+          <div class="about-lead">
+            <div class="about-lead__panel">
+              <strong>為什麼會做這個網站</strong>
+              <p>
+                我想把「找專案」這件事，從一串搜尋結果，變成一條更有方向感的探索路徑。你不只會看到熱門 repo，
+                還能更快知道它和哪些 topic、language、相關專案連在一起。
+              </p>
+            </div>
+            <div class="about-lead__quote">
+              <p>
+                如果首頁幫你縮小範圍，關聯圖幫你擴展視野，那統計分析就是幫你在決定下一步前，先看清楚整體輪廓。
+              </p>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main class="about-layout">
+        <section class="results-panel about-panel">
+          <p class="results-header__eyebrow">Intent</p>
+          <h2>這個網站想解決什麼問題</h2>
+          <p>
+            一般搜尋很容易把你帶到「很多結果」，卻不一定帶你走向「更好的判斷」。你可能看到 star 很高的 repo，
+            但不知道它是不是你要的方向，也不知道要不要點開相關專案一起看。
+          </p>
+          <p>
+            GitHub Analysis for You 的目標不是替你做決定，而是把你做判斷前最需要的上下文先整理好：熱門程度、主題分布、
+            相鄰專案、技術脈絡，以及從哪一個點繼續往外探索最有效。
+          </p>
+        </section>
+
+        <div class="about-grid">
+          <section class="results-panel about-panel">
+            <p class="results-header__eyebrow">How It Works</p>
+            <h2>怎麼使用最有效</h2>
+            <ol class="about-steps">
+              <li>先從首頁搜尋關鍵字，快速把範圍縮到一批有機會的專案。</li>
+              <li>再用語言、topic 與排序，把名單整理成你真正會點進去的一小群。</li>
+              <li>最後進到關聯圖，沿著相似 repo、topic 與 language 往外延伸，找出更值得深入看的方向。</li>
+            </ol>
+          </section>
+
+          <section class="results-panel about-panel">
+            <p class="results-header__eyebrow">Principles</p>
+            <h2>這個網站重視什麼</h2>
+            <div class="about-values">
+              <article class="about-value">
+                <strong>探索效率</strong>
+                <p>讓你更快縮小範圍，不用在大量結果裡來回跳轉。</p>
+              </article>
+              <article class="about-value">
+                <strong>脈絡感</strong>
+                <p>不只看單一 repo，而是看它和其他技術主題如何連在一起。</p>
+              </article>
+              <article class="about-value">
+                <strong>降低噪音</strong>
+                <p>把最常用的判斷訊號整理出來，減少無效點擊與重複比對。</p>
+              </article>
+            </div>
+          </section>
+        </div>
+
+        <section class="results-panel about-panel">
+          <p class="results-header__eyebrow">Guide</p>
+          <h2>三個主要頁面怎麼搭配</h2>
+          <div class="about-guides">
+            <article class="about-guide">
+              <span class="about-guide__eyebrow">Home Search</span>
+              <h3>首頁搜尋</h3>
+              <p>適合一開始還在收斂主題時使用。先找到一批可能值得看的 repo，再進一步過濾。</p>
+            </article>
+            <article class="about-guide">
+              <span class="about-guide__eyebrow">Connections</span>
+              <h3>關聯圖</h3>
+              <p>適合想從一個 repo 往外延伸時使用。它幫你把相近的 topic、language 與專案脈絡視覺化。</p>
+            </article>
+            <article class="about-guide">
+              <span class="about-guide__eyebrow">Insights</span>
+              <h3>統計分析</h3>
+              <p>適合在下判斷前先看整體輪廓。熱門語言、作者分布、排行榜都能幫你快速建立全局感。</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="results-panel about-panel">
+          <p class="results-header__eyebrow">Next Step</p>
+          <h2>準備開始了嗎？</h2>
+          <p>
+            如果你已經知道想找什麼，直接回首頁開始搜尋。若你更想從一個 repo 的延伸脈絡開始看，也可以直接打開關聯圖。
+          </p>
+          <div class="about-cta">
+            <a class="feature-link__cta" href="./index.html">回首頁開始探索</a>
+            <a class="feature-link__cta feature-link__cta--ghost" href="./network-graph.html">直接前往關聯圖</a>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="./clarity.js"></script>
+    <script src="./about.js"></script>
+  </body>
+</html>
