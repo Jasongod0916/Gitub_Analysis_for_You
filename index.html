@@ -32,7 +32,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     />
     <link rel="stylesheet" href="./styles.css" />
   </head>
-  <body>
+  <body data-clarity-page="home">
     <!-- Google Tag Manager (noscript) -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TKR6Z4LD"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
@@ -93,13 +93,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </header>
 
       <section class="feature-nav">
-        <a class="feature-link feature-link--primary" href="./network-graph.html">
+        <a class="feature-link feature-link--primary" href="./network-graph.html" target="_blank" rel="noopener noreferrer">
           <p class="feature-link__eyebrow">Connections</p>
           <h2>關聯圖</h2>
           <p>從搜尋結果延伸探索相關 repo、topic、language 與技術脈絡。</p>
           <span class="feature-link__cta">進入關聯探索</span>
         </a>
-        <a class="feature-link feature-link--secondary" href="./analytics.html">
+        <a class="feature-link feature-link--secondary" href="./analytics.html" target="_blank" rel="noopener noreferrer">
           <p class="feature-link__eyebrow">Insights</p>
           <h2>統計分析</h2>
           <p>查看熱門排行、分布與整體趨勢，作為輔助判斷。</p>
@@ -193,6 +193,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </main>
     </div>
 
+    <script src="./clarity.js"></script>
     <script src="./script.js"></script>
   </body>
 </html>

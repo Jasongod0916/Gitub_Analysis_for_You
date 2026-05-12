@@ -100,24 +100,30 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 46px;
-  padding: 0 18px;
-  border: 1px solid rgba(15, 118, 110, 0.18);
+  min-height: 40px;
+  padding: 0 14px;
+  min-width: 108px;
   border-radius: 999px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(246, 252, 250, 0.98));
-  color: #16524b;
-  font-size: 0.95rem;
-  font-weight: 800;
-  letter-spacing: 0.02em;
+  border: 1px solid rgba(17, 69, 63, 0.12);
+  background: linear-gradient(135deg, var(--brand), var(--brand-deep));
+  color: #fff9ef;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 1;
+  white-space: nowrap;
+  word-break: keep-all;
+  writing-mode: horizontal-tb;
   text-decoration: none;
-  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease, background 0.18s ease;
 }
 
 .graph-back-link:hover,
 .graph-back-link:focus-visible {
   transform: translateY(-1px);
-  border-color: rgba(15, 118, 110, 0.32);
-  box-shadow: 0 12px 20px rgba(17, 69, 63, 0.12);
+  border-color: rgba(15, 118, 110, 0.24);
+  box-shadow: 0 10px 18px rgba(17, 69, 63, 0.08);
+  background: linear-gradient(135deg, var(--brand), var(--brand-deep));
 }
 
 .graph-search {
@@ -320,6 +326,7 @@ body {
   align-self: start;
   align-items: end;
   gap: 12px;
+  justify-items: end;
   margin-top: 28px;
 }
 
@@ -709,9 +716,9 @@ body {
 }
 
 :root[data-theme="dark"] .graph-back-link {
-  background: linear-gradient(180deg, rgba(255, 138, 31, 0.16), rgba(255, 138, 31, 0.08));
-  border-color: rgba(255, 138, 31, 0.22);
-  color: #ffe2c0;
+  background: linear-gradient(135deg, var(--brand), var(--brand-deep));
+  border-color: rgba(17, 69, 63, 0.12);
+  color: #fff9ef;
 }
 
 :root[data-theme="dark"] .graph-stage {

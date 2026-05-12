@@ -32,12 +32,21 @@ const viewMenuItems = document.querySelectorAll(".view-menu__item");
 const themeToggle = document.querySelector("#themeToggle");
 const themeToggleLabel = document.querySelector("#themeToggleLabel");
 
+function trackEvent(eventName) {
+  window.trackClarityEvent?.(eventName);
+}
+
+function setTag(key, value) {
+  window.setClarityTag?.(key, value);
+}
+
 function applyTheme(theme) {
   const nextTheme = theme === "dark" ? "dark" : "light";
   document.documentElement.dataset.theme = nextTheme;
   themeToggle.setAttribute("aria-pressed", String(nextTheme === "dark"));
   themeToggleLabel.textContent = nextTheme === "dark" ? "淺色模式" : "深色模式";
   localStorage.setItem("gafy-theme", nextTheme);
+  setTag("theme", nextTheme);
 }
 
 function escapeHtml(value) {
@@ -394,6 +403,9 @@ heroSearchInput.addEventListener("input", (event) => {
 heroSearchForm.addEventListener("submit", (event) => {
   event.preventDefault();
   setQuery(heroSearchInput.value, "hero");
+  setTag("search_surface", "hero");
+  setTag("search_has_query", heroSearchInput.value.trim() ? "true" : "false");
+  trackEvent("home_search_submitted");
   resultsPanel.scrollIntoView({ behavior: "smooth", block: "start" });
 });
 
@@ -404,6 +416,8 @@ searchInput.addEventListener("input", (event) => {
 sortSelect.addEventListener("change", (event) => {
   state.sortBy = event.target.value;
   state.currentPage = 1;
+  setTag("sort_by", state.sortBy);
+  trackEvent("home_sort_changed");
   renderProjects();
 });
 
@@ -437,6 +451,8 @@ viewMenuItems.forEach((item) => {
     state.viewMode = item.dataset.view;
     viewMenu.classList.add("hidden");
     viewSwitch.setAttribute("aria-expanded", "false");
+    setTag("view_mode", state.viewMode);
+    trackEvent("home_view_changed");
     projectGrid.classList.add("is-switching");
     setTimeout(() => {
       renderProjects();
@@ -454,8 +470,10 @@ document.addEventListener("click", (event) => {
 
 themeToggle.addEventListener("click", () => {
   const currentTheme = document.documentElement.dataset.theme === "dark" ? "dark" : "light";
+  trackEvent("theme_toggled");
   applyTheme(currentTheme === "dark" ? "light" : "dark");
 });
 
 applyTheme(localStorage.getItem("gafy-theme") || "light");
+setTag("page_type", "home");
 loadProjects();

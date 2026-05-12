@@ -100,12 +100,21 @@ const graphResetView = document.querySelector("#graphResetView");
 const themeToggle = document.querySelector("#themeToggle");
 const themeToggleLabel = document.querySelector("#themeToggleLabel");
 
+function trackEvent(eventName) {
+  window.trackClarityEvent?.(eventName);
+}
+
+function setTag(key, value) {
+  window.setClarityTag?.(key, value);
+}
+
 function applyTheme(theme) {
   const nextTheme = theme === "dark" ? "dark" : "light";
   document.documentElement.dataset.theme = nextTheme;
   themeToggle.setAttribute("aria-pressed", String(nextTheme === "dark"));
   themeToggleLabel.textContent = nextTheme === "dark" ? "淺色模式" : "深色模式";
   localStorage.setItem("gafy-theme", nextTheme);
+  setTag("theme", nextTheme);
 }
 
 function escapeHtml(value) {
@@ -970,6 +979,9 @@ function renderEverything() {
 
 function focusTool(tool, options = {}) {
   graphState.rootTool = tool;
+  setTag("graph_root_language", tool.language || "Unknown");
+  setTag("graph_root_owner", tool.owner || "unknown");
+  trackEvent("graph_repo_focused");
 
   const { nodes, edges } = buildNeighborhood(tool);
   graphState.visibleNodes = nodes;
@@ -1022,10 +1034,14 @@ graphSearchForm.addEventListener("submit", (event) => {
   }
 
   focusTool(nextTool);
+  setTag("graph_search_has_query", graphSearchInput.value.trim() ? "true" : "false");
+  trackEvent("graph_search_submitted");
 });
 
 graphNodeRange.addEventListener("input", (event) => {
   graphState.visibleRange = Number(event.target.value);
+  setTag("graph_visible_range", String(graphState.visibleRange));
+  trackEvent("graph_range_changed");
   graphNodeRangeValue.textContent = `${graphState.visibleRange} 個關聯 repo`;
 
   if (graphState.rootTool) {
@@ -1035,6 +1051,7 @@ graphNodeRange.addEventListener("input", (event) => {
 
 graphResetView.addEventListener("click", () => {
   if (graphState.rootTool) {
+    trackEvent("graph_view_reset");
     renderCanvas();
   }
 });
@@ -1054,6 +1071,7 @@ graphStage.addEventListener("dblclick", (event) => {
 
 themeToggle.addEventListener("click", () => {
   const currentTheme = document.documentElement.dataset.theme === "dark" ? "dark" : "light";
+  trackEvent("theme_toggled");
   applyTheme(currentTheme === "dark" ? "light" : "dark");
 });
 
@@ -1069,4 +1087,5 @@ window.addEventListener("resize", () => {
 graphNodeRange.value = String(graphState.visibleRange);
 graphNodeRangeValue.textContent = `${graphState.visibleRange} 個關聯 repo`;
 applyTheme(localStorage.getItem("gafy-theme") || "light");
+setTag("page_type", "network-graph");
 loadGraph();

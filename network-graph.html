@@ -20,7 +20,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <link rel="stylesheet" href="./styles.css" />
     <link rel="stylesheet" href="./network-graph.css" />
   </head>
-  <body>
+  <body data-clarity-page="network-graph">
     <!-- Google Tag Manager (noscript) -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TKR6Z4LD"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
@@ -48,7 +48,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                   以專案、主題與語言的交集為基礎，查看彼此之間的連結。
                 </p>
               </div>
-              <a class="graph-back-link" href="./index.html">探索頁</a>
             </div>
 
             <form class="graph-search" id="graphSearchForm">
@@ -104,6 +103,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
               </p>
             </div>
             <div class="graph-stage-meta">
+              <a class="graph-back-link" href="./index.html">探索頁</a>
               <div class="graph-stage-stats" aria-label="Current graph stats">
                 <span>Repos <strong id="graphTotalTools">--</strong></span>
                 <span>Nodes <strong id="graphVisibleNodes">--</strong></span>
@@ -139,6 +139,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </main>
     </div>
 
+    <script src="./clarity.js"></script>
     <script src="./network-graph.js"></script>
   </body>
 </html>

@@ -15,6 +15,14 @@ const languageList = document.querySelector("#languageList");
 const themeToggle = document.querySelector("#themeToggle");
 const themeToggleLabel = document.querySelector("#themeToggleLabel");
 
+function trackEvent(eventName) {
+  window.trackClarityEvent?.(eventName);
+}
+
+function setTag(key, value) {
+  window.setClarityTag?.(key, value);
+}
+
 const chartColors = [
   "#1c7c72",
   "#d8891c",
@@ -34,6 +42,7 @@ function applyTheme(theme) {
   themeToggle.setAttribute("aria-pressed", String(nextTheme === "dark"));
   themeToggleLabel.textContent = nextTheme === "dark" ? "深色模式" : "亮色模式";
   localStorage.setItem("gafy-theme", nextTheme);
+  setTag("theme", nextTheme);
 }
 
 function formatNumber(value) {
@@ -162,6 +171,8 @@ async function loadRankings() {
     renderStats(data.summary || {});
     renderLeaderboard();
     renderLanguageChart();
+    setTag("ranking_has_data", rankingState.authors.length > 0 ? "true" : "false");
+    trackEvent("analytics_loaded");
   } catch (error) {
     rankingSummary.textContent = "讀取排行榜資料失敗，請確認本機伺服器是否已啟動。";
     chartSummary.textContent = "無法載入程式種類資料。";
@@ -173,8 +184,10 @@ async function loadRankings() {
 
 themeToggle.addEventListener("click", () => {
   const currentTheme = document.documentElement.dataset.theme === "dark" ? "dark" : "light";
+  trackEvent("theme_toggled");
   applyTheme(currentTheme === "dark" ? "light" : "dark");
 });
 
 applyTheme(localStorage.getItem("gafy-theme") || "light");
+setTag("page_type", "analytics");
 loadRankings();
