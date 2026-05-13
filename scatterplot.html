@@ -3,7 +3,25 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Scatterplot | GitHub Analysis for You</title>
+    <!-- Google Tag Manager -->
+    <script>
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != "dataLayer" ? "&l=" + l : "";
+        j.async = true;
+        j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, "script", "dataLayer", "GTM-TKR6Z4LD");
+    </script>
+    <!-- End Google Tag Manager -->
+    <title>Fork vs Star Scatter Plot | GitHub Analysis for You</title>
+    <meta
+      name="description"
+      content="用 Stars 和 Forks 的散點圖觀察 GitHub repository 的人氣與技術採用分布。"
+    />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -11,14 +29,31 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="./scatterplot.css" />
   </head>
   <body data-clarity-page="scatterplot">
-    <div class="page-shell">
-      <header class="hero">
+    <!-- Google Tag Manager (noscript) -->
+    <noscript>
+      <iframe
+        src="https://www.googletagmanager.com/ns.html?id=GTM-TKR6Z4LD"
+        height="0"
+        width="0"
+        style="display: none; visibility: hidden"
+      ></iframe>
+    </noscript>
+    <!-- End Google Tag Manager (noscript) -->
+    <div class="page-shell scatter-shell">
+      <header class="hero scatter-hero">
+        <button class="theme-toggle" id="themeToggle" type="button" aria-pressed="false">
+          <span class="theme-toggle__icon" aria-hidden="true"></span>
+          <span class="theme-toggle__label" id="themeToggleLabel">深色模式</span>
+        </button>
         <div class="hero__content">
           <div class="brand-mark">
-            <a class="brand-mark__identity" href="./index.html" aria-label="回到主頁">
-              <img src="./assets/title_icon.jpg" alt="GitHub Analysis for You icon" />
+            <div class="brand-mark__identity">
+              <a href="./index.html" aria-label="回到主頁">
+                <img src="./assets/title_icon.jpg" alt="GitHub Analysis for You icon" />
+              </a>
               <div>
                 <p class="brand-mark__title" aria-label="GitHub Analysis for You">
                   <span class="brand-mark__title-full">GitHub Analysis for You</span>
@@ -29,23 +64,111 @@
                   </span>
                 </p>
               </div>
-            </a>
+            </div>
             <nav class="top-nav top-nav--hero" aria-label="Secondary">
-              <a class="top-nav__link" href="./about.html">About</a>
-              <a class="top-nav__link" href="./rankings.html">Ranking</a>
-              <a class="top-nav__link" href="./network-graph.html">關聯圖</a>
-              <a class="top-nav__link" href="./scatterplot.html" aria-current="page">散佈圖</a>
+              <a class="top-nav__link" href="./index.html">Home</a>
+              <a class="top-nav__link" href="./analytics.html">Insights</a>
             </nav>
-            <button class="theme-toggle theme-toggle--nav" id="themeToggle" type="button" aria-pressed="false">
-              <span class="theme-toggle__icon" aria-hidden="true"></span>
-              <span class="theme-toggle__label" id="themeToggleLabel">切換深色</span>
-            </button>
           </div>
-          <h1>測試</h1>
+          <h1>Fork vs Star Scatter Plot</h1>
+          <p class="hero__description">
+            每個 repo 都是一個點，用 Stars 對 Forks 看出高人氣低 fork、以及高 fork 的技術型專案群。
+          </p>
+          <div class="hero__stats" id="scatterStats">
+            <article class="hero-stat">
+              <span class="hero-stat__label">Repos</span>
+              <strong id="totalRepos">--</strong>
+            </article>
+            <article class="hero-stat">
+              <span class="hero-stat__label">Median Stars</span>
+              <strong id="medianStars">--</strong>
+            </article>
+            <article class="hero-stat">
+              <span class="hero-stat__label">Median Forks</span>
+              <strong id="medianForks">--</strong>
+            </article>
+          </div>
         </div>
       </header>
+
+      <main class="scatter-layout">
+        <aside class="results-panel scatter-controls">
+          <div class="results-header">
+            <div>
+              <p class="results-header__eyebrow">Filters</p>
+              <h2>探索分布</h2>
+              <p class="results-header__description">
+                搜尋 repo、owner 或語言，快速定位散點圖上的專案。
+              </p>
+            </div>
+          </div>
+
+          <form class="scatter-search" id="scatterSearchForm">
+            <label class="search-box__label" for="scatterSearchInput">搜尋 repo / owner / language</label>
+            <div class="scatter-search__field">
+              <input id="scatterSearchInput" type="search" placeholder="例如 React、Python、freeCodeCamp" />
+            </div>
+          </form>
+
+          <div class="scatter-control-group">
+            <div class="scatter-control-row">
+              <label class="search-box__label" for="minStarsRange">最低 stars</label>
+              <span id="minStarsValue">0</span>
+            </div>
+            <input id="minStarsRange" type="range" min="0" max="0" step="1000" value="0" />
+          </div>
+
+          <div class="scatter-control-group">
+            <span class="search-box__label">語言</span>
+            <div class="scatter-chip-row" id="languageChips"></div>
+          </div>
+
+          <div class="scatter-selected" id="selectedRepo">
+            <p class="results-header__eyebrow">Selected Repo</p>
+            <h3>點選圖上的 repo</h3>
+            <p>會顯示 Stars、Forks、語言和 GitHub 連結。</p>
+          </div>
+        </aside>
+
+        <section class="results-panel scatter-panel">
+          <div class="results-header scatter-header">
+            <div>
+              <p class="results-header__eyebrow">Forks x Stars</p>
+              <h2 id="scatterHeadline">正在載入散點圖...</h2>
+              <p class="results-header__description" id="scatterSummary">
+                X 軸是 Stars，Y 軸是 Forks；兩軸使用 log scale，避免熱門專案把其他點擠在角落。
+              </p>
+            </div>
+            <a class="scatter-back-link" href="./index.html">回首頁</a>
+          </div>
+
+          <div class="scatter-stage" id="scatterStage">
+            <svg
+              class="scatter-canvas"
+              id="scatterCanvas"
+              viewBox="0 0 980 660"
+              preserveAspectRatio="xMidYMid meet"
+              role="img"
+              aria-label="Stars 和 Forks 的 GitHub repository 散點圖"
+            ></svg>
+            <div class="scatter-tooltip hidden" id="scatterTooltip"></div>
+          </div>
+
+          <div class="scatter-quadrants" aria-label="Distribution guide">
+            <div><span class="scatter-dot scatter-dot--popular"></span>高人氣低 fork</div>
+            <div><span class="scatter-dot scatter-dot--technical"></span>高 fork 技術型專案</div>
+            <div><span class="scatter-dot"></span>一般分布</div>
+          </div>
+
+          <div class="empty-state hidden" id="scatterEmpty">
+            <h3>沒有符合條件的 repo</h3>
+            <p>請放寬搜尋字或最低 stars 篩選。</p>
+          </div>
+        </section>
+      </main>
     </div>
 
+    <script src="./clarity.js"></script>
     <script src="./scatterplot.js"></script>
   </body>
 </html>
