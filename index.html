@@ -52,16 +52,10 @@
     <!-- End Google Tag Manager (noscript) -->
     <div class="page-shell">
       <header class="hero">
-        <button class="theme-toggle" id="themeToggle" type="button" aria-pressed="false">
-          <span class="theme-toggle__icon" aria-hidden="true"></span>
-          <span class="theme-toggle__label" id="themeToggleLabel">切換深色</span>
-        </button>
         <div class="hero__content">
           <div class="brand-mark">
-            <div class="brand-mark__identity">
-              <a href="./index.html" aria-label="回到主頁">
-                <img src="./assets/title_icon.jpg" alt="GitHub Analysis for You icon" />
-              </a>
+            <a class="brand-mark__identity" href="./index.html" aria-label="回到主頁">
+              <img src="./assets/title_icon.jpg" alt="GitHub Analysis for You icon" />
               <div>
                 <p class="brand-mark__title" aria-label="GitHub Analysis for You">
                   <span class="brand-mark__title-full">GitHub Analysis for You</span>
@@ -72,15 +66,19 @@
                   </span>
                 </p>
               </div>
-            </div>
+            </a>
             <nav class="top-nav top-nav--hero" aria-label="Secondary">
               <a class="top-nav__link" href="./about.html">About</a>
+              <a class="top-nav__link" href="./rankings.html">Ranking</a>
+              <a class="top-nav__link" href="./network-graph.html">關聯圖</a>
+              <a class="top-nav__link" href="./scatterplot.html">散佈圖</a>
             </nav>
+            <button class="theme-toggle theme-toggle--nav" id="themeToggle" type="button" aria-pressed="false">
+              <span class="theme-toggle__icon" aria-hidden="true"></span>
+              <span class="theme-toggle__label" id="themeToggleLabel">切換深色</span>
+            </button>
           </div>
-          <h1>快速找到值得深入查看的 GitHub 專案。</h1>
-          <p class="hero__description">
-            先用關鍵字縮小範圍，再透過關聯圖延伸探索相似技術脈絡與值得深入看的專案。
-          </p>
+          <h1>快速找到值得收藏的GitHub 專案</h1>
           <form class="hero-search" id="heroSearchForm">
             <label class="hero-search__label" for="heroSearchInput">輸入關鍵字，立即開始探索</label>
             <div class="hero-search__field">
@@ -91,7 +89,6 @@
               />
               <button class="hero-search__button" type="submit">開始探索</button>
             </div>
-            <p class="hero-search__hint">下方還能用進階篩選與關聯圖，繼續往外擴展。</p>
           </form>
           <div class="hero__stats" id="heroStats">
             <article class="hero-stat">
@@ -129,18 +126,18 @@
         </a>
         <a
           class="feature-link feature-link--secondary"
-          href="./analytics.html"
+          href="./rankings.html"
           target="_blank"
           rel="noopener noreferrer"
-          aria-label="查看統計分析"
+          aria-label="查看排行榜"
         >
-          <p class="feature-link__eyebrow">Insights</p>
+          <p class="feature-link__eyebrow">Rankings</p>
           <div class="feature-link__header">
-            <h2>查看統計分析</h2>
+            <h2>查看排行榜</h2>
           </div>
-          <p>查看熱門排行、分布與整體趨勢，快速掌握目前結果的整體輪廓。</p>
+          <p>查看貢獻者排行榜與程式語言分布，快速掌握目前收錄專案的組成。</p>
           <div class="feature-link__footer">
-            <span class="feature-link__cta feature-link__cta--ghost">打開統計分析 <span aria-hidden="true">→</span></span>
+            <span class="feature-link__cta feature-link__cta--ghost">打開排行榜 <span aria-hidden="true">→</span></span>
           </div>
         </a>
       </section>

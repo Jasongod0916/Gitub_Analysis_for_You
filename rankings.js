@@ -40,7 +40,7 @@ function applyTheme(theme) {
   const nextTheme = theme === "dark" ? "dark" : "light";
   document.documentElement.dataset.theme = nextTheme;
   themeToggle.setAttribute("aria-pressed", String(nextTheme === "dark"));
-  themeToggleLabel.textContent = nextTheme === "dark" ? "深色模式" : "亮色模式";
+  themeToggleLabel.textContent = nextTheme === "dark" ? "切換淺色" : "切換深色";
   localStorage.setItem("gafy-theme", nextTheme);
   setTag("theme", nextTheme);
 }
@@ -82,7 +82,7 @@ function renderLeaderboard() {
 
   leaderboard.innerHTML = rankingState.authors
     .map((author) => {
-      const projects = author.projects.length
+      const details = author.projects.length
         ? `代表專案：${author.projects.map(escapeHtml).join("、")}`
         : `最近更新：${formatDate(author.latest_update)}`;
 
@@ -91,7 +91,7 @@ function renderLeaderboard() {
           <div class="leaderboard-row__rank">#${author.rank}</div>
           <div class="leaderboard-row__owner">
             <h3>${escapeHtml(author.owner)}</h3>
-            <p>${projects}</p>
+            <p>${details}</p>
           </div>
           <div class="leaderboard-row__metrics">
             <div class="leaderboard-metric">
@@ -129,7 +129,7 @@ function renderLanguageChart() {
   if (total === 0) {
     languagePie.style.background = "conic-gradient(var(--brand) 0deg 360deg)";
     languageList.innerHTML = "";
-    chartSummary.textContent = "目前沒有可用的語言資料。";
+    chartSummary.textContent = "目前沒有可用的語言分布資料。";
     return;
   }
 
@@ -143,9 +143,7 @@ function renderLanguageChart() {
   });
 
   languagePie.style.background = `conic-gradient(${gradientParts.join(", ")})`;
-  chartSummary.textContent = `共 ${formatNumber(total)} 筆語言資料，前 ${
-    visibleLanguages.length
-  } 類顯示於圓餅圖。`;
+  chartSummary.textContent = `共 ${formatNumber(total)} 筆語言資料，前 ${visibleLanguages.length} 類顯示於分布圖。`;
 
   languageList.innerHTML = visibleLanguages
     .map((item, index) => {
@@ -172,10 +170,10 @@ async function loadRankings() {
     renderLeaderboard();
     renderLanguageChart();
     setTag("ranking_has_data", rankingState.authors.length > 0 ? "true" : "false");
-    trackEvent("analytics_loaded");
+    trackEvent("rankings_loaded");
   } catch (error) {
     rankingSummary.textContent = "讀取排行榜資料失敗，請確認本機伺服器是否已啟動。";
-    chartSummary.textContent = "無法載入程式種類資料。";
+    chartSummary.textContent = "無法載入語言分布資料。";
     leaderboard.innerHTML = "";
     languageList.innerHTML = "";
     rankingEmpty.classList.remove("hidden");
@@ -189,5 +187,5 @@ themeToggle.addEventListener("click", () => {
 });
 
 applyTheme(localStorage.getItem("gafy-theme") || "light");
-setTag("page_type", "analytics");
+setTag("page_type", "rankings");
 loadRankings();

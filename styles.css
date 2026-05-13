@@ -106,6 +106,10 @@ body {
   padding-right: 170px;
 }
 
+.hero__content:has(.theme-toggle--nav) {
+  padding-right: 0;
+}
+
 .theme-toggle {
   position: absolute;
   top: 18px;
@@ -134,6 +138,15 @@ body {
   border-color: rgba(255, 255, 255, 0.24);
 }
 
+.theme-toggle--nav {
+  position: static;
+  min-height: 42px;
+  justify-self: end;
+  align-self: center;
+  margin: 0;
+  padding: 0 16px 0 12px;
+}
+
 .theme-toggle__icon {
   width: 22px;
   height: 22px;
@@ -158,11 +171,14 @@ body {
 }
 
 .brand-mark {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(340px, 1fr) auto minmax(220px, 1fr);
   align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  margin-bottom: 12px;
+  gap: 18px;
+  width: 100%;
+  margin-bottom: 18px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.16);
 }
 
 .brand-mark__identity {
@@ -170,6 +186,15 @@ body {
   align-items: center;
   gap: 12px;
   min-width: 0;
+  flex: 0 0 auto;
+  color: inherit;
+  text-decoration: none;
+  transition: transform 0.18s ease;
+}
+
+.brand-mark__identity:hover,
+.brand-mark__identity:focus-visible {
+  transform: translateY(-1px);
 }
 
 .brand-mark img {
@@ -196,6 +221,7 @@ body {
   font-size: clamp(1.06rem, 1.9vw, 1.46rem);
   font-weight: 800;
   line-height: 1.1;
+  white-space: nowrap;
 }
 
 .brand-mark__title-short {
@@ -206,31 +232,38 @@ body {
   display: inline;
 }
 
+:root[data-theme="dark"] .brand-mark {
+  border-bottom-color: rgba(255, 138, 31, 0.16);
+}
+
 .top-nav {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 10px;
-  flex-wrap: wrap;
+  min-width: 0;
+  flex-wrap: nowrap;
 }
 
 .top-nav--hero {
-  padding-right: 112px;
+  padding-right: 0;
 }
 
 .top-nav__link {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 36px;
-  padding: 0 14px;
+  min-height: 42px;
+  padding: 0 18px;
   border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.06);
   color: rgba(255, 249, 239, 0.9);
   font-family: "Manrope", sans-serif;
-  font-size: 0.82rem;
+  font-size: 0.9rem;
   font-weight: 800;
-  letter-spacing: 0.04em;
+  letter-spacing: 0;
+  white-space: nowrap;
   text-decoration: none;
   transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease;
 }
@@ -552,10 +585,6 @@ body {
   min-height: 0;
 }
 
-.about-hero .hero__content {
-  padding-right: 170px;
-}
-
 .about-lead {
   display: grid;
   gap: 18px;
@@ -651,6 +680,118 @@ body {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 10px;
+}
+
+.about-principles {
+  position: relative;
+  overflow: hidden;
+  grid-template-columns: minmax(280px, 0.88fr) minmax(0, 1.4fr);
+  align-items: stretch;
+  gap: 18px;
+  padding: 28px;
+  background:
+    radial-gradient(circle at 8% 18%, rgba(15, 118, 110, 0.16), transparent 34%),
+    radial-gradient(circle at 92% 78%, rgba(217, 119, 6, 0.14), transparent 30%),
+    linear-gradient(135deg, rgba(255, 252, 247, 0.96), rgba(244, 239, 230, 0.9));
+}
+
+.about-principles::after {
+  content: "";
+  position: absolute;
+  right: -44px;
+  top: -54px;
+  width: 170px;
+  height: 170px;
+  border-radius: 50%;
+  background: rgba(15, 118, 110, 0.1);
+}
+
+.about-principles__intro {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  align-content: center;
+  gap: 12px;
+  min-height: 240px;
+  padding: 24px;
+  border-radius: 24px;
+  background: linear-gradient(135deg, rgba(17, 69, 63, 0.94), rgba(15, 118, 110, 0.86));
+  color: #fff9ef;
+  box-shadow: 0 18px 42px rgba(17, 69, 63, 0.16);
+}
+
+.about-principles__intro .results-header__eyebrow,
+.about-principles__intro p {
+  color: rgba(255, 249, 239, 0.86);
+}
+
+.about-principles__intro h2 {
+  color: #fff9ef;
+  font-size: clamp(1.8rem, 3vw, 2.7rem);
+}
+
+.about-principles__stack {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.about-principle-card {
+  display: grid;
+  align-content: space-between;
+  min-height: 240px;
+  padding: 20px;
+  border: 1px solid rgba(17, 69, 63, 0.1);
+  border-radius: 24px;
+  background: rgba(255, 252, 247, 0.76);
+  box-shadow: 0 16px 32px rgba(55, 42, 24, 0.08);
+}
+
+.about-principle-card span {
+  width: fit-content;
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: rgba(15, 118, 110, 0.1);
+  color: var(--brand-deep);
+  font-family: "Manrope", sans-serif;
+  font-size: 0.76rem;
+  font-weight: 800;
+}
+
+.about-principle-card strong {
+  display: block;
+  margin-top: 26px;
+  color: var(--text);
+  font-family: "Manrope", sans-serif;
+  font-size: 1.18rem;
+}
+
+.about-principle-card p {
+  margin-top: 12px;
+}
+
+:root[data-theme="dark"] .about-principles {
+  background:
+    radial-gradient(circle at 8% 18%, rgba(255, 138, 31, 0.14), transparent 34%),
+    radial-gradient(circle at 92% 78%, rgba(15, 118, 110, 0.16), transparent 30%),
+    linear-gradient(135deg, rgba(22, 14, 10, 0.94), rgba(15, 9, 6, 0.9));
+}
+
+:root[data-theme="dark"] .about-principles__intro {
+  background: linear-gradient(135deg, rgba(17, 69, 63, 0.92), rgba(12, 8, 6, 0.96));
+  border: 1px solid rgba(255, 138, 31, 0.14);
+}
+
+:root[data-theme="dark"] .about-principle-card {
+  background: rgba(255, 138, 31, 0.04);
+  border-color: rgba(255, 138, 31, 0.14);
+}
+
+:root[data-theme="dark"] .about-principle-card span {
+  background: rgba(255, 138, 31, 0.12);
+  color: #ffd9b4;
 }
 
 .about-value {
@@ -987,7 +1128,7 @@ body {
 .results-header {
   display: flex;
   justify-content: space-between;
-  align-items: end;
+  align-items: flex-start;
   gap: 16px;
 }
 
@@ -1653,9 +1794,21 @@ body {
     grid-template-columns: 1fr;
   }
 
+  .brand-mark {
+    align-items: start;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .top-nav {
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+
   .about-grid,
   .about-guides,
-  .about-values {
+  .about-values,
+  .about-principles,
+  .about-principles__stack {
     grid-template-columns: 1fr;
   }
 
@@ -1722,6 +1875,15 @@ body {
     padding-right: 0;
   }
 
+  .about-principles {
+    padding: 20px;
+  }
+
+  .about-principles__intro,
+  .about-principle-card {
+    min-height: 0;
+  }
+
   .hero-search {
     margin-top: 16px;
   }
@@ -1774,11 +1936,6 @@ body {
     flex-wrap: wrap;
   }
 
-  .brand-mark {
-    align-items: start;
-    flex-direction: column;
-  }
-
   .top-nav--hero {
     padding-right: 0;
   }
@@ -1798,6 +1955,10 @@ body {
   .theme-toggle {
     position: static;
     margin-bottom: 18px;
+  }
+
+  .theme-toggle--nav {
+    margin-bottom: 0;
   }
 }
 

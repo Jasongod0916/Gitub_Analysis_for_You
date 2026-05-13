@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Google Tag Manager -->
+    <script>
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != "dataLayer" ? "&l=" + l : "";
+        j.async = true;
+        j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, "script", "dataLayer", "GTM-TKR6Z4LD");
+    </script>
+    <!-- End Google Tag Manager -->
+    <title>GitHub 排行榜 | GitHub Analysis for You</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Noto+Sans+TC:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="./rankings.css" />
+  </head>
+  <body data-clarity-page="rankings">
+    <!-- Google Tag Manager (noscript) -->
+    <noscript>
+      <iframe
+        src="https://www.googletagmanager.com/ns.html?id=GTM-TKR6Z4LD"
+        height="0"
+        width="0"
+        style="display: none; visibility: hidden"
+      ></iframe>
+    </noscript>
+    <!-- End Google Tag Manager (noscript) -->
+    <div class="page-shell rankings-shell">
+      <header class="hero rankings-hero">
+        <div class="hero__content">
+          <div class="brand-mark">
+            <a class="brand-mark__identity" href="./index.html" aria-label="回到主頁">
+              <img src="./assets/title_icon.jpg" alt="GitHub Analysis for You icon" />
+              <div>
+                <p class="brand-mark__title" aria-label="GitHub Analysis for You">
+                  <span class="brand-mark__title-full">GitHub Analysis for You</span>
+                  <span class="brand-mark__title-short" aria-hidden="true">
+                    <span class="brand-mark__title-letter brand-mark__title-letter--g">G</span>
+                    <span class="brand-mark__title-letter brand-mark__title-letter--a">A</span>
+                    <span class="brand-mark__title-letter brand-mark__title-letter--y">Y</span>
+                  </span>
+                </p>
+              </div>
+            </a>
+            <nav class="top-nav top-nav--hero" aria-label="Secondary">
+              <a class="top-nav__link" href="./about.html">About</a>
+              <a class="top-nav__link" href="./rankings.html" aria-current="page">Ranking</a>
+              <a class="top-nav__link" href="./network-graph.html">關聯圖</a>
+              <a class="top-nav__link" href="./scatterplot.html">散佈圖</a>
+            </nav>
+            <button class="theme-toggle theme-toggle--nav" id="themeToggle" type="button" aria-pressed="false">
+              <span class="theme-toggle__icon" aria-hidden="true"></span>
+              <span class="theme-toggle__label" id="themeToggleLabel">切換深色</span>
+            </button>
+          </div>
+          <h1>貢獻者排行榜</h1>
+          <p class="hero__description">
+            依據收錄專案的 repository owner 統計貢獻者排行，並同步呈現目前專案資料中的程式語言分布。
+          </p>
+          <div class="hero__stats" id="rankingStats">
+            <article class="hero-stat">
+              <span class="hero-stat__label">收錄專案</span>
+              <strong id="totalTools">--</strong>
+            </article>
+            <article class="hero-stat">
+              <span class="hero-stat__label">排行榜作者</span>
+              <strong id="authorCount">--</strong>
+            </article>
+            <article class="hero-stat">
+              <span class="hero-stat__label">主要語言</span>
+              <strong id="topLanguage">--</strong>
+            </article>
+          </div>
+        </div>
+      </header>
+
+      <main class="rankings-layout">
+        <section class="results-panel chart-panel">
+          <div class="results-header ranking-header">
+            <div>
+              <p class="results-header__eyebrow">Language Mix</p>
+              <h2>程式語言分布</h2>
+              <p class="results-header__description" id="chartSummary">
+                查看目前收錄專案的語言分布與各語言占比。
+              </p>
+            </div>
+          </div>
+
+          <div class="chart-grid">
+            <div class="pie-chart" id="languagePie" aria-label="程式語言分布圖" role="img"></div>
+            <div class="language-list" id="languageList"></div>
+          </div>
+        </section>
+
+        <section class="results-panel ranking-panel">
+          <div class="results-header ranking-header">
+            <div>
+              <p class="results-header__eyebrow">Top Contributors</p>
+              <h2>貢獻者排行榜</h2>
+              <p class="results-header__description" id="rankingSummary">
+                依收錄專案數排序，並以 stars 作為同名次時的參考。
+              </p>
+            </div>
+            <a class="ranking-link" href="./index.html">探索頁</a>
+          </div>
+          <div class="leaderboard" id="leaderboard"></div>
+          <div class="empty-state hidden" id="rankingEmpty">
+            <h3>目前沒有排行榜資料</h3>
+            <p>請確認 data/tools.db 中是否已有 tools 資料與 owner 欄位。</p>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="./clarity.js"></script>
+    <script src="./rankings.js"></script>
+  </body>
+</html>

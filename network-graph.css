@@ -16,10 +16,18 @@ body {
 
 .graph-topbar {
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: minmax(340px, 1fr) auto minmax(220px, 1fr);
   align-items: center;
-  gap: 12px;
+  gap: 18px;
   margin-bottom: 0;
+  padding: 18px 22px 16px;
+  border: 1px solid rgba(17, 69, 63, 0.12);
+  border-bottom-color: rgba(255, 255, 255, 0.16);
+  border-radius: 26px;
+  background:
+    linear-gradient(135deg, rgba(15, 118, 110, 0.92), rgba(17, 69, 63, 0.88)),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.06), transparent);
+  box-shadow: var(--shadow);
 }
 
 .graph-brand {
@@ -28,8 +36,13 @@ body {
   width: fit-content;
   min-width: 0;
   gap: 12px;
-  color: var(--text);
+  color: rgba(255, 249, 239, 0.94);
   text-decoration: none;
+}
+
+.graph-topnav {
+  justify-self: center;
+  padding-right: 0;
 }
 
 .graph-brand img {
@@ -37,7 +50,8 @@ body {
   height: 44px;
   border-radius: 12px;
   object-fit: cover;
-  box-shadow: 0 8px 20px rgba(55, 42, 24, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 22px rgba(10, 26, 23, 0.22);
 }
 
 .graph-brand span {
@@ -51,17 +65,19 @@ body {
 
 .graph-theme-toggle {
   position: static;
+  min-height: 42px;
   width: fit-content;
   justify-self: end;
-  color: var(--brand-deep);
-  background: var(--panel);
-  border-color: var(--line);
+  color: rgba(255, 249, 239, 0.88);
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.12);
+  margin: 0;
 }
 
 .graph-layout {
   display: grid;
   grid-template-columns: minmax(280px, 320px) minmax(0, 1fr) minmax(300px, 340px);
-  gap: 14px;
+  gap: 0;
   min-height: 0;
   height: 100%;
   margin-top: 16px;
@@ -715,6 +731,20 @@ body {
   color: var(--text);
 }
 
+:root[data-theme="dark"] .graph-topbar {
+  background:
+    linear-gradient(135deg, rgba(15, 118, 110, 0.92), rgba(17, 69, 63, 0.9)),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05), transparent);
+  border-color: rgba(255, 138, 31, 0.14);
+  border-bottom-color: rgba(255, 255, 255, 0.16);
+}
+
+:root[data-theme="dark"] .graph-theme-toggle {
+  color: rgba(255, 249, 239, 0.9);
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.14);
+}
+
 :root[data-theme="dark"] .graph-back-link {
   background: linear-gradient(135deg, var(--brand), var(--brand-deep));
   border-color: rgba(17, 69, 63, 0.12);
@@ -772,7 +802,7 @@ body {
 @media (max-width: 1240px) {
   .graph-layout {
     grid-template-columns: minmax(240px, 280px) minmax(0, 1fr) minmax(260px, 300px);
-    gap: 12px;
+    gap: 0;
   }
 
   .graph-detail-panel {
@@ -807,8 +837,18 @@ body {
 
 @media (max-width: 760px) {
   .graph-topbar {
-    grid-template-columns: minmax(0, 1fr) auto;
-    align-items: center;
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+  }
+
+  .graph-topnav,
+  .graph-theme-toggle {
+    justify-self: start;
+  }
+
+  .graph-topnav {
+    justify-content: flex-start;
+    flex-wrap: wrap;
   }
 }
 
