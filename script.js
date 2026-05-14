@@ -294,13 +294,15 @@ function renderProjects() {
     .map(
       (project, index) => `
         <article class="card is-entering" style="animation-delay: ${index * 70}ms">
-          <div class="card__rank">Top ${startIndex + index + 1}</div>
+          <div class="card__badges">
+            <span class="card__rank">Top ${startIndex + index + 1}</span>
+            <span class="category-tag">${project.language}</span>
+          </div>
           <div class="card__top">
             <div>
               <h3 class="card__title">${project.name}</h3>
               <p class="card__subtitle">${highlightText(project.full_name)}</p>
             </div>
-            <span class="category-tag">${project.language}</span>
           </div>
           <div class="metrics">
             ${createMetric("Stars", project.stars)}

@@ -44,16 +44,10 @@
     <!-- End Google Tag Manager (noscript) -->
     <div class="page-shell scatter-shell">
       <header class="hero scatter-hero">
-        <button class="theme-toggle" id="themeToggle" type="button" aria-pressed="false">
-          <span class="theme-toggle__icon" aria-hidden="true"></span>
-          <span class="theme-toggle__label" id="themeToggleLabel">深色模式</span>
-        </button>
         <div class="hero__content">
           <div class="brand-mark">
-            <div class="brand-mark__identity">
-              <a href="./index.html" aria-label="回到主頁">
-                <img src="./assets/title_icon.jpg" alt="GitHub Analysis for You icon" />
-              </a>
+            <a class="brand-mark__identity" href="./index.html" aria-label="回到主頁">
+              <img src="./assets/title_icon.jpg" alt="GitHub Analysis for You icon" />
               <div>
                 <p class="brand-mark__title" aria-label="GitHub Analysis for You">
                   <span class="brand-mark__title-full">GitHub Analysis for You</span>
@@ -64,11 +58,17 @@
                   </span>
                 </p>
               </div>
-            </div>
+            </a>
             <nav class="top-nav top-nav--hero" aria-label="Secondary">
-              <a class="top-nav__link" href="./index.html">Home</a>
-              <a class="top-nav__link" href="./analytics.html">Insights</a>
+              <a class="top-nav__link" href="./about.html">About</a>
+              <a class="top-nav__link" href="./rankings.html">Ranking</a>
+              <a class="top-nav__link" href="./network-graph.html">關聯圖</a>
+              <a class="top-nav__link" href="./scatterplot.html" aria-current="page">散佈圖</a>
             </nav>
+            <button class="theme-toggle theme-toggle--nav" id="themeToggle" type="button" aria-pressed="false">
+              <span class="theme-toggle__icon" aria-hidden="true"></span>
+              <span class="theme-toggle__label" id="themeToggleLabel">切換深色</span>
+            </button>
           </div>
           <h1>Fork vs Star Scatter Plot</h1>
           <p class="hero__description">
@@ -119,8 +119,9 @@
           </div>
 
           <div class="scatter-control-group">
-            <span class="search-box__label">語言</span>
+            <span class="search-box__label">熱門語言（前 10）</span>
             <div class="scatter-chip-row" id="languageChips"></div>
+            <p class="scatter-control-hint">依目前收錄 repo 的主要語言數量排序，All 代表不套用語言篩選。</p>
           </div>
 
           <div class="scatter-selected" id="selectedRepo">

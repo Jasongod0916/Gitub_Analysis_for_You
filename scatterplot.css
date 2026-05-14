@@ -68,6 +68,13 @@
   font-weight: 800;
 }
 
+.scatter-control-hint {
+  margin: -2px 0 0;
+  color: var(--muted);
+  font-size: 0.82rem;
+  line-height: 1.55;
+}
+
 #minStarsRange {
   width: 100%;
   accent-color: var(--brand);
@@ -101,6 +108,11 @@
 .scatter-chip.is-active {
   background: var(--brand);
   color: #f4fffc;
+}
+
+.scatter-chip--more {
+  border-style: dashed;
+  background: rgba(255, 252, 247, 0.62);
 }
 
 .scatter-selected {

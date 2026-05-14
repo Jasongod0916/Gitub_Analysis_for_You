@@ -1,11 +1,7 @@
-.rankings-shell {
-  width: min(1180px, calc(100% - 32px));
-}
-
 .rankings-layout {
   display: grid;
   grid-template-columns: minmax(320px, 0.78fr) minmax(0, 1.22fr);
-  gap: 24px;
+  gap: clamp(16px, 2vw, 28px);
   margin-top: 24px;
 }
 
@@ -147,7 +143,7 @@
 
 .chart-grid {
   display: grid;
-  gap: 24px;
+  gap: clamp(16px, 2vw, 24px);
 }
 
 .pie-chart {
@@ -254,15 +250,37 @@
   .rankings-layout {
     grid-template-columns: 1fr;
   }
+
+  .chart-grid {
+    grid-template-columns: minmax(220px, 0.8fr) minmax(0, 1.2fr);
+    align-items: center;
+  }
+
+  .pie-chart {
+    width: min(100%, 280px);
+  }
 }
 
 @media (max-width: 680px) {
+  .chart-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .pie-chart {
+    width: min(100%, 260px);
+  }
+
   .leaderboard-row {
-    grid-template-columns: 52px minmax(0, 1fr);
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .leaderboard-row__rank {
+    width: fit-content;
+    min-width: 52px;
   }
 
   .leaderboard-row__metrics {
-    grid-column: 1 / -1;
     justify-content: start;
   }
 
@@ -271,6 +289,26 @@
   }
 
   .ranking-header {
+    flex-direction: column;
     align-items: start;
+  }
+
+  .ranking-link {
+    width: 100%;
+  }
+}
+
+@media (min-width: 1320px) {
+  .rankings-layout {
+    grid-template-columns: minmax(360px, 0.72fr) minmax(0, 1.28fr);
+  }
+
+  .chart-grid {
+    grid-template-columns: 0.9fr 1.1fr;
+    align-items: center;
+  }
+
+  .pie-chart {
+    width: min(100%, 360px);
   }
 }

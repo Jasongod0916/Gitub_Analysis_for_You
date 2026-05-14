@@ -3,6 +3,7 @@ const graphState = {
   topicFrequency: new Map(),
   toolLookup: new Map(),
   rootTool: null,
+  selectedTool: null,
   visibleNodes: [],
   visibleEdges: [],
   visibleRange: 12,
@@ -94,6 +95,7 @@ const graphHeadline = document.querySelector("#graphHeadline");
 const graphSummary = document.querySelector("#graphSummary");
 const graphStage = document.querySelector("#graphStage");
 const graphCanvas = document.querySelector("#graphCanvas");
+const graphNodeMenu = document.querySelector("#graphNodeMenu");
 const graphLoading = document.querySelector("#graphLoading");
 const graphDetail = document.querySelector("#graphDetail");
 const graphResetView = document.querySelector("#graphResetView");
@@ -671,9 +673,57 @@ function renderRelationList() {
   });
 }
 
+function getSelectedNode() {
+  if (!graphState.selectedTool) return null;
+  return graphState.visibleNodes.find((node) => node.tool.id === graphState.selectedTool.id) || null;
+}
+
+function updateSelectedNodeStyles() {
+  graphCanvas.querySelectorAll("[data-node-id]").forEach((element) => {
+    element.classList.toggle(
+      "is-selected",
+      Number(element.dataset.nodeId) === graphState.selectedTool?.id
+    );
+  });
+}
+
+function hideNodeMenu() {
+  graphNodeMenu.classList.add("hidden");
+  graphNodeMenu.removeAttribute("data-node-id");
+}
+
+function showNodeMenu(tool, event) {
+  graphState.selectedTool = tool;
+  renderDetail();
+  updateSelectedNodeStyles();
+
+  const stageRect = graphStage.getBoundingClientRect();
+  const menuWidth = graphNodeMenu.offsetWidth || 112;
+  const menuHeight = graphNodeMenu.offsetHeight || 48;
+  const left = clamp(event.clientX - stageRect.left + 10, 10, stageRect.width - menuWidth - 10);
+  const top = clamp(event.clientY - stageRect.top + 10, 10, stageRect.height - menuHeight - 10);
+
+  graphNodeMenu.style.left = `${left}px`;
+  graphNodeMenu.style.top = `${top}px`;
+  graphNodeMenu.dataset.nodeId = String(tool.id);
+  graphNodeMenu.classList.remove("hidden");
+}
+
+function selectTool(tool) {
+  graphState.selectedTool = tool;
+  hideNodeMenu();
+  renderDetail();
+  updateSelectedNodeStyles();
+  trackEvent("graph_repo_selected");
+}
+
 function renderDetail() {
-  const tool = graphState.rootTool;
-  const highlightTopics = getTopFocusTopics(tool, graphState.visibleNodes);
+  const tool = graphState.selectedTool || graphState.rootTool;
+  const selectedNode = getSelectedNode();
+  const highlightTopics =
+    selectedNode && !selectedNode.isRoot
+      ? selectedNode.sharedTopics?.slice(0, 6) || []
+      : getTopFocusTopics(tool, graphState.visibleNodes);
   const languageLegend = getVisibleLanguageLegend();
   const description =
     tool.description ||
@@ -779,7 +829,7 @@ function renderHeadline() {
   const topNeighbor = neighbors[0];
   graphHeadline.textContent = `${graphState.rootTool.name} 的關聯圖`;
   graphSummary.textContent = topNeighbor
-    ? `中心：${graphState.rootTool.name}\n最接近：${topNeighbor.tool.name}\n可點任一節點重新展開`
+    ? `中心：${graphState.rootTool.name}\n最接近：${topNeighbor.tool.name}`
     : `中心：${graphState.rootTool.name}\n目前沒有足夠的相似 repo 可展開`;
 }
 
@@ -822,10 +872,12 @@ function renderCanvas() {
         node.tool.name,
         node.tool.full_name,
         `${titleCaseLanguage(node.tool.language)} · ${formatNumber(node.tool.stars)} stars`,
-        node.reasons?.[0] || "點擊可重新展開關聯圖",
+        node.reasons?.[0] || "左鍵查看資訊，右鍵展開關聯圖",
       ];
       return `
-        <g class="graph-node${node.isRoot ? " graph-node--root" : ""}" data-node-id="${
+        <g class="graph-node${node.isRoot ? " graph-node--root" : ""}${
+          node.tool.id === graphState.selectedTool?.id ? " is-selected" : ""
+        }" data-node-id="${
           node.tool.id
         }" transform="translate(${point.x.toFixed(2)} ${point.y.toFixed(2)})">
           <title>${escapeHtml(tooltipLines.join("\n"))}</title>
@@ -857,7 +909,14 @@ function renderCanvas() {
     element.addEventListener("click", () => {
       const nextTool = nodeMap.get(Number(element.dataset.nodeId))?.tool;
       if (nextTool) {
-        focusTool(nextTool, { preserveQuery: true });
+        selectTool(nextTool);
+      }
+    });
+    element.addEventListener("contextmenu", (event) => {
+      event.preventDefault();
+      const nextTool = nodeMap.get(Number(element.dataset.nodeId))?.tool;
+      if (nextTool) {
+        showNodeMenu(nextTool, event);
       }
     });
   });
@@ -887,7 +946,9 @@ function handleWheelZoom(event) {
 }
 
 function handlePointerDown(event) {
+  if (event.target.closest("#graphNodeMenu")) return;
   if (event.target.closest("[data-node-id]")) return;
+  hideNodeMenu();
 
   graphState.isDragging = true;
   graphState.dragPointerId = event.pointerId;
@@ -979,6 +1040,8 @@ function renderEverything() {
 
 function focusTool(tool, options = {}) {
   graphState.rootTool = tool;
+  graphState.selectedTool = tool;
+  hideNodeMenu();
   setTag("graph_root_language", tool.language || "Unknown");
   setTag("graph_root_owner", tool.owner || "unknown");
   trackEvent("graph_repo_focused");
@@ -1052,7 +1115,18 @@ graphNodeRange.addEventListener("input", (event) => {
 graphResetView.addEventListener("click", () => {
   if (graphState.rootTool) {
     trackEvent("graph_view_reset");
+    hideNodeMenu();
     renderCanvas();
+  }
+});
+
+graphNodeMenu.addEventListener("click", (event) => {
+  const button = event.target.closest("[data-action='expand']");
+  if (!button) return;
+  const nextTool = graphState.toolLookup.get(Number(graphNodeMenu.dataset.nodeId));
+  if (nextTool) {
+    trackEvent("graph_context_expand");
+    focusTool(nextTool, { preserveQuery: true });
   }
 });
 

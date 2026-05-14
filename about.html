@@ -80,38 +80,39 @@
           </div>
           <h1>關於我們</h1>
           <p class="hero__description">
-            GitHub 上的資訊很多，但真正麻煩的通常不是找不到專案，而是不知道下一步該點哪裡、哪些值得花時間看。
-            這個網站就是為了把那段判斷成本降下來。我們想把「找專案」這件事，從一串搜尋結果，變成一條更有方向感的探索路徑。
-            你不只會看到熱門 repo，還能更快知道它和哪些 topic、language、相關專案連在一起。
+            GitHub 不缺專案，缺的是探索方向。
+            我們打造這個網站，是為了讓開源專案探索不再只是滑過一串搜尋結果，而是能看見專案之間的關聯、技術脈絡與下一步方向。
+            你可以快速找到熱門 repo，也能理解它連結到哪些 topics、languages 與相關專案，讓每一次搜尋都更接近真正值得投入的目標。
           </p>
         </div>
       </header>
 
       <main class="about-layout">
-        <section class="results-panel about-panel about-principles">
-          <div class="about-principles__intro">
+        <section class="results-panel about-panel about-feature-showcase">
+          <div class="about-feature-showcase__header">
             <p class="results-header__eyebrow">Features</p>
-            <h2>我們提供哪些功能</h2>
-            <p>
-              這個網站不是只列出 repo，而是把搜尋、排名與視覺化串起來，幫你更快判斷下一步要看哪裡。
-            </p>
+            <h2>主要功能</h2>
+            <p>搜尋只是起點。這裡把專案關係、貢獻排行與分布視覺化整理好，讓你更快決定要收藏、比較，還是繼續延伸探索。</p>
           </div>
-          <div class="about-principles__stack" aria-label="網站功能">
-            <article class="about-principle-card">
-              <span>01</span>
+          <div class="about-feature-cards" aria-label="網站功能">
+            <a class="about-feature-card about-feature-card--graph" href="./network-graph.html">
+              <span class="about-feature-card__index">01</span>
               <strong>關聯圖</strong>
-              <p>把 repo、topic、language 的關係視覺化，讓你從一個專案延伸找到相似技術脈絡。</p>
-            </article>
-            <article class="about-principle-card">
-              <span>02</span>
+              <p>從一個 repo 往外看相似專案、topic 與 language，找到原本搜尋結果不會主動告訴你的技術脈絡。</p>
+              <em>適合：想沿著一個好專案繼續挖</em>
+            </a>
+            <a class="about-feature-card" href="./rankings.html">
+              <span class="about-feature-card__index">02</span>
               <strong>排行榜</strong>
-              <p>整理 repository owner 貢獻排行與程式語言分布，快速看出目前收錄專案的整體組成。</p>
-            </article>
-            <article class="about-principle-card">
-              <span>03</span>
+              <p>把 repository owner 貢獻排行與程式語言分布整理成輪廓，快速知道目前資料集中誰最活躍、哪些語言最多。</p>
+              <em>適合：先看整體趨勢再決定方向</em>
+            </a>
+            <a class="about-feature-card" href="./scatterplot.html">
+              <span class="about-feature-card__index">03</span>
               <strong>散佈圖</strong>
-              <p>用視覺化角度觀察專案之間的分布與差異，未來可以更快找出值得比較的群組。</p>
-            </article>
+              <p>用 stars 與 forks 的分布看專案型態，找出高人氣、技術型或值得比較的 repo 群組。</p>
+              <em>適合：比較專案熱度與採用程度</em>
+            </a>
           </div>
         </section>
 

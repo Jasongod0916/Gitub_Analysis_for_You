@@ -2,6 +2,7 @@ const scatterState = {
   tools: [],
   filteredTools: [],
   selectedLanguage: "All",
+  languagesExpanded: false,
   selectedRepoId: null,
   minStars: 0,
   chart: {
@@ -46,7 +47,7 @@ function applyTheme(theme) {
   const nextTheme = theme === "dark" ? "dark" : "light";
   document.documentElement.dataset.theme = nextTheme;
   themeToggle.setAttribute("aria-pressed", String(nextTheme === "dark"));
-  themeToggleLabel.textContent = nextTheme === "dark" ? "淺色模式" : "深色模式";
+  themeToggleLabel.textContent = nextTheme === "dark" ? "切換淺色" : "切換深色";
   localStorage.setItem("gafy-theme", nextTheme);
   setTag("theme", nextTheme);
 }
@@ -131,18 +132,23 @@ function renderStats() {
 function renderLanguageChips() {
   const counts = new Map();
   scatterState.tools.forEach((tool) => counts.set(tool.language, (counts.get(tool.language) || 0) + 1));
-  const languages = [...counts.entries()]
-    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
-    .slice(0, 10);
+  const allLanguages = [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+  const visibleLanguages = scatterState.languagesExpanded ? allLanguages : allLanguages.slice(0, 10);
+  const hiddenCount = Math.max(0, allLanguages.length - visibleLanguages.length);
 
   languageChips.innerHTML = [
-    `<button class="scatter-chip is-active" type="button" data-language="All">All</button>`,
-    ...languages.map(
+    `<button class="scatter-chip${scatterState.selectedLanguage === "All" ? " is-active" : ""}" type="button" data-language="All">All</button>`,
+    ...visibleLanguages.map(
       ([language, count]) =>
-        `<button class="scatter-chip" type="button" data-language="${escapeHtml(language)}">${escapeHtml(
+        `<button class="scatter-chip${scatterState.selectedLanguage === language ? " is-active" : ""}" type="button" data-language="${escapeHtml(language)}">${escapeHtml(
           language
         )} ${formatNumber(count)}</button>`
     ),
+    allLanguages.length > 10
+      ? `<button class="scatter-chip scatter-chip--more" type="button" data-language-toggle="true">${
+          scatterState.languagesExpanded ? "收合" : `更多 ${formatNumber(hiddenCount)}`
+        }</button>`
+      : "",
   ].join("");
 }
 
@@ -391,6 +397,12 @@ minStarsRange.addEventListener("input", applyFilters);
 languageChips.addEventListener("click", (event) => {
   const button = event.target.closest(".scatter-chip");
   if (!button) return;
+  if (button.dataset.languageToggle) {
+    scatterState.languagesExpanded = !scatterState.languagesExpanded;
+    renderLanguageChips();
+    trackEvent("scatter_language_more_toggled");
+    return;
+  }
   scatterState.selectedLanguage = button.dataset.language;
   languageChips.querySelectorAll(".scatter-chip").forEach((chip) => chip.classList.remove("is-active"));
   button.classList.add("is-active");

@@ -119,7 +119,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           </div>
 
           <div class="graph-stage__toolbar">
-            <p class="graph-stage__hint">滾輪縮放，點擊節點查看詳細資訊。</p>
+            <p class="graph-stage__hint">滾輪縮放，左鍵查看資訊，右鍵可重新展開。</p>
           </div>
 
           <div class="graph-stage" id="graphStage">
@@ -128,6 +128,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
               <span><i class="graph-legend__dot graph-legend__dot--neighbor"></i>關聯 repo</span>
             </div>
             <svg class="graph-canvas" id="graphCanvas" viewBox="0 0 960 720" preserveAspectRatio="xMidYMid meet"></svg>
+            <div class="graph-node-menu hidden" id="graphNodeMenu">
+              <button type="button" data-action="expand">展開</button>
+            </div>
             <button class="graph-stage__reset" id="graphResetView" type="button">預設</button>
             <div class="graph-stage__loading" id="graphLoading">正在載入 repo 關聯圖...</div>
           </div>
