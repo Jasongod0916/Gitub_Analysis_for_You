@@ -24,6 +24,12 @@ UTF8_TEXT_TYPES = {
     "text/xml",
     "image/svg+xml",
 }
+HTML_ROUTE_ALIASES = {
+    "/about": "/about.html",
+    "/rankings": "/rankings.html",
+    "/network-graph": "/network-graph.html",
+    "/scatterplot": "/scatterplot.html",
+}
 
 
 def resolve_database_path() -> Path:
@@ -177,6 +183,8 @@ def fetch_rankings() -> dict:
 class AppHandler(BaseHTTPRequestHandler):
     def do_GET(self) -> None:
         parsed_url = urlparse(self.path)
+        if self.redirect_html_alias(parsed_url):
+            return
         if parsed_url.path == "/api/tools":
             self.handle_tools_api(parsed_url.query)
             return
@@ -188,6 +196,8 @@ class AppHandler(BaseHTTPRequestHandler):
 
     def do_HEAD(self) -> None:
         parsed_url = urlparse(self.path)
+        if self.redirect_html_alias(parsed_url):
+            return
         if parsed_url.path in {"/api/tools", "/api/rankings"}:
             self.send_response(200)
             self.send_header("Content-Type", "application/json; charset=utf-8")
@@ -195,6 +205,19 @@ class AppHandler(BaseHTTPRequestHandler):
             return
 
         self.serve_static_file(parsed_url.path, send_body=False)
+
+    def redirect_html_alias(self, parsed_url) -> bool:
+        redirect_target = HTML_ROUTE_ALIASES.get(parsed_url.path)
+        if not redirect_target:
+            return False
+
+        if parsed_url.query:
+            redirect_target = f"{redirect_target}?{parsed_url.query}"
+
+        self.send_response(301)
+        self.send_header("Location", redirect_target)
+        self.end_headers()
+        return True
 
     def handle_tools_api(self, query_string: str) -> None:
         query = parse_qs(query_string).get("q", [""])[0].strip().lower()
