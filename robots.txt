@@ -1,5 +1,10 @@
 User-agent: *
 Allow: /
+Allow: /index.html
+Allow: /about.html
+Allow: /rankings.html
+Allow: /network-graph.html
+Allow: /scatterplot.html
 
 Disallow: /api/
 Disallow: /data/

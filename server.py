@@ -13,6 +13,17 @@ ROOT_DIR = Path(__file__).resolve().parent
 DATA_DIR = ROOT_DIR / "data"
 HOST = os.environ.get("HOST", "0.0.0.0")
 PORT = int(os.environ.get("PORT", "3000"))
+UTF8_TEXT_TYPES = {
+    "text/html",
+    "text/plain",
+    "text/css",
+    "application/javascript",
+    "text/javascript",
+    "application/json",
+    "application/xml",
+    "text/xml",
+    "image/svg+xml",
+}
 
 
 def resolve_database_path() -> Path:
@@ -222,9 +233,12 @@ class AppHandler(BaseHTTPRequestHandler):
             return
 
         content_type, _ = mimetypes.guess_type(target_path.name)
+        content_type = content_type or "application/octet-stream"
+        if content_type in UTF8_TEXT_TYPES:
+            content_type = f"{content_type}; charset=utf-8"
         body = target_path.read_bytes()
         self.send_response(200)
-        self.send_header("Content-Type", f"{content_type or 'application/octet-stream'}")
+        self.send_header("Content-Type", content_type)
         self.send_header("Content-Length", str(len(body)))
         self.end_headers()
         self.wfile.write(body)
