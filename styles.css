@@ -838,6 +838,10 @@ body {
   gap: 14px;
 }
 
+.about-feature-cards--primary {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
 .about-feature-card {
   position: relative;
   display: grid;
@@ -854,6 +858,14 @@ body {
   text-decoration: none;
   box-shadow: 0 18px 36px rgba(55, 42, 24, 0.08);
   transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+}
+
+.about-feature-cards--primary .about-feature-card {
+  align-content: start;
+  align-items: start;
+  gap: 14px;
+  min-height: 332px;
+  padding-top: 96px;
 }
 
 .about-feature-card::after {
@@ -921,8 +933,18 @@ body {
   line-height: 1;
 }
 
+.about-feature-cards--primary .about-feature-card strong {
+  margin-bottom: 0;
+  line-height: 1.08;
+}
+
 .about-feature-card p {
   margin: 0;
+}
+
+.about-feature-cards--primary .about-feature-card p {
+  font-size: 0.98rem;
+  line-height: 1.65;
 }
 
 .about-feature-card em {
@@ -936,6 +958,13 @@ body {
   font-style: normal;
   font-size: 0.82rem;
   font-weight: 800;
+}
+
+.about-feature-cards--primary .about-feature-card em {
+  margin-top: auto;
+  max-width: 100%;
+  line-height: 1.45;
+  white-space: normal;
 }
 
 .about-feature-card--graph em {

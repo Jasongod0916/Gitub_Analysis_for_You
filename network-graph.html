@@ -93,8 +93,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </button>
       </div>
 
-      <main class="graph-layout">
-        <aside class="results-panel graph-sidebar">
+      <main class="graph-page">
+        <section class="graph-layout">
+          <aside class="results-panel graph-sidebar">
           <div class="graph-sidebar__section">
             <div class="results-header graph-section-header">
               <div>
@@ -147,83 +148,56 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             </div>
             <div class="graph-list" id="graphRelationList"></div>
           </div>
-        </aside>
+          </aside>
 
-        <section class="results-panel graph-stage-panel">
-          <div class="results-header graph-stage-header">
-            <div>
-              <p class="results-header__eyebrow">Visual Graph</p>
-              <h2 id="graphHeadline">正在整理關聯圖...</h2>
-              <p class="results-header__description" id="graphSummary">
-                依 shared topics、language 與 owner 關係整理 repo 之間的連結。
-              </p>
-            </div>
-            <div class="graph-stage-meta">
-              <a class="graph-back-link" href="./index.html">探索頁</a>
-              <div class="graph-stage-stats" aria-label="Current graph stats">
-                <span>Repos <strong id="graphTotalTools">--</strong></span>
-                <span>Nodes <strong id="graphVisibleNodes">--</strong></span>
-                <span>Links <strong id="graphVisibleEdges">--</strong></span>
+          <section class="results-panel graph-stage-panel">
+            <div class="results-header graph-stage-header">
+              <div>
+                <p class="results-header__eyebrow">Visual Graph</p>
+                <h2 id="graphHeadline">正在整理關聯圖...</h2>
+                <p class="results-header__description" id="graphSummary">
+                  依 shared topics、language 與 owner 關係整理 repo 之間的連結。
+                </p>
+              </div>
+              <div class="graph-stage-meta">
+                <a class="graph-back-link" href="./index.html">探索頁</a>
+                <div class="graph-stage-stats" aria-label="Current graph stats">
+                  <span>Repos <strong id="graphTotalTools">--</strong></span>
+                  <span>Nodes <strong id="graphVisibleNodes">--</strong></span>
+                  <span>Links <strong id="graphVisibleEdges">--</strong></span>
+                </div>
               </div>
             </div>
-          </div>
 
-          <div class="graph-stage__toolbar">
-            <p class="graph-stage__hint">滾輪縮放，左鍵查看資訊，右鍵可重新展開。</p>
-          </div>
-
-          <div class="graph-stage" id="graphStage">
-            <div class="graph-legend">
-              <span><i class="graph-legend__dot graph-legend__dot--root"></i>目前 repo</span>
-              <span><i class="graph-legend__dot graph-legend__dot--neighbor"></i>關聯 repo</span>
+            <div class="graph-stage__toolbar">
+              <p class="graph-stage__hint">滾輪縮放，左鍵查看資訊，右鍵可重新展開。</p>
             </div>
-            <svg class="graph-canvas" id="graphCanvas" viewBox="0 0 960 720" preserveAspectRatio="xMidYMid meet"></svg>
-            <div class="graph-node-menu hidden" id="graphNodeMenu">
-              <button type="button" data-action="expand">展開</button>
-            </div>
-            <button class="graph-stage__reset" id="graphResetView" type="button">預設</button>
-            <div class="graph-stage__loading" id="graphLoading">正在載入 repo 關聯圖...</div>
-          </div>
-        </section>
 
-        <aside class="results-panel graph-detail-panel">
-          <div class="graph-detail" id="graphDetail">
-            <p class="results-header__eyebrow">Selected Repo</p>
-            <h2>選擇一個專案...</h2>
-            <p class="results-header__description">
-              點選左側或圖中的節點後，這裡會顯示專案摘要與關聯資訊。
-            </p>
-          </div>
-        </aside>
-        <section class="results-panel graph-stage-panel">
-          <div class="results-header graph-stage-header">
-            <div>
-              <p class="results-header__eyebrow">Why This Page Matters</p>
-              <h2>為什麼關聯圖值得被單獨查看？</h2>
+            <div class="graph-stage" id="graphStage">
+              <div class="graph-legend">
+                <span><i class="graph-legend__dot graph-legend__dot--root"></i>目前 repo</span>
+                <span><i class="graph-legend__dot graph-legend__dot--neighbor"></i>關聯 repo</span>
+              </div>
+              <svg class="graph-canvas" id="graphCanvas" viewBox="0 0 960 720" preserveAspectRatio="xMidYMid meet"></svg>
+              <div class="graph-node-menu hidden" id="graphNodeMenu">
+                <button type="button" data-action="expand">展開</button>
+              </div>
+              <button class="graph-stage__reset" id="graphResetView" type="button">預設</button>
+              <div class="graph-stage__loading" id="graphLoading">正在載入 repo 關聯圖...</div>
+            </div>
+          </section>
+
+          <aside class="results-panel graph-detail-panel">
+            <div class="graph-detail" id="graphDetail">
+              <p class="results-header__eyebrow">Selected Repo</p>
+              <h2>選擇一個專案...</h2>
               <p class="results-header__description">
-                關聯圖頁面把 repository 之間的共享 topic、owner 與 language 視覺化，適合用來找延伸閱讀路徑。
-                如果首頁搜尋只能回答「有沒有這個 repo」，這一頁更像是在回答「接下來我還應該看什麼」。
+                點選左側或圖中的節點後，這裡會顯示專案摘要與關聯資訊。
               </p>
             </div>
-          </div>
-          <div class="about-feature-cards" aria-label="Network graph guide">
-            <article class="about-feature-card">
-              <span class="about-feature-card__index">01</span>
-              <strong>找相似專案</strong>
-              <p>從一個已知 repo 出發，快速看到跟它主題、語言或作者關聯較高的其他選項。</p>
-            </article>
-            <article class="about-feature-card">
-              <span class="about-feature-card__index">02</span>
-              <strong>看技術脈絡</strong>
-              <p>關聯圖能讓你理解專案不是孤立存在，而是位在某個更大的開源技術網絡裡。</p>
-            </article>
-            <article class="about-feature-card">
-              <span class="about-feature-card__index">03</span>
-              <strong>延伸到其他頁面</strong>
-              <p>找到值得注意的 repo 之後，可以再到排行榜或散佈圖頁面，補看它的人氣與群體位置。</p>
-            </article>
-          </div>
+          </aside>
         </section>
+
       </main>
     </div>
 

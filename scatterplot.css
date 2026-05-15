@@ -317,6 +317,25 @@
   gap: 7px;
 }
 
+.scatter-panel .results-header__description {
+  max-width: none;
+}
+
+.scatter-panel .about-feature-cards {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.scatter-panel .about-feature-card {
+  align-content: start;
+  padding-top: 94px;
+}
+
+.scatter-panel .about-feature-card strong {
+  display: flex;
+  align-items: flex-end;
+  min-height: 5.2rem;
+}
+
 .scatter-dot {
   width: 10px;
   height: 10px;

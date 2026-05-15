@@ -1,7 +1,8 @@
 html,
 body {
   height: 100%;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: hidden;
 }
 
 .graph-shell {
@@ -11,6 +12,14 @@ body {
   height: 100vh;
   width: min(1440px, calc(100% - 32px));
   padding: 18px 0;
+  overflow: hidden;
+}
+
+.graph-page {
+  display: grid;
+  min-height: 0;
+  height: 100%;
+  padding-top: 16px;
   overflow: hidden;
 }
 
@@ -80,7 +89,6 @@ body {
   gap: 0;
   min-height: 0;
   height: 100%;
-  margin-top: 16px;
   overflow: hidden;
   align-items: stretch;
 }
