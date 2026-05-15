@@ -103,6 +103,9 @@ const graphZoomOut = document.querySelector("#graphZoomOut");
 const graphResetView = document.querySelector("#graphResetView");
 const themeToggle = document.querySelector("#themeToggle");
 const themeToggleLabel = document.querySelector("#themeToggleLabel");
+const GRAPH_DEFAULT_SCALE = 2.52;
+const GRAPH_ZOOM_IN_FACTOR = 1.08;
+const GRAPH_ZOOM_OUT_FACTOR = 1 / GRAPH_ZOOM_IN_FACTOR;
 
 function trackEvent(eventName) {
   window.trackClarityEvent?.(eventName);
@@ -579,9 +582,7 @@ function getGraphBounds(positions) {
 function resetCamera(bounds) {
   const width = graphState.canvasSize.width;
   const height = graphState.canvasSize.height;
-  const boundsWidth = Math.max(bounds.maxX - bounds.minX, 1);
-  const boundsHeight = Math.max(bounds.maxY - bounds.minY, 1);
-  const scale = clamp(Math.min(width / boundsWidth, height / boundsHeight) * 1.65, 0.98, 1.92);
+  const scale = GRAPH_DEFAULT_SCALE;
   const graphCenterX = (bounds.minX + bounds.maxX) / 2;
   const graphCenterY = (bounds.minY + bounds.maxY) / 2;
 
@@ -763,10 +764,6 @@ function renderDetail() {
 
     <div class="graph-detail__list">
       <div class="graph-detail__card">
-        <h3>距離怎麼判斷</h3>
-        <p>節點越近，代表 repo 越相似。系統會先看 shared topics，再補上同 language、同 owner 和描述關鍵字交集；共同訊號越多，邊的權重越高，排版時也會被拉得更近。</p>
-      </div>
-      <div class="graph-detail__card">
         <h3>顏色怎麼判斷</h3>
         <p>預設用同一個青綠色系，會把目前畫面中的 repo 依 stars 分成五段；越熱門越深、外框也越重。開啟語言分色後，其他節點會改依 language 分組顯示。</p>
         <label class="graph-toggle">
@@ -803,6 +800,10 @@ function renderDetail() {
               `
           }
         </div>
+      </div>
+      <div class="graph-detail__card">
+        <h3>距離怎麼判斷</h3>
+        <p>節點越近，代表 repo 越相似。系統會先看 shared topics，再補上同 language、同 owner 和描述關鍵字交集；共同訊號越多，邊的權重越高，排版時也會被拉得更近。</p>
       </div>
       <div class="graph-detail__card">
         <h3>主要關聯線索</h3>
@@ -931,7 +932,7 @@ function handleWheelZoom(event) {
   event.preventDefault();
 
   const point = getSvgPointFromClient(event.clientX, event.clientY);
-  zoomGraphAtPoint(point, event.deltaY < 0 ? 1.12 : 0.9);
+  zoomGraphAtPoint(point, event.deltaY < 0 ? GRAPH_ZOOM_IN_FACTOR : GRAPH_ZOOM_OUT_FACTOR);
 }
 
 function zoomGraphAtPoint(point, zoomFactor) {
@@ -1136,12 +1137,12 @@ graphResetView.addEventListener("click", () => {
 
 graphZoomIn?.addEventListener("click", () => {
   trackEvent("graph_zoom_in_clicked");
-  zoomGraphFromCenter(1.12);
+  zoomGraphFromCenter(GRAPH_ZOOM_IN_FACTOR);
 });
 
 graphZoomOut?.addEventListener("click", () => {
   trackEvent("graph_zoom_out_clicked");
-  zoomGraphFromCenter(0.9);
+  zoomGraphFromCenter(GRAPH_ZOOM_OUT_FACTOR);
 });
 
 graphNodeMenu.addEventListener("click", (event) => {

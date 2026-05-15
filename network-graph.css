@@ -387,6 +387,12 @@ body {
   font-size: 0.86rem;
 }
 
+.graph-stage-meta .graph-back-link {
+  width: 118px;
+  min-width: 118px;
+  padding: 0 9px;
+}
+
 .graph-stage__toolbar {
   display: flex;
   align-items: center;
