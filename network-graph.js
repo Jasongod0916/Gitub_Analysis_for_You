@@ -98,6 +98,8 @@ const graphCanvas = document.querySelector("#graphCanvas");
 const graphNodeMenu = document.querySelector("#graphNodeMenu");
 const graphLoading = document.querySelector("#graphLoading");
 const graphDetail = document.querySelector("#graphDetail");
+const graphZoomIn = document.querySelector("#graphZoomIn");
+const graphZoomOut = document.querySelector("#graphZoomOut");
 const graphResetView = document.querySelector("#graphResetView");
 const themeToggle = document.querySelector("#themeToggle");
 const themeToggleLabel = document.querySelector("#themeToggleLabel");
@@ -828,9 +830,11 @@ function renderHeadline() {
   const neighbors = graphState.visibleNodes.filter((node) => !node.isRoot);
   const topNeighbor = neighbors[0];
   graphHeadline.textContent = `${graphState.rootTool.name} 的關聯圖`;
-  graphSummary.textContent = topNeighbor
-    ? `中心：${graphState.rootTool.name}\n最接近：${topNeighbor.tool.name}`
-    : `中心：${graphState.rootTool.name}\n目前沒有足夠的相似 repo 可展開`;
+  graphSummary.innerHTML = topNeighbor
+    ? `中心：${escapeHtml(graphState.rootTool.name)}<br>最接近：${escapeHtml(
+        topNeighbor.tool.name
+      )}<br><strong>滾輪縮放，左鍵查看資訊，右鍵可重新展開。</strong>`
+    : `中心：${escapeHtml(graphState.rootTool.name)}<br>目前沒有足夠的相似 repo 可展開<br><strong>滾輪縮放，左鍵查看資訊，右鍵可重新展開。</strong>`;
 }
 
 function renderCanvas() {
@@ -927,7 +931,10 @@ function handleWheelZoom(event) {
   event.preventDefault();
 
   const point = getSvgPointFromClient(event.clientX, event.clientY);
-  const zoomFactor = event.deltaY < 0 ? 1.12 : 0.9;
+  zoomGraphAtPoint(point, event.deltaY < 0 ? 1.12 : 0.9);
+}
+
+function zoomGraphAtPoint(point, zoomFactor) {
   const nextScale = clamp(
     graphState.camera.scale * zoomFactor,
     graphState.camera.minScale,
@@ -943,6 +950,13 @@ function handleWheelZoom(event) {
   graphState.camera.translateX = point.x - contentX * nextScale;
   graphState.camera.translateY = point.y - contentY * nextScale;
   applyViewportTransform();
+}
+
+function zoomGraphFromCenter(zoomFactor) {
+  if (!graphCanvas.querySelector("#graphViewport")) return;
+  const rect = graphCanvas.getBoundingClientRect();
+  const point = getSvgPointFromClient(rect.left + rect.width / 2, rect.top + rect.height / 2);
+  zoomGraphAtPoint(point, zoomFactor);
 }
 
 function handlePointerDown(event) {
@@ -1118,6 +1132,16 @@ graphResetView.addEventListener("click", () => {
     hideNodeMenu();
     renderCanvas();
   }
+});
+
+graphZoomIn?.addEventListener("click", () => {
+  trackEvent("graph_zoom_in_clicked");
+  zoomGraphFromCenter(1.12);
+});
+
+graphZoomOut?.addEventListener("click", () => {
+  trackEvent("graph_zoom_out_clicked");
+  zoomGraphFromCenter(0.9);
 });
 
 graphNodeMenu.addEventListener("click", (event) => {

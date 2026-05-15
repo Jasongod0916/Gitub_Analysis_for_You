@@ -154,11 +154,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <div class="results-header graph-stage-header">
               <div>
                 <p class="results-header__eyebrow">Visual Graph</p>
-                <h2 id="graphHeadline">正在整理關聯圖...</h2>
-                <p class="results-header__description" id="graphSummary">
-                  依 shared topics、language 與 owner 關係整理 repo 之間的連結。
-                </p>
-              </div>
+              <h2 id="graphHeadline">正在整理關聯圖...</h2>
+              <p class="results-header__description" id="graphSummary">
+                依 shared topics、language 與 owner 關係整理 repo 之間的連結。
+              </p>
+            </div>
               <div class="graph-stage-meta">
                 <a class="graph-back-link" href="./index.html">探索頁</a>
                 <div class="graph-stage-stats" aria-label="Current graph stats">
@@ -168,11 +168,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 </div>
               </div>
             </div>
-
-            <div class="graph-stage__toolbar">
-              <p class="graph-stage__hint">滾輪縮放，左鍵查看資訊，右鍵可重新展開。</p>
-            </div>
-
             <div class="graph-stage" id="graphStage">
               <div class="graph-legend">
                 <span><i class="graph-legend__dot graph-legend__dot--root"></i>目前 repo</span>
@@ -182,7 +177,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
               <div class="graph-node-menu hidden" id="graphNodeMenu">
                 <button type="button" data-action="expand">展開</button>
               </div>
-              <button class="graph-stage__reset" id="graphResetView" type="button">預設</button>
+              <div class="graph-stage-controls" aria-label="Graph view controls">
+                <button class="graph-stage__control" id="graphZoomIn" type="button" aria-label="放大">+</button>
+                <button class="graph-stage__control" id="graphZoomOut" type="button" aria-label="縮小">-</button>
+                <button class="graph-stage__reset" id="graphResetView" type="button">預設</button>
+              </div>
               <div class="graph-stage__loading" id="graphLoading">正在載入 repo 關聯圖...</div>
             </div>
           </section>
