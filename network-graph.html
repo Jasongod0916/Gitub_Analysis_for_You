@@ -32,6 +32,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       content="Explore related GitHub repositories with an interactive network graph built from shared owners, topics, and languages."
     />
     <meta name="twitter:image" content="https://gitub-analysis-for-you.onrender.com/assets/title_icon.jpg" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": "Network Graph",
+        "url": "https://gitub-analysis-for-you.onrender.com/network-graph.html",
+        "description": "Explore related GitHub repositories with an interactive network graph built from shared owners, topics, and languages."
+      }
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -166,6 +175,35 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             </p>
           </div>
         </aside>
+        <section class="results-panel graph-stage-panel">
+          <div class="results-header graph-stage-header">
+            <div>
+              <p class="results-header__eyebrow">Why This Page Matters</p>
+              <h2>為什麼關聯圖值得被單獨查看？</h2>
+              <p class="results-header__description">
+                關聯圖頁面把 repository 之間的共享 topic、owner 與 language 視覺化，適合用來找延伸閱讀路徑。
+                如果首頁搜尋只能回答「有沒有這個 repo」，這一頁更像是在回答「接下來我還應該看什麼」。
+              </p>
+            </div>
+          </div>
+          <div class="about-feature-cards" aria-label="Network graph guide">
+            <article class="about-feature-card">
+              <span class="about-feature-card__index">01</span>
+              <strong>找相似專案</strong>
+              <p>從一個已知 repo 出發，快速看到跟它主題、語言或作者關聯較高的其他選項。</p>
+            </article>
+            <article class="about-feature-card">
+              <span class="about-feature-card__index">02</span>
+              <strong>看技術脈絡</strong>
+              <p>關聯圖能讓你理解專案不是孤立存在，而是位在某個更大的開源技術網絡裡。</p>
+            </article>
+            <article class="about-feature-card">
+              <span class="about-feature-card__index">03</span>
+              <strong>延伸到其他頁面</strong>
+              <p>找到值得注意的 repo 之後，可以再到排行榜或散佈圖頁面，補看它的人氣與群體位置。</p>
+            </article>
+          </div>
+        </section>
       </main>
     </div>
 

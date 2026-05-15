@@ -39,6 +39,15 @@
       content="See GitHub repository rankings by owner and language, with quick summaries of the most active and most starred projects in the dataset."
     />
     <meta name="twitter:image" content="https://gitub-analysis-for-you.onrender.com/assets/title_icon.jpg" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": "GitHub Rankings",
+        "url": "https://gitub-analysis-for-you.onrender.com/rankings.html",
+        "description": "See GitHub repository rankings by owner and language, with quick summaries of the most active and most starred projects in the dataset."
+      }
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -141,6 +150,35 @@
           <div class="empty-state hidden" id="rankingEmpty">
             <h3>目前沒有排行榜資料</h3>
             <p>請確認 data/tools.db 中是否已有 tools 資料與 owner 欄位。</p>
+          </div>
+        </section>
+        <section class="results-panel ranking-panel">
+          <div class="results-header ranking-header">
+            <div>
+              <p class="results-header__eyebrow">How To Use</p>
+              <h2>這個排行榜頁面能幫你看什麼？</h2>
+              <p class="results-header__description">
+                這一頁把 GitHub repository owner 與常見語言分布整理成可快速掃描的輪廓。
+                如果你想知道資料集中誰最活躍、哪些語言最常出現，或哪些作者持續推出高關注專案，這裡會比只看首頁搜尋更快。
+              </p>
+            </div>
+          </div>
+          <div class="about-feature-cards" aria-label="Ranking page guide">
+            <article class="about-feature-card">
+              <span class="about-feature-card__index">01</span>
+              <strong>看作者活躍度</strong>
+              <p>排行榜會整理 owner 的 repo 數量與整體表現，適合先從創作者或團隊角度理解資料集。</p>
+            </article>
+            <article class="about-feature-card">
+              <span class="about-feature-card__index">02</span>
+              <strong>看語言分布</strong>
+              <p>語言比例可以幫你快速判斷目前資料更偏向哪些技術生態，作為後續搜尋與比較的起點。</p>
+            </article>
+            <article class="about-feature-card">
+              <span class="about-feature-card__index">03</span>
+              <strong>回到其他頁面深挖</strong>
+              <p>如果某位 owner 或某種語言特別吸引你，可以再回首頁、關聯圖或散佈圖沿著同一條線繼續探索。</p>
+            </article>
           </div>
         </section>
       </main>

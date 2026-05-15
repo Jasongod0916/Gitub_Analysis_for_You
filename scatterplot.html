@@ -39,6 +39,15 @@
       content="Compare GitHub repositories by stars and forks with an interactive scatter plot that helps surface popular and technically adopted projects."
     />
     <meta name="twitter:image" content="https://gitub-analysis-for-you.onrender.com/assets/title_icon.jpg" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": "Fork vs Star Scatter Plot",
+        "url": "https://gitub-analysis-for-you.onrender.com/scatterplot.html",
+        "description": "Compare GitHub repositories by stars and forks with an interactive scatter plot that helps surface popular and technically adopted projects."
+      }
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -181,6 +190,35 @@
           <div class="empty-state hidden" id="scatterEmpty">
             <h3>沒有符合條件的 repo</h3>
             <p>請放寬搜尋字或最低 stars 篩選。</p>
+          </div>
+        </section>
+        <section class="results-panel scatter-panel">
+          <div class="results-header scatter-header">
+            <div>
+              <p class="results-header__eyebrow">How To Read</p>
+              <h2>如何解讀這張 GitHub 散佈圖？</h2>
+              <p class="results-header__description">
+                這一頁把 stars 與 forks 放在同一張圖上，幫你快速辨認高人氣專案、技術採用型專案，或值得比較的 repo 群。
+                它適合用來補足排行榜看不到的分布感，也能幫你更快決定哪些專案值得深入閱讀。
+              </p>
+            </div>
+          </div>
+          <div class="about-feature-cards" aria-label="Scatter plot guide">
+            <article class="about-feature-card">
+              <span class="about-feature-card__index">01</span>
+              <strong>看人氣與採用差異</strong>
+              <p>有些 repo stars 很高但 forks 較低，有些則代表被更多人實際延伸或參與，兩者意義不同。</p>
+            </article>
+            <article class="about-feature-card">
+              <span class="about-feature-card__index">02</span>
+              <strong>找異常亮點</strong>
+              <p>散點位置特別突出的專案，常常就是你值得點開、比較或加入追蹤名單的候選。</p>
+            </article>
+            <article class="about-feature-card">
+              <span class="about-feature-card__index">03</span>
+              <strong>搭配其他視圖判斷</strong>
+              <p>如果你在這裡看到有趣的 repo，再搭配關聯圖與首頁搜尋，會更容易判斷它的上下文與替代方案。</p>
+            </article>
           </div>
         </section>
       </main>
