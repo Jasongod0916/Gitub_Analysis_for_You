@@ -186,6 +186,16 @@ class AppHandler(BaseHTTPRequestHandler):
 
         self.serve_static_file(parsed_url.path)
 
+    def do_HEAD(self) -> None:
+        parsed_url = urlparse(self.path)
+        if parsed_url.path in {"/api/tools", "/api/rankings"}:
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json; charset=utf-8")
+            self.end_headers()
+            return
+
+        self.serve_static_file(parsed_url.path, send_body=False)
+
     def handle_tools_api(self, query_string: str) -> None:
         query = parse_qs(query_string).get("q", [""])[0].strip().lower()
         tools = fetch_tools()
@@ -220,7 +230,7 @@ class AppHandler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(body)
 
-    def serve_static_file(self, raw_path: str) -> None:
+    def serve_static_file(self, raw_path: str, send_body: bool = True) -> None:
         relative_path = "index.html" if raw_path in {"/", ""} else raw_path.lstrip("/")
         target_path = (ROOT_DIR / relative_path).resolve()
 
@@ -241,7 +251,8 @@ class AppHandler(BaseHTTPRequestHandler):
         self.send_header("Content-Type", content_type)
         self.send_header("Content-Length", str(len(body)))
         self.end_headers()
-        self.wfile.write(body)
+        if send_body:
+            self.wfile.write(body)
 
     def log_message(self, format: str, *args) -> None:
         return
