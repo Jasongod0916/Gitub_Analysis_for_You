@@ -2055,15 +2055,18 @@ body {
   }
 }
 
-@media (max-width: 1280px) {
-  .feature-nav {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
 @media (max-width: 900px) {
   .feature-nav {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+
+  .feature-nav > .feature-link {
+    grid-column: span 2;
+  }
+
+  .feature-nav > .feature-link:nth-child(4),
+  .feature-nav > .feature-link:nth-child(5) {
+    grid-column: span 3;
   }
 
   .brand-mark {
@@ -2130,6 +2133,18 @@ body {
 }
 
 @media (max-width: 640px) {
+  .feature-nav {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .feature-nav > .feature-link {
+    grid-column: span 1;
+  }
+
+  .feature-nav > .feature-link:last-child {
+    grid-column: 1 / -1;
+  }
+
   .page-shell {
     width: min(100% - 20px, 1440px);
     padding-top: 16px;
