@@ -95,7 +95,8 @@
             </a>
             <nav class="top-nav top-nav--hero" aria-label="Secondary">
               <a class="top-nav__link" href="./about.html">About</a>
-              <a class="top-nav__link" href="./rankings.html">Ranking</a>
+              <a class="top-nav__link" href="./rankings.html">排行榜</a>
+              <a class="top-nav__link" href="./collection-map.html">學習地圖</a>
               <a class="top-nav__link" href="./network-graph.html">關聯圖</a>
               <a class="top-nav__link" href="./scatterplot.html">散佈圖</a>
             </nav>
@@ -106,7 +107,7 @@
           </div>
           <h1>快速找到值得收藏的GitHub 專案</h1>
           <form class="hero-search" id="heroSearchForm">
-            <label class="hero-search__label" for="heroSearchInput">輸入關鍵字，立即開始探索</label>
+            <label class="hero-search__label" for="heroSearchInput">輸入關鍵字，開始探索</label>
             <div class="hero-search__field">
               <input
                 id="heroSearchInput"
@@ -133,7 +134,28 @@
         </div>
       </header>
 
-      <section class="feature-nav">
+      <section class="feature-nav-shell">
+        <div class="results-header feature-nav-shell__header">
+          <div>
+            <p class="results-header__eyebrow">Quick Paths</p>
+            <h2>快速入口</h2>
+            <p class="results-header__description">用不同角度進入資料庫，先選你現在最需要的探索方式。</p>
+          </div>
+        </div>
+        <div class="feature-nav">
+        <a
+          class="feature-link feature-link--secondary"
+          href="./about.html"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="查看關於我們"
+        >
+          <p class="feature-link__eyebrow">About</p>
+          <div class="feature-link__header">
+            <h2>關於我們</h2>
+          </div>
+          <p>了解網站功能與設計。</p>
+        </a>
         <a
           class="feature-link feature-link--primary"
           href="./network-graph.html"
@@ -145,10 +167,20 @@
           <div class="feature-link__header">
             <h2>探索專案關聯</h2>
           </div>
-          <p>查看目前結果延伸出的相似 repo、topic 與 language 關聯，繼續往外探索技術脈絡。</p>
-          <div class="feature-link__footer">
-            <span class="feature-link__cta">開始探索關聯圖 <span aria-hidden="true">→</span></span>
+          <p>延伸相似 repo 與技術脈絡。</p>
+        </a>
+        <a
+          class="feature-link feature-link--tertiary"
+          href="./collection-map.html"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="學習地圖"
+        >
+          <p class="feature-link__eyebrow">Learning Paths</p>
+          <div class="feature-link__header">
+            <h2>學習地圖</h2>
           </div>
+        <p>查看代表專案。</p>
         </a>
         <a
           class="feature-link feature-link--secondary"
@@ -159,13 +191,24 @@
         >
           <p class="feature-link__eyebrow">Rankings</p>
           <div class="feature-link__header">
-            <h2>查看排行榜</h2>
+            <h2>排行榜</h2>
           </div>
-          <p>貢獻排行與語言分布一眼看懂。</p>
-          <div class="feature-link__footer">
-            <span class="feature-link__cta feature-link__cta--ghost">打開排行榜 <span aria-hidden="true">→</span></span>
-          </div>
+          <p>一眼看懂排行與語言分布。</p>
         </a>
+        <a
+          class="feature-link feature-link--secondary"
+          href="./scatterplot.html"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="打開散佈圖"
+        >
+          <p class="feature-link__eyebrow">Scatter Plot</p>
+          <div class="feature-link__header">
+            <h2>散佈圖</h2>
+          </div>
+          <p>快速比較熱門度與採用度。</p>
+        </a>
+        </div>
       </section>
 
       <main class="layout">
@@ -249,37 +292,6 @@
           <div class="empty-state hidden" id="emptyState">
             <h3>目前找不到符合條件的專案</h3>
             <p>試著調整關鍵字、切換語言或放寬主題篩選，通常能找到新的方向。</p>
-          </div>
-        </section>
-        <section class="results-panel">
-          <div class="results-header">
-            <div>
-              <p class="results-header__eyebrow">Explore More</p>
-              <h2>Discover More Than the Homepage</h2>
-              <p class="results-header__description">
-                Each feature page serves a different search intent. Use the
-                <a href="./rankings.html">GitHub rankings page</a> to compare owners and languages,
-                the <a href="./network-graph.html">network graph</a> to discover related repositories,
-                and the <a href="./scatterplot.html">scatter plot</a> to compare stars and forks.
-              </p>
-            </div>
-          </div>
-          <div class="about-feature-cards" aria-label="Feature page links">
-            <a class="about-feature-card" href="./rankings.html">
-              <span class="about-feature-card__index">01</span>
-              <strong>Rankings</strong>
-              <p>Review repository owners, language mix, and overall patterns in the current GitHub dataset.</p>
-            </a>
-            <a class="about-feature-card" href="./network-graph.html">
-              <span class="about-feature-card__index">02</span>
-              <strong>Network Graph</strong>
-              <p>Follow shared topics, languages, and owners to uncover adjacent repositories worth exploring.</p>
-            </a>
-            <a class="about-feature-card" href="./scatterplot.html">
-              <span class="about-feature-card__index">03</span>
-              <strong>Scatter Plot</strong>
-              <p>Compare repository popularity and adoption through stars and forks on one visual chart.</p>
-            </a>
           </div>
         </section>
       </main>

@@ -355,23 +355,39 @@ function renderPagination(totalItems, totalPages) {
   const startItem = (state.currentPage - 1) * PAGE_SIZE + 1;
   const endItem = Math.min(state.currentPage * PAGE_SIZE, totalItems);
 
-  const pageButtons = [];
-  for (let page = 1; page <= totalPages; page += 1) {
-    const isActive = page === state.currentPage ? " is-active" : "";
-    pageButtons.push(
-      `<button class="pagination__button${isActive}" type="button" data-page="${page}">${page}</button>`
-    );
+  const visiblePages = new Set([1, totalPages]);
+  for (let page = state.currentPage - 2; page <= state.currentPage + 2; page += 1) {
+    if (page >= 1 && page <= totalPages) visiblePages.add(page);
   }
 
+  const sortedPages = [...visiblePages].sort((first, second) => first - second);
+  const pageButtons = [];
+
+  sortedPages.forEach((page, index) => {
+    const previousPage = sortedPages[index - 1];
+    if (index > 0 && page - previousPage > 1) {
+      pageButtons.push('<span class="pagination__ellipsis" aria-hidden="true">…</span>');
+    }
+
+    const isActive = page === state.currentPage ? " is-active" : "";
+    pageButtons.push(
+      `<button class="pagination__button pagination__button--page${isActive}" type="button" data-page="${page}">${page}</button>`
+    );
+  });
+
   pagination.innerHTML = `
-    <button class="pagination__button" type="button" data-page="prev" ${
-      state.currentPage === 1 ? "disabled" : ""
-    }>上一頁</button>
-    <span class="pagination__info">第 ${startItem}-${endItem} 筆，共 ${totalItems} 筆</span>
-    ${pageButtons.join("")}
-    <button class="pagination__button" type="button" data-page="next" ${
-      state.currentPage === totalPages ? "disabled" : ""
-    }>下一頁</button>
+    <div class="pagination__summary">
+      <button class="pagination__button pagination__button--nav" type="button" data-page="prev" ${
+        state.currentPage === 1 ? "disabled" : ""
+      }>上一頁</button>
+      <span class="pagination__info">第 ${startItem}-${endItem} 筆，共 ${totalItems} 筆</span>
+      <button class="pagination__button pagination__button--nav" type="button" data-page="next" ${
+        state.currentPage === totalPages ? "disabled" : ""
+      }>下一頁</button>
+    </div>
+    <div class="pagination__pages" aria-label="頁碼導覽">
+      ${pageButtons.join("")}
+    </div>
   `;
 }
 
@@ -439,7 +455,7 @@ pagination.addEventListener("click", (event) => {
   }
 
   renderProjects();
-  window.scrollTo({ top: 0, behavior: "smooth" });
+  resultsPanel.scrollIntoView({ behavior: "smooth", block: "start" });
 });
 
 viewSwitch.addEventListener("click", () => {
