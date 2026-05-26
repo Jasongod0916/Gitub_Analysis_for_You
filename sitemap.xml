@@ -2,22 +2,26 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://gitub-analysis-for-you.onrender.com/</loc>
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-26</lastmod>
   </url>
   <url>
     <loc>https://gitub-analysis-for-you.onrender.com/about.html</loc>
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-26</lastmod>
   </url>
   <url>
     <loc>https://gitub-analysis-for-you.onrender.com/rankings.html</loc>
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-26</lastmod>
   </url>
   <url>
     <loc>https://gitub-analysis-for-you.onrender.com/network-graph.html</loc>
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-26</lastmod>
   </url>
   <url>
     <loc>https://gitub-analysis-for-you.onrender.com/scatterplot.html</loc>
-    <lastmod>2026-05-15</lastmod>
+    <lastmod>2026-05-26</lastmod>
+  </url>
+  <url>
+    <loc>https://gitub-analysis-for-you.onrender.com/collection-map.html</loc>
+    <lastmod>2026-05-26</lastmod>
   </url>
 </urlset>
