@@ -5,6 +5,7 @@ Allow: /about.html
 Allow: /rankings.html
 Allow: /network-graph.html
 Allow: /scatterplot.html
+Allow: /collection-map.html
 
 Disallow: /api/
 Disallow: /data/
