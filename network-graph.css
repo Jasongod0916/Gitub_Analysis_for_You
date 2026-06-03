@@ -949,7 +949,8 @@ body {
   }
 
   .graph-topnav,
-  .graph-theme-toggle {
+  .graph-theme-toggle,
+  .header-actions--graph {
     justify-self: start;
   }
 

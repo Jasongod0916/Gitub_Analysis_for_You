@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import mimetypes
 import os
+import re
 import sqlite3
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -13,6 +14,7 @@ ROOT_DIR = Path(__file__).resolve().parent
 DATA_DIR = ROOT_DIR / "data"
 HOST = os.environ.get("HOST", "0.0.0.0")
 PORT = int(os.environ.get("PORT", "3000"))
+SITE_URL = "https://gitub-analysis-for-you.onrender.com"
 UTF8_TEXT_TYPES = {
     "text/html",
     "text/plain",
@@ -27,9 +29,11 @@ UTF8_TEXT_TYPES = {
 HTML_ROUTE_ALIASES = {
     "/about": "/about.html",
     "/rankings": "/rankings.html",
+    "/collection-map": "/collection-map.html",
     "/network-graph": "/network-graph.html",
     "/scatterplot": "/scatterplot.html",
 }
+LANGUAGE_PREFIXES = {"zh-Hant", "en", "ja"}
 
 
 def resolve_database_path() -> Path:
@@ -207,9 +211,13 @@ class AppHandler(BaseHTTPRequestHandler):
         self.serve_static_file(parsed_url.path, send_body=False)
 
     def redirect_html_alias(self, parsed_url) -> bool:
-        redirect_target = HTML_ROUTE_ALIASES.get(parsed_url.path)
+        normalized_path, language = self.strip_language_prefix(parsed_url.path)
+        redirect_target = HTML_ROUTE_ALIASES.get(normalized_path)
         if not redirect_target:
             return False
+
+        if language:
+            redirect_target = f"/{language}{redirect_target}"
 
         if parsed_url.query:
             redirect_target = f"{redirect_target}?{parsed_url.query}"
@@ -253,7 +261,34 @@ class AppHandler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(body)
 
+    def strip_language_prefix(self, raw_path: str) -> tuple[str, str | None]:
+        path_parts = raw_path.lstrip("/").split("/", 1)
+        if not path_parts or path_parts[0] not in LANGUAGE_PREFIXES:
+            return raw_path, None
+
+        remaining_path = f"/{path_parts[1]}" if len(path_parts) > 1 and path_parts[1] else "/"
+        return remaining_path, path_parts[0]
+
+    def localized_absolute_url(self, raw_path: str, language: str | None) -> str:
+        if raw_path in {"/", "", "/index.html"}:
+            return f"{SITE_URL}/{language}/" if language and language != "zh-Hant" else f"{SITE_URL}/"
+
+        prefix = f"/{language}" if language and language != "zh-Hant" else ""
+        return f"{SITE_URL}{prefix}{raw_path}"
+
+    def localize_html_head(self, body: bytes, raw_path: str, language: str | None) -> bytes:
+        html = body.decode("utf-8")
+        html = html.replace('<html lang="zh-Hant">', f'<html lang="{language or "zh-Hant"}">')
+
+        if language and language != "zh-Hant":
+            page_url = self.localized_absolute_url(raw_path, language)
+            html = re.sub(r'<link rel="canonical" href="[^"]+" />', f'<link rel="canonical" href="{page_url}" />', html)
+            html = re.sub(r'<meta property="og:url" content="[^"]+" />', f'<meta property="og:url" content="{page_url}" />', html)
+
+        return html.encode("utf-8")
+
     def serve_static_file(self, raw_path: str, send_body: bool = True) -> None:
+        raw_path, language = self.strip_language_prefix(raw_path)
         relative_path = "index.html" if raw_path in {"/", ""} else raw_path.lstrip("/")
         target_path = (ROOT_DIR / relative_path).resolve()
 
@@ -270,6 +305,8 @@ class AppHandler(BaseHTTPRequestHandler):
         if content_type in UTF8_TEXT_TYPES:
             content_type = f"{content_type}; charset=utf-8"
         body = target_path.read_bytes()
+        if language and content_type.startswith("text/html"):
+            body = self.localize_html_head(body, raw_path, language)
         self.send_response(200)
         self.send_header("Content-Type", content_type)
         self.send_header("Content-Length", str(len(body)))

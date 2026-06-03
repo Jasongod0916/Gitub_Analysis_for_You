@@ -10,6 +10,7 @@ const state = {
   projects: [],
 };
 const PAGE_SIZE = 25;
+const COLLAPSED_CATEGORY_COUNT = 6;
 
 const heroSearchForm = document.querySelector("#heroSearchForm");
 const heroSearchInput = document.querySelector("#heroSearchInput");
@@ -40,11 +41,19 @@ function setTag(key, value) {
   window.setClarityTag?.(key, value);
 }
 
+function translate(key, fallback) {
+  return window.gafyTranslations?.[key] || fallback;
+}
+
+function translateTemplate(key, fallback, values = {}) {
+  return translate(key, fallback).replace(/\{(\w+)\}/g, (_, name) => values[name] ?? "");
+}
+
 function applyTheme(theme) {
   const nextTheme = theme === "dark" ? "dark" : "light";
   document.documentElement.dataset.theme = nextTheme;
   themeToggle.setAttribute("aria-pressed", String(nextTheme === "dark"));
-  themeToggleLabel.textContent = nextTheme === "dark" ? "淺色模式" : "深色模式";
+  themeToggleLabel.textContent = nextTheme === "dark" ? "淺色" : "深色";
   localStorage.setItem("gafy-theme", nextTheme);
   setTag("theme", nextTheme);
 }
@@ -146,7 +155,7 @@ function renderCategoryChips() {
   const categories = getCategories();
   const visibleCategories = state.categoriesExpanded
     ? categories
-    : [categories[0], ...categories.slice(1, 6)];
+    : [categories[0], ...categories.slice(1, COLLAPSED_CATEGORY_COUNT + 1)];
 
   visibleCategories.forEach((category) => {
     const button = document.createElement("button");
@@ -162,11 +171,13 @@ function renderCategoryChips() {
     categoryChips.appendChild(button);
   });
 
-  if (categories.length > 6) {
+  if (categories.length > COLLAPSED_CATEGORY_COUNT + 1) {
     const toggleButton = document.createElement("button");
     toggleButton.type = "button";
     toggleButton.className = "chip chip--ghost";
-    toggleButton.textContent = state.categoriesExpanded ? "收合" : "更多";
+    toggleButton.textContent = state.categoriesExpanded
+      ? translate("common.collapse", "收合")
+      : translate("common.more", "更多");
     toggleButton.addEventListener("click", () => {
       state.categoriesExpanded = !state.categoriesExpanded;
       renderCategoryChips();
@@ -201,7 +212,9 @@ function renderTopicChips() {
     const toggleButton = document.createElement("button");
     toggleButton.type = "button";
     toggleButton.className = "chip chip--ghost";
-    toggleButton.textContent = state.topicsExpanded ? "收合" : "更多";
+    toggleButton.textContent = state.topicsExpanded
+      ? translate("common.collapse", "收合")
+      : translate("common.more", "更多");
     toggleButton.addEventListener("click", () => {
       state.topicsExpanded = !state.topicsExpanded;
       renderTopicChips();
@@ -265,15 +278,26 @@ function createStatusPill(label, tone = "muted") {
 
 function buildSummaryText(filteredProjects) {
   if (filteredProjects.length === 0) {
-    return "目前沒有符合條件的項目，建議放寬關鍵字或 topic 條件。";
+    return translate(
+      "home.results.summary.empty",
+      "目前沒有符合條件的項目，建議放寬關鍵字或 topic 條件。"
+    );
   }
 
   const topProject = filteredProjects[0];
   if (state.viewMode === "compact") {
-    return `簡單檢視聚焦名稱、描述、語言、星星數與更新時間，方便快速瀏覽 ${topProject.name}。`;
+    return translateTemplate(
+      "home.results.summary.compact",
+      "簡單檢視聚焦名稱、描述、語言、星星數與更新時間，方便快速瀏覽 {project}。",
+      { project: topProject.name }
+    );
   }
 
-  return `目前共整理出 ${filteredProjects.length} 個項目，建議優先查看 ${topProject.name}。`;
+  return translateTemplate(
+    "home.results.summary.default",
+    "目前共整理出 {count} 個項目，建議優先查看 {project}。",
+    { count: filteredProjects.length, project: topProject.name }
+  );
 }
 
 function renderProjects() {
@@ -283,7 +307,9 @@ function renderProjects() {
   const startIndex = (state.currentPage - 1) * PAGE_SIZE;
   const paginatedProjects = filteredProjects.slice(startIndex, startIndex + PAGE_SIZE);
 
-  resultsCount.textContent = `共 ${filteredProjects.length} 筆結果`;
+  resultsCount.textContent = translateTemplate("home.results.count", "共 {count} 筆結果", {
+    count: filteredProjects.length,
+  });
   resultsSummary.textContent = buildSummaryText(filteredProjects);
   projectGrid.classList.toggle("is-list", state.viewMode === "list");
   projectGrid.classList.toggle("is-compact", state.viewMode === "compact");
@@ -379,20 +405,24 @@ function renderPagination(totalItems, totalPages) {
     <div class="pagination__summary">
       <button class="pagination__button pagination__button--nav" type="button" data-page="prev" ${
         state.currentPage === 1 ? "disabled" : ""
-      }>上一頁</button>
-      <span class="pagination__info">第 ${startItem}-${endItem} 筆，共 ${totalItems} 筆</span>
+      }>${translate("home.pagination.prev", "上一頁")}</button>
+      <span class="pagination__info">${translateTemplate(
+        "home.pagination.info",
+        "第 {start}-{end} 筆，共 {total} 筆",
+        { start: startItem, end: endItem, total: totalItems }
+      )}</span>
       <button class="pagination__button pagination__button--nav" type="button" data-page="next" ${
         state.currentPage === totalPages ? "disabled" : ""
-      }>下一頁</button>
+      }>${translate("home.pagination.next", "下一頁")}</button>
     </div>
-    <div class="pagination__pages" aria-label="頁碼導覽">
+    <div class="pagination__pages" aria-label="${translate("home.pagination.aria", "頁碼導覽")}">
       ${pageButtons.join("")}
     </div>
   `;
 }
 
 async function loadProjects() {
-  resultsCount.textContent = "資料載入中...";
+  resultsCount.textContent = translate("home.results.loading", "資料載入中...");
 
   try {
     const response = await fetch("/api/tools");
@@ -404,12 +434,15 @@ async function loadProjects() {
     renderTopicChips();
     renderProjects();
   } catch (error) {
-    resultsCount.textContent = "資料載入失敗";
+    resultsCount.textContent = translate("home.results.loadFailed", "資料載入失敗");
     projectGrid.innerHTML = "";
     emptyState.classList.remove("hidden");
     emptyState.innerHTML = `
-      <h3>無法連接資料庫</h3>
-      <p>請確認本機伺服器已透過 start-server.bat 啟動。</p>
+      <h3>${translate("home.results.connectionFailed.title", "無法連接資料庫")}</h3>
+      <p>${translate(
+        "home.results.connectionFailed.description",
+        "請確認本機伺服器已透過 start-server.bat 啟動。"
+      )}</p>
     `;
   }
 }
@@ -483,6 +516,14 @@ document.addEventListener("click", (event) => {
   if (!event.target.closest(".view-switch-wrap")) {
     viewMenu.classList.add("hidden");
     viewSwitch.setAttribute("aria-expanded", "false");
+  }
+});
+
+window.addEventListener("gafy:languagechange", () => {
+  renderCategoryChips();
+  renderTopicChips();
+  if (state.projects.length > 0) {
+    renderProjects();
   }
 });
 

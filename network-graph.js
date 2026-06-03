@@ -119,7 +119,7 @@ function applyTheme(theme) {
   const nextTheme = theme === "dark" ? "dark" : "light";
   document.documentElement.dataset.theme = nextTheme;
   themeToggle.setAttribute("aria-pressed", String(nextTheme === "dark"));
-  themeToggleLabel.textContent = nextTheme === "dark" ? "淺色模式" : "深色模式";
+  themeToggleLabel.textContent = nextTheme === "dark" ? "淺色" : "深色";
   localStorage.setItem("gafy-theme", nextTheme);
   setTag("theme", nextTheme);
 }

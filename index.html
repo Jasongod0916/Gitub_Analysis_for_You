@@ -33,6 +33,10 @@
     />
     <meta name="robots" content="index, follow, max-image-preview:large" />
     <link rel="canonical" href="https://gitub-analysis-for-you.onrender.com/" />
+    <link rel="alternate" hreflang="zh-Hant" href="https://gitub-analysis-for-you.onrender.com/" />
+    <link rel="alternate" hreflang="en" href="https://gitub-analysis-for-you.onrender.com/en/" />
+    <link rel="alternate" hreflang="ja" href="https://gitub-analysis-for-you.onrender.com/ja/" />
+    <link rel="alternate" hreflang="x-default" href="https://gitub-analysis-for-you.onrender.com/" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="GitHub Analysis for You" />
     <meta
@@ -94,41 +98,52 @@
               </div>
             </a>
             <nav class="top-nav top-nav--hero" aria-label="Secondary">
-              <a class="top-nav__link" href="./index.html" aria-current="page">探索頁</a>
-              <a class="top-nav__link" href="./about.html">About</a>
-              <a class="top-nav__link" href="./rankings.html">排行榜</a>
-              <a class="top-nav__link" href="./collection-map.html">學習地圖</a>
-              <a class="top-nav__link" href="./network-graph.html">關聯圖</a>
-              <a class="top-nav__link" href="./scatterplot.html">散佈圖</a>
+              <a class="top-nav__link" href="./index.html" aria-current="page" data-i18n="nav.explore">探索頁</a>
+              <a class="top-nav__link" href="./about.html" data-i18n="nav.about">About</a>
+              <a class="top-nav__link" href="./rankings.html" data-i18n="nav.rankings">排行榜</a>
+              <a class="top-nav__link" href="./collection-map.html" data-i18n="nav.learningMap">學習地圖</a>
+              <a class="top-nav__link" href="./network-graph.html" data-i18n="nav.networkGraph">專案關聯</a>
+              <a class="top-nav__link" href="./scatterplot.html" data-i18n="nav.scatterplot">採用比較</a>
             </nav>
-            <button class="theme-toggle theme-toggle--nav" id="themeToggle" type="button" aria-pressed="false">
-              <span class="theme-toggle__icon" aria-hidden="true"></span>
-              <span class="theme-toggle__label" id="themeToggleLabel">切換深色</span>
-            </button>
+            <div class="header-actions">
+              <label class="language-switcher" aria-label="Language selector">
+                <span class="language-switcher__label" aria-hidden="true">🌐</span>
+                <select class="language-switcher__select" id="languageSelect">
+                  <option value="zh-Hant">中文</option>
+                  <option value="en">English</option>
+                  <option value="ja">日本語</option>
+                </select>
+              </label>
+              <button class="theme-toggle theme-toggle--nav" id="themeToggle" type="button" aria-pressed="false">
+                <span class="theme-toggle__icon" aria-hidden="true"></span>
+                <span class="theme-toggle__label" id="themeToggleLabel" data-i18n="theme.dark">深色</span>
+              </button>
+            </div>
           </div>
-          <h1>快速找到值得收藏的GitHub 專案</h1>
+          <h1 data-i18n="home.hero.title">快速找到值得收藏的GitHub 專案</h1>
           <form class="hero-search" id="heroSearchForm">
-            <label class="hero-search__label" for="heroSearchInput">輸入關鍵字，開始探索</label>
+            <label class="hero-search__label" for="heroSearchInput" data-i18n="home.hero.label">輸入關鍵字，開始探索</label>
             <div class="hero-search__field">
               <input
                 id="heroSearchInput"
                 type="search"
                 placeholder="搜尋 repo、owner、topic 或 language，例如 React、Python、dashboard"
+                data-i18n-placeholder="home.hero.placeholder"
               />
-              <button class="hero-search__button" type="submit">開始探索</button>
+              <button class="hero-search__button" type="submit" data-i18n="home.hero.button">開始探索</button>
             </div>
           </form>
           <div class="hero__stats" id="heroStats">
             <article class="hero-stat">
-              <span class="hero-stat__label">專案總數</span>
+              <span class="hero-stat__label" data-i18n="home.stats.total">專案總數</span>
               <strong id="projectTotal">--</strong>
             </article>
             <article class="hero-stat">
-              <span class="hero-stat__label">熱門語言</span>
+              <span class="hero-stat__label" data-i18n="home.stats.language">熱門語言</span>
               <strong id="topLanguage">--</strong>
             </article>
             <article class="hero-stat">
-              <span class="hero-stat__label">熱門主題</span>
+              <span class="hero-stat__label" data-i18n="home.stats.topic">熱門主題</span>
               <strong id="topTopic">--</strong>
             </article>
           </div>
@@ -138,25 +153,12 @@
       <section class="feature-nav-shell">
         <div class="results-header feature-nav-shell__header">
           <div>
-            <p class="results-header__eyebrow">Quick Paths</p>
-            <h2>快速入口</h2>
-            <p class="results-header__description">用不同角度進入資料庫，先選你現在最需要的探索方式。</p>
+            <p class="results-header__eyebrow" data-i18n="home.quick.eyebrow">Quick Paths</p>
+            <h2 data-i18n="home.quick.title">快速入口</h2>
+            <p class="results-header__description" data-i18n="home.quick.description">先選一種探索方式，從關聯、學習路線、排行或分布快速進入資料庫。</p>
           </div>
         </div>
         <div class="feature-nav">
-        <a
-          class="feature-link feature-link--secondary"
-          href="./about.html"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="查看關於我們"
-        >
-          <p class="feature-link__eyebrow">About</p>
-          <div class="feature-link__header">
-            <h2>關於我們</h2>
-          </div>
-          <p>了解網站功能與設計。</p>
-        </a>
         <a
           class="feature-link feature-link--primary"
           href="./network-graph.html"
@@ -164,11 +166,12 @@
           rel="noopener noreferrer"
           aria-label="開始探索關聯圖"
         >
-          <p class="feature-link__eyebrow">Connections</p>
+          <p class="feature-link__eyebrow" data-i18n="home.quick.network.eyebrow">Start Here</p>
           <div class="feature-link__header">
-            <h2>探索專案關聯</h2>
+            <h2 data-i18n="home.quick.network.title">延伸相似專案</h2>
           </div>
-          <p>延伸相似 repo 與技術脈絡。</p>
+          <p data-i18n="home.quick.network.description">從一個 repo 延伸出相關專案、topic 與 language，快速看懂技術脈絡。</p>
+          <span class="feature-link__action" data-i18n="home.quick.network.action">前往關聯圖</span>
         </a>
         <a
           class="feature-link feature-link--tertiary"
@@ -177,11 +180,11 @@
           rel="noopener noreferrer"
           aria-label="學習地圖"
         >
-          <p class="feature-link__eyebrow">Learning Paths</p>
+          <p class="feature-link__eyebrow" data-i18n="home.quick.learning.eyebrow">Learning</p>
           <div class="feature-link__header">
-            <h2>學習地圖</h2>
+            <h2 data-i18n="home.quick.learning.title">規劃學習路線</h2>
           </div>
-        <p>查看代表專案。</p>
+          <p data-i18n="home.quick.learning.description">依主題整理代表 repo，先找方向，再看每條路徑值得深入的專案。</p>
         </a>
         <a
           class="feature-link feature-link--secondary"
@@ -190,11 +193,11 @@
           rel="noopener noreferrer"
           aria-label="查看排行榜"
         >
-          <p class="feature-link__eyebrow">Rankings</p>
+          <p class="feature-link__eyebrow" data-i18n="home.quick.rankings.eyebrow">Rankings</p>
           <div class="feature-link__header">
-            <h2>排行榜</h2>
+            <h2 data-i18n="home.quick.rankings.title">查看熱門排行</h2>
           </div>
-          <p>一眼看懂排行與語言分布。</p>
+          <p data-i18n="home.quick.rankings.description">快速比較 stars、forks、作者與語言分布，先看整體趨勢再決定往哪裡找。</p>
         </a>
         <a
           class="feature-link feature-link--secondary"
@@ -203,11 +206,11 @@
           rel="noopener noreferrer"
           aria-label="打開散佈圖"
         >
-          <p class="feature-link__eyebrow">Scatter Plot</p>
+          <p class="feature-link__eyebrow" data-i18n="home.quick.scatter.eyebrow">Compare</p>
           <div class="feature-link__header">
-            <h2>散佈圖</h2>
+            <h2 data-i18n="home.quick.scatter.title">比較採用程度</h2>
           </div>
-          <p>快速比較熱門度與採用度。</p>
+          <p data-i18n="home.quick.scatter.description">用 stars 與 forks 的分布看熱門度、活躍度與值得比較的 repo。</p>
         </a>
         </div>
       </section>
@@ -215,25 +218,26 @@
       <main class="layout">
         <section class="search-panel">
           <div class="search-box">
-            <label class="search-box__label" for="searchInput">進階搜尋</label>
-            <p class="search-box__hint">用語言與熱門主題篩選，快速鎖定專案。</p>
+            <label class="search-box__label" for="searchInput" data-i18n="home.search.title">進階搜尋</label>
+            <p class="search-box__hint" data-i18n="home.search.hint">用語言與熱門主題篩選，快速鎖定專案。</p>
             <div class="search-box__field">
               <input
                 id="searchInput"
                 type="search"
                 placeholder="試試搜尋：React、Python、dashboard、AI tool"
+                data-i18n-placeholder="home.search.placeholder"
               />
             </div>
           </div>
 
           <div class="toolbar">
             <div class="filter-group">
-              <span class="filter-group__label">語言篩選</span>
+              <span class="filter-group__label" data-i18n="home.search.languageFilter">語言篩選</span>
               <div class="chips" id="categoryChips"></div>
             </div>
 
             <div class="filter-group">
-              <span class="filter-group__label">熱門主題</span>
+              <span class="filter-group__label" data-i18n="home.search.topicFilter">熱門主題</span>
               <div class="chips chips--soft" id="topicChips"></div>
             </div>
           </div>
@@ -242,9 +246,9 @@
         <section class="results-panel">
           <div class="results-header">
             <div>
-              <p class="results-header__eyebrow">Discovery Board</p>
-              <h2>精選 GitHub 專案</h2>
-              <p class="results-header__description" id="resultsSummary">
+              <p class="results-header__eyebrow" data-i18n="home.results.eyebrow">Discovery Board</p>
+              <h2 data-i18n="home.results.title">精選 GitHub 專案</h2>
+              <p class="results-header__description" id="resultsSummary" data-i18n="home.results.description">
                 依目前條件整理出最值得先查看的項目，並保留通往關聯圖的探索節奏。
               </p>
             </div>
@@ -253,11 +257,11 @@
                 <div class="sort-group sort-group--inline">
                   <div class="sort-select-wrap" data-sort="stars">
                     <select id="sortSelect">
-                      <option value="stars">依熱門程度</option>
-                      <option value="forks">依 Fork 數</option>
-                      <option value="watchers">依 Watching 數</option>
-                      <option value="updated_at">依最近更新</option>
-                      <option value="title">依名稱 A-Z</option>
+                      <option value="stars" data-i18n="home.results.sort.popular">依熱門程度</option>
+                      <option value="forks" data-i18n="home.results.sort.forks">依 Fork 數</option>
+                      <option value="watchers" data-i18n="home.results.sort.watching">依 Watching 數</option>
+                      <option value="updated_at" data-i18n="home.results.sort.updated">依最近更新</option>
+                      <option value="title" data-i18n="home.results.sort.title">依名稱 A-Z</option>
                     </select>
                     <span class="sort-select-wrap__arrow" aria-hidden="true"></span>
                   </div>
@@ -268,6 +272,7 @@
                     id="viewSwitch"
                     type="button"
                     aria-label="切換檢視模式"
+                    data-i18n-aria-label="home.results.view.aria"
                     aria-expanded="false"
                   >
                     <span class="view-switch__icon" aria-hidden="true">
@@ -275,12 +280,12 @@
                       <span></span>
                       <span></span>
                     </span>
-                    <span class="view-switch__label">檢視</span>
+                    <span class="view-switch__label" data-i18n="home.results.view.label">檢視</span>
                     <span class="view-switch__arrow" aria-hidden="true"></span>
                   </button>
                   <div class="view-menu hidden" id="viewMenu">
-                    <button class="view-menu__item is-active" data-view="grid" type="button">卡片檢視</button>
-                    <button class="view-menu__item" data-view="list" type="button">列表檢視</button>
+                    <button class="view-menu__item is-active" data-view="grid" type="button" data-i18n="home.results.view.grid">卡片檢視</button>
+                    <button class="view-menu__item" data-view="list" type="button" data-i18n="home.results.view.list">列表檢視</button>
                   </div>
                 </div>
               </div>
@@ -291,14 +296,15 @@
           <div class="project-grid" id="projectGrid"></div>
           <div class="pagination hidden" id="pagination"></div>
           <div class="empty-state hidden" id="emptyState">
-            <h3>目前找不到符合條件的專案</h3>
-            <p>試著調整關鍵字、切換語言或放寬主題篩選，通常能找到新的方向。</p>
+            <h3 data-i18n="home.results.empty.title">目前找不到符合條件的專案</h3>
+            <p data-i18n="home.results.empty.description">試著調整關鍵字、切換語言或放寬主題篩選，通常能找到新的方向。</p>
           </div>
         </section>
       </main>
     </div>
 
     <script src="./clarity.js"></script>
+    <script src="./language-switcher.js"></script>
     <script src="./script.js"></script>
     <script src="./theme-label-fix.js"></script>
   </body>

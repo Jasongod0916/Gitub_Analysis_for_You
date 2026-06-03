@@ -1,6 +1,7 @@
 const rankingState = {
   authors: [],
   languages: [],
+  summary: {},
 };
 
 const totalTools = document.querySelector("#totalTools");
@@ -23,6 +24,25 @@ function setTag(key, value) {
   window.setClarityTag?.(key, value);
 }
 
+function translate(key, fallback) {
+  return window.gafyTranslations?.[key] || fallback;
+}
+
+function translateTemplate(key, fallback, values = {}) {
+  return translate(key, fallback).replace(/\{(\w+)\}/g, (_, name) => values[name] ?? "");
+}
+
+function getLocale() {
+  const language = document.documentElement.lang || "zh-Hant";
+  if (language.startsWith("en")) return "en-US";
+  if (language.startsWith("ja")) return "ja-JP";
+  return "zh-TW";
+}
+
+function getListSeparator() {
+  return document.documentElement.lang?.startsWith("en") ? ", " : "、";
+}
+
 const chartColors = [
   "#1c7c72",
   "#d8891c",
@@ -40,20 +60,21 @@ function applyTheme(theme) {
   const nextTheme = theme === "dark" ? "dark" : "light";
   document.documentElement.dataset.theme = nextTheme;
   themeToggle.setAttribute("aria-pressed", String(nextTheme === "dark"));
-  themeToggleLabel.textContent = nextTheme === "dark" ? "切換淺色" : "切換深色";
+  themeToggleLabel.textContent =
+    nextTheme === "dark" ? translate("theme.light", "淺色") : translate("theme.dark", "深色");
   localStorage.setItem("gafy-theme", nextTheme);
   setTag("theme", nextTheme);
 }
 
 function formatNumber(value) {
-  return new Intl.NumberFormat("zh-TW").format(value || 0);
+  return new Intl.NumberFormat(getLocale()).format(value || 0);
 }
 
 function formatDate(value) {
-  if (!value) return "未知";
+  if (!value) return translate("common.unknown", "未知");
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return value;
-  return date.toLocaleDateString("zh-TW");
+  return date.toLocaleDateString(getLocale());
 }
 
 function escapeHtml(value) {
@@ -76,15 +97,21 @@ function renderLeaderboard() {
 
   rankingEmpty.classList.add("hidden");
   const topAuthor = rankingState.authors[0];
-  rankingSummary.textContent = `${topAuthor.owner} 目前以 ${formatNumber(
-    topAuthor.repo_count
-  )} 個收錄專案排在第一名，排行榜依專案數排序，stars 作為同名次時的參考。`;
+  rankingSummary.textContent = translateTemplate(
+    "rankings.contributors.summary",
+    "{owner} 目前以 {count} 個收錄專案排在第一名，排行榜依專案數排序，stars 作為同名次時的參考。",
+    { owner: topAuthor.owner, count: formatNumber(topAuthor.repo_count) }
+  );
 
   leaderboard.innerHTML = rankingState.authors
     .map((author) => {
       const details = author.projects.length
-        ? `代表專案：${author.projects.map(escapeHtml).join("、")}`
-        : `最近更新：${formatDate(author.latest_update)}`;
+        ? translateTemplate("rankings.contributors.projects", "代表專案：{projects}", {
+            projects: author.projects.map(escapeHtml).join(getListSeparator()),
+          })
+        : translateTemplate("rankings.contributors.updated", "最近更新：{date}", {
+            date: formatDate(author.latest_update),
+          });
 
       return `
         <article class="leaderboard-row">
@@ -119,7 +146,7 @@ function getVisibleLanguages() {
   const restCount = rest.reduce((sum, item) => sum + item.repo_count, 0);
 
   if (restCount === 0) return topLanguages;
-  return [...topLanguages, { language: "其他", repo_count: restCount, stars: 0 }];
+  return [...topLanguages, { language: translate("rankings.language.other", "其他"), repo_count: restCount, stars: 0 }];
 }
 
 function renderLanguageChart() {
@@ -129,7 +156,7 @@ function renderLanguageChart() {
   if (total === 0) {
     languagePie.style.background = "conic-gradient(var(--brand) 0deg 360deg)";
     languageList.innerHTML = "";
-    chartSummary.textContent = "目前沒有可用的語言分布資料。";
+    chartSummary.textContent = translate("rankings.language.noData", "目前沒有可用的語言分布資料。");
     return;
   }
 
@@ -143,7 +170,11 @@ function renderLanguageChart() {
   });
 
   languagePie.style.background = `conic-gradient(${gradientParts.join(", ")})`;
-  chartSummary.textContent = `共 ${formatNumber(total)} 筆語言資料，前 ${visibleLanguages.length} 類顯示於分布圖。`;
+  chartSummary.textContent = translateTemplate(
+    "rankings.language.summary",
+    "共 {total} 筆語言資料，前 {count} 類顯示於分布圖。",
+    { total: formatNumber(total), count: visibleLanguages.length }
+  );
 
   languageList.innerHTML = visibleLanguages
     .map((item, index) => {
@@ -166,19 +197,32 @@ async function loadRankings() {
     const data = await response.json();
     rankingState.authors = data.authors || [];
     rankingState.languages = data.languages || [];
-    renderStats(data.summary || {});
+    rankingState.summary = data.summary || {};
+    renderStats(rankingState.summary);
     renderLeaderboard();
     renderLanguageChart();
     setTag("ranking_has_data", rankingState.authors.length > 0 ? "true" : "false");
     trackEvent("rankings_loaded");
   } catch (error) {
-    rankingSummary.textContent = "讀取排行榜資料失敗，請確認本機伺服器是否已啟動。";
-    chartSummary.textContent = "無法載入語言分布資料。";
+    rankingSummary.textContent = translate(
+      "rankings.contributors.loadFailed",
+      "讀取排行榜資料失敗，請確認本機伺服器是否已啟動。"
+    );
+    chartSummary.textContent = translate("rankings.language.loadFailed", "無法載入語言分布資料。");
     leaderboard.innerHTML = "";
     languageList.innerHTML = "";
     rankingEmpty.classList.remove("hidden");
   }
 }
+
+window.addEventListener("gafy:languagechange", () => {
+  applyTheme(localStorage.getItem("gafy-theme") || "light");
+  if (rankingState.authors.length > 0 || rankingState.languages.length > 0) {
+    renderStats(rankingState.summary);
+    renderLeaderboard();
+    renderLanguageChart();
+  }
+});
 
 themeToggle.addEventListener("click", () => {
   const currentTheme = document.documentElement.dataset.theme === "dark" ? "dark" : "light";

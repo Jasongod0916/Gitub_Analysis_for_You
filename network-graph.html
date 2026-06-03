@@ -24,6 +24,10 @@ gtag('config', 'G-87LQB5DWWX');
     />
     <meta name="robots" content="index, follow, max-image-preview:large" />
     <link rel="canonical" href="https://gitub-analysis-for-you.onrender.com/network-graph.html" />
+    <link rel="alternate" hreflang="zh-Hant" href="https://gitub-analysis-for-you.onrender.com/network-graph.html" />
+    <link rel="alternate" hreflang="en" href="https://gitub-analysis-for-you.onrender.com/en/network-graph.html" />
+    <link rel="alternate" hreflang="ja" href="https://gitub-analysis-for-you.onrender.com/ja/network-graph.html" />
+    <link rel="alternate" hreflang="x-default" href="https://gitub-analysis-for-you.onrender.com/network-graph.html" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Network Graph | GitHub Analysis for You" />
     <meta
@@ -89,17 +93,27 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <span>GitHub Analysis for You</span>
         </a>
         <nav class="top-nav graph-topnav" aria-label="Secondary">
-          <a class="top-nav__link" href="./index.html">探索頁</a>
-          <a class="top-nav__link" href="./about.html">About</a>
-          <a class="top-nav__link" href="./rankings.html">排行榜</a>
-          <a class="top-nav__link" href="./collection-map.html">學習地圖</a>
-          <a class="top-nav__link" href="./network-graph.html" aria-current="page">關聯圖</a>
-          <a class="top-nav__link" href="./scatterplot.html">散佈圖</a>
+          <a class="top-nav__link" href="./index.html" data-i18n="nav.explore">探索頁</a>
+          <a class="top-nav__link" href="./about.html" data-i18n="nav.about">About</a>
+          <a class="top-nav__link" href="./rankings.html" data-i18n="nav.rankings">排行榜</a>
+          <a class="top-nav__link" href="./collection-map.html" data-i18n="nav.learningMap">學習地圖</a>
+          <a class="top-nav__link" href="./network-graph.html" aria-current="page" data-i18n="nav.networkGraph">專案關聯</a>
+          <a class="top-nav__link" href="./scatterplot.html" data-i18n="nav.scatterplot">採用比較</a>
         </nav>
-        <button class="theme-toggle graph-theme-toggle" id="themeToggle" type="button" aria-pressed="false">
-          <span class="theme-toggle__icon" aria-hidden="true"></span>
-          <span class="theme-toggle__label" id="themeToggleLabel">深色模式</span>
-        </button>
+        <div class="header-actions header-actions--graph">
+          <label class="language-switcher" aria-label="Language selector">
+            <span class="language-switcher__label" aria-hidden="true">🌐</span>
+            <select class="language-switcher__select" id="languageSelect">
+              <option value="zh-Hant">中文</option>
+              <option value="en">English</option>
+              <option value="ja">日本語</option>
+            </select>
+          </label>
+          <button class="theme-toggle graph-theme-toggle" id="themeToggle" type="button" aria-pressed="false">
+            <span class="theme-toggle__icon" aria-hidden="true"></span>
+            <span class="theme-toggle__label" id="themeToggleLabel" data-i18n="theme.dark">深色</span>
+          </button>
+        </div>
       </div>
 
       <main class="graph-page">
@@ -210,6 +224,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </div>
 
     <script src="./clarity.js"></script>
+    <script src="./language-switcher.js"></script>
     <script src="./network-graph.js"></script>
   </body>
 </html>
