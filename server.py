@@ -26,6 +26,19 @@ UTF8_TEXT_TYPES = {
     "text/xml",
     "image/svg+xml",
 }
+LONG_CACHE_EXTENSIONS = {
+    ".css",
+    ".js",
+    ".jpg",
+    ".jpeg",
+    ".png",
+    ".webp",
+    ".gif",
+    ".svg",
+    ".ico",
+    ".woff",
+    ".woff2",
+}
 HTML_ROUTE_ALIASES = {
     "/about": "/about.html",
     "/rankings": "/rankings.html",
@@ -287,6 +300,13 @@ class AppHandler(BaseHTTPRequestHandler):
 
         return html.encode("utf-8")
 
+    def get_cache_control(self, target_path: Path, content_type: str) -> str:
+        if content_type.startswith("text/html"):
+            return "no-cache"
+        if target_path.suffix.lower() in LONG_CACHE_EXTENSIONS:
+            return "public, max-age=2592000"
+        return "public, max-age=3600"
+
     def serve_static_file(self, raw_path: str, send_body: bool = True) -> None:
         raw_path, language = self.strip_language_prefix(raw_path)
         relative_path = "index.html" if raw_path in {"/", ""} else raw_path.lstrip("/")
@@ -310,6 +330,7 @@ class AppHandler(BaseHTTPRequestHandler):
         self.send_response(200)
         self.send_header("Content-Type", content_type)
         self.send_header("Content-Length", str(len(body)))
+        self.send_header("Cache-Control", self.get_cache_control(target_path, content_type))
         self.end_headers()
         if send_body:
             self.wfile.write(body)

@@ -38,6 +38,7 @@
   "home.results.eyebrow": "Discovery Board",
   "home.results.title": "精選 GitHub 專案",
   "home.results.description": "依目前條件整理出最值得先查看的項目，並保留通往關聯圖的探索節奏。",
+  "home.results.sort.aria": "排序結果",
   "home.results.sort.popular": "依熱門程度",
   "home.results.sort.forks": "依 Fork 數",
   "home.results.sort.watching": "依 Watching 數",

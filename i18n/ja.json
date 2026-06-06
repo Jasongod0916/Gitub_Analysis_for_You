@@ -38,6 +38,7 @@
   "home.results.eyebrow": "Discovery Board",
   "home.results.title": "注目の GitHub プロジェクト",
   "home.results.description": "まず見るべきプロジェクトを条件に合わせて整理し、さらに深掘りしたいときは関連図へ進めます。",
+  "home.results.sort.aria": "結果を並べ替え",
   "home.results.sort.popular": "人気順",
   "home.results.sort.forks": "Fork 数順",
   "home.results.sort.watching": "Watching 数順",

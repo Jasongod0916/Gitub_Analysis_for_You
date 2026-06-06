@@ -38,6 +38,7 @@
   "home.results.eyebrow": "Discovery Board",
   "home.results.title": "Featured GitHub projects",
   "home.results.description": "A focused list of projects worth checking first, with a path into the network graph when you want to explore deeper.",
+  "home.results.sort.aria": "Sort results",
   "home.results.sort.popular": "Most popular",
   "home.results.sort.forks": "Most forks",
   "home.results.sort.watching": "Most watched",
