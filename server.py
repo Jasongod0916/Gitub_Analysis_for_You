@@ -50,6 +50,8 @@ HTML_ROUTE_ALIASES = {
 }
 LANGUAGE_PREFIXES = {"zh-Hant", "en", "ja"}
 TOOLS_CACHE = None
+TOOLS_JSON_CACHE = None
+TOOLS_GZIP_CACHE = None
 
 def resolve_database_path() -> Path:
     db_files = sorted(DATA_DIR.glob("*.db"))
@@ -130,6 +132,21 @@ def get_tools_cached() -> list[dict]:
     if TOOLS_CACHE is None:
         TOOLS_CACHE = fetch_tools()
     return TOOLS_CACHE
+    
+def get_tools_response_bodies() -> tuple[bytes, bytes]:
+    global TOOLS_JSON_CACHE, TOOLS_GZIP_CACHE
+
+    if TOOLS_JSON_CACHE is None or TOOLS_GZIP_CACHE is None:
+        body = json.dumps(
+            {"items": get_tools_cached()},
+            ensure_ascii=False,
+            separators=(",", ":"),
+        ).encode("utf-8")
+
+        TOOLS_JSON_CACHE = body
+        TOOLS_GZIP_CACHE = gzip.compress(body)
+
+    return TOOLS_JSON_CACHE, TOOLS_GZIP_CACHE
 
 def fetch_rankings() -> dict:
     connection = sqlite3.connect(resolve_database_path())
@@ -246,48 +263,97 @@ class AppHandler(BaseHTTPRequestHandler):
         self.send_header("Location", redirect_target)
         self.end_headers()
         return True
-
+        
     def handle_tools_api(self, query_string: str) -> None:
         query = parse_qs(query_string).get("q", [""])[0].strip().lower()
-        # tools = fetch_tools()
-        tools = get_tools_cached()
-        if query:
-            tools = [
-                tool
-                for tool in tools
-                if query in " ".join(
-                    [
-                        tool["name"],
-                        tool["full_name"],
-                        tool["owner"],
-                        tool["description"],
-                        tool["language"],
-                        " ".join(tool["topics"]),
-                    ]
-                ).lower()
-            ]
-
-        # body = json.dumps({"items": tools}, ensure_ascii=False).encode("utf-8")
-        # self.send_response(200)
-        # self.send_header("Content-Type", "application/json; charset=utf-8")
-        # self.send_header("Content-Length", str(len(body)))
-        # self.end_headers()
-        # self.wfile.write(body)
-        body = json.dumps({"items": tools}, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
         accept_encoding = self.headers.get("Accept-Encoding", "")
-        
+    
+        if not query:
+            raw_body, gzip_body = get_tools_response_bodies()
+            body = gzip_body if "gzip" in accept_encoding else raw_body
+    
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json; charset=utf-8")
+            self.send_header("Cache-Control", "public, max-age=300, stale-while-revalidate=86400")
+            self.send_header("Vary", "Accept-Encoding")
+    
+            if "gzip" in accept_encoding:
+                self.send_header("Content-Encoding", "gzip")
+    
+            self.send_header("Content-Length", str(len(body)))
+            self.end_headers()
+            self.wfile.write(body)
+            return
+    
+        tools = [
+            tool
+            for tool in get_tools_cached()
+            if query in " ".join(
+                [
+                    tool["name"],
+                    tool["full_name"],
+                    tool["owner"],
+                    tool["description"],
+                    tool["language"],
+                    " ".join(tool["topics"]),
+                ]
+            ).lower()
+        ]
+    
+        body = json.dumps({"items": tools}, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
+    
         self.send_response(200)
         self.send_header("Content-Type", "application/json; charset=utf-8")
         self.send_header("Cache-Control", "public, max-age=300, stale-while-revalidate=86400")
         self.send_header("Vary", "Accept-Encoding")
-        
+    
         if "gzip" in accept_encoding:
             body = gzip.compress(body)
             self.send_header("Content-Encoding", "gzip")
-        
+    
         self.send_header("Content-Length", str(len(body)))
         self.end_headers()
         self.wfile.write(body)
+    # def handle_tools_api(self, query_string: str) -> None:
+    #     query = parse_qs(query_string).get("q", [""])[0].strip().lower()
+    #     tools = get_tools_cached()
+    #     if query:
+    #         tools = [
+    #             tool
+    #             for tool in tools
+    #             if query in " ".join(
+    #                 [
+    #                     tool["name"],
+    #                     tool["full_name"],
+    #                     tool["owner"],
+    #                     tool["description"],
+    #                     tool["language"],
+    #                     " ".join(tool["topics"]),
+    #                 ]
+    #             ).lower()
+    #         ]
+
+    #     # body = json.dumps({"items": tools}, ensure_ascii=False).encode("utf-8")
+    #     # self.send_response(200)
+    #     # self.send_header("Content-Type", "application/json; charset=utf-8")
+    #     # self.send_header("Content-Length", str(len(body)))
+    #     # self.end_headers()
+    #     # self.wfile.write(body)
+    #     body = json.dumps({"items": tools}, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
+    #     accept_encoding = self.headers.get("Accept-Encoding", "")
+        
+    #     self.send_response(200)
+    #     self.send_header("Content-Type", "application/json; charset=utf-8")
+    #     self.send_header("Cache-Control", "public, max-age=300, stale-while-revalidate=86400")
+    #     self.send_header("Vary", "Accept-Encoding")
+        
+    #     if "gzip" in accept_encoding:
+    #         body = gzip.compress(body)
+    #         self.send_header("Content-Encoding", "gzip")
+        
+    #     self.send_header("Content-Length", str(len(body)))
+    #     self.end_headers()
+    #     self.wfile.write(body)
 
     def handle_rankings_api(self) -> None:
         body = json.dumps(fetch_rankings(), ensure_ascii=False).encode("utf-8")
