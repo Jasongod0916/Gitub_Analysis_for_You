@@ -261,9 +261,24 @@ class AppHandler(BaseHTTPRequestHandler):
                 ).lower()
             ]
 
+        # body = json.dumps({"items": tools}, ensure_ascii=False).encode("utf-8")
+        # self.send_response(200)
+        # self.send_header("Content-Type", "application/json; charset=utf-8")
+        # self.send_header("Content-Length", str(len(body)))
+        # self.end_headers()
+        # self.wfile.write(body)
         body = json.dumps({"items": tools}, ensure_ascii=False).encode("utf-8")
+        accept_encoding = self.headers.get("Accept-Encoding", "")
+        
         self.send_response(200)
         self.send_header("Content-Type", "application/json; charset=utf-8")
+        self.send_header("Cache-Control", "public, max-age=300, stale-while-revalidate=86400")
+        self.send_header("Vary", "Accept-Encoding")
+        
+        if "gzip" in accept_encoding:
+            body = gzip.compress(body)
+            self.send_header("Content-Encoding", "gzip")
+        
         self.send_header("Content-Length", str(len(body)))
         self.end_headers()
         self.wfile.write(body)
