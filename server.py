@@ -49,7 +49,7 @@ HTML_ROUTE_ALIASES = {
     "/scatterplot": "/scatterplot.html",
 }
 LANGUAGE_PREFIXES = {"zh-Hant", "en", "ja"}
-
+TOOLS_CACHE = None
 
 def resolve_database_path() -> Path:
     db_files = sorted(DATA_DIR.glob("*.db"))
@@ -125,6 +125,11 @@ def fetch_tools() -> list[dict]:
         )
     return tools
 
+def get_tools_cached() -> list[dict]:
+    global TOOLS_CACHE
+    if TOOLS_CACHE is None:
+        TOOLS_CACHE = fetch_tools()
+    return TOOLS_CACHE
 
 def fetch_rankings() -> dict:
     connection = sqlite3.connect(resolve_database_path())
@@ -244,7 +249,8 @@ class AppHandler(BaseHTTPRequestHandler):
 
     def handle_tools_api(self, query_string: str) -> None:
         query = parse_qs(query_string).get("q", [""])[0].strip().lower()
-        tools = fetch_tools()
+        # tools = fetch_tools()
+        tools = get_tools_cached()
         if query:
             tools = [
                 tool
