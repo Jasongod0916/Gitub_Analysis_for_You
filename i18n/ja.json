@@ -35,6 +35,8 @@
   "home.search.placeholder": "検索例: React、Python、dashboard、AI tool",
   "home.search.languageFilter": "言語フィルター",
   "home.search.topicFilter": "人気トピック",
+  "home.search.allLanguages": "すべて",
+  "home.search.allTopics": "すべて",
   "home.results.eyebrow": "Discovery Board",
   "home.results.title": "注目の GitHub プロジェクト",
   "home.results.description": "まず見るべきプロジェクトを条件に合わせて整理し、さらに深掘りしたいときは関連図へ進めます。",

@@ -35,6 +35,8 @@
   "home.search.placeholder": "Try searching: React, Python, dashboard, AI tool",
   "home.search.languageFilter": "Language filter",
   "home.search.topicFilter": "Popular topics",
+  "home.search.allLanguages": "All",
+  "home.search.allTopics": "All",
   "home.results.eyebrow": "Discovery Board",
   "home.results.title": "Featured GitHub projects",
   "home.results.description": "A focused list of projects worth checking first, with a path into the network graph when you want to explore deeper.",

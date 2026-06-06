@@ -35,6 +35,8 @@
   "home.search.placeholder": "試試搜尋：React、Python、dashboard、AI tool",
   "home.search.languageFilter": "語言篩選",
   "home.search.topicFilter": "熱門主題",
+  "home.search.allLanguages": "全部",
+  "home.search.allTopics": "全部",
   "home.results.eyebrow": "Discovery Board",
   "home.results.title": "精選 GitHub 專案",
   "home.results.description": "依目前條件整理出最值得先查看的項目，並保留通往關聯圖的探索節奏。",

@@ -49,6 +49,14 @@ function translateTemplate(key, fallback, values = {}) {
   return translate(key, fallback).replace(/\{(\w+)\}/g, (_, name) => values[name] ?? "");
 }
 
+function getCategoryChipLabel(category) {
+  return category === "All" ? translate("home.search.allLanguages", "全部") : category;
+}
+
+function getTopicChipLabel(topic) {
+  return topic === "All" ? translate("home.search.allTopics", "全部") : topic;
+}
+
 function applyTheme(theme) {
   const nextTheme = theme === "dark" ? "dark" : "light";
   document.documentElement.dataset.theme = nextTheme;
@@ -158,10 +166,12 @@ function renderCategoryChips() {
     : [categories[0], ...categories.slice(1, COLLAPSED_CATEGORY_COUNT + 1)];
 
   visibleCategories.forEach((category) => {
+    const isActive = state.category === category;
     const button = document.createElement("button");
     button.type = "button";
-    button.className = `chip${state.category === category ? " is-active" : ""}`;
-    button.textContent = category;
+    button.className = `chip${isActive ? " is-active" : ""}`;
+    button.textContent = getCategoryChipLabel(category);
+    button.setAttribute("aria-pressed", String(isActive));
     button.addEventListener("click", () => {
       state.category = category;
       state.currentPage = 1;
@@ -178,6 +188,7 @@ function renderCategoryChips() {
     toggleButton.textContent = state.categoriesExpanded
       ? translate("common.collapse", "收合")
       : translate("common.more", "更多");
+    toggleButton.setAttribute("aria-expanded", String(state.categoriesExpanded));
     toggleButton.addEventListener("click", () => {
       state.categoriesExpanded = !state.categoriesExpanded;
       renderCategoryChips();
@@ -195,10 +206,12 @@ function renderTopicChips() {
     : [topics[0], ...topics.slice(1, 9)];
 
   visibleTopics.forEach((topic) => {
+    const isActive = state.topic === topic;
     const button = document.createElement("button");
     button.type = "button";
-    button.className = `chip${state.topic === topic ? " is-active" : ""}`;
-    button.textContent = topic;
+    button.className = `chip${isActive ? " is-active" : ""}`;
+    button.textContent = getTopicChipLabel(topic);
+    button.setAttribute("aria-pressed", String(isActive));
     button.addEventListener("click", () => {
       state.topic = topic;
       state.currentPage = 1;
@@ -215,6 +228,7 @@ function renderTopicChips() {
     toggleButton.textContent = state.topicsExpanded
       ? translate("common.collapse", "收合")
       : translate("common.more", "更多");
+    toggleButton.setAttribute("aria-expanded", String(state.topicsExpanded));
     toggleButton.addEventListener("click", () => {
       state.topicsExpanded = !state.topicsExpanded;
       renderTopicChips();
