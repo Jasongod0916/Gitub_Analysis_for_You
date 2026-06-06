@@ -1366,8 +1366,8 @@ body {
 }
 
 .chips--soft .chip.is-active {
-  background: var(--warm);
-  color: #fff9ef;
+  background: #e28418;
+  color: #ffffff;
 }
 
 :root[data-theme="dark"] .chips--soft .chip.is-active {
