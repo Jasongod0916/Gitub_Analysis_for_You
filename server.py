@@ -100,7 +100,7 @@ def fetch_tools() -> list[dict]:
         tools.append(
             {
                 "id": row["id"],
-                "github_id": row["github_id"],
+                # "github_id": row["github_id"],
                 "name": row["name"],
                 "full_name": row["full_name"],
                 "owner": row["owner"],
@@ -114,12 +114,12 @@ def fetch_tools() -> list[dict]:
                 "language": row["language"] or "Unknown",
                 "license": row["license"] or "No license",
                 "archived": bool(row["archived"]),
-                "disabled": bool(row["disabled"]),
+                # "disabled": bool(row["disabled"]),
                 "visibility": row["visibility"] or "unknown",
-                "created_at": row["created_at"] or "",
+                # "created_at": row["created_at"] or "",
                 "updated_at": row["updated_at"] or "",
-                "pushed_at": row["pushed_at"] or "",
-                "default_branch": row["default_branch"] or "",
+                # "pushed_at": row["pushed_at"] or "",
+                # "default_branch": row["default_branch"] or "",
                 "topics": [topic for topic in (row["topics"] or "").split("|") if topic],
             }
         )
@@ -267,7 +267,7 @@ class AppHandler(BaseHTTPRequestHandler):
         # self.send_header("Content-Length", str(len(body)))
         # self.end_headers()
         # self.wfile.write(body)
-        body = json.dumps({"items": tools}, ensure_ascii=False).encode("utf-8")
+        body = json.dumps({"items": tools}, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
         accept_encoding = self.headers.get("Accept-Encoding", "")
         
         self.send_response(200)
