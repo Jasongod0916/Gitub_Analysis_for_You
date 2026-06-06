@@ -145,21 +145,21 @@
               </button>
             </div>
           </div>
-          <h1>Fork vs Star Scatter Plot</h1>
-          <p class="hero__description">
+          <h1 data-i18n="scatter.hero.title">Fork vs Star Scatter Plot</h1>
+          <p class="hero__description" data-i18n="scatter.hero.description">
             每個 repo 都是一個點，用 Stars 對 Forks 看出高人氣低 fork、以及高 fork 的技術型專案群。
           </p>
           <div class="hero__stats" id="scatterStats">
             <article class="hero-stat">
-              <span class="hero-stat__label">Repos</span>
+              <span class="hero-stat__label" data-i18n="scatter.stats.repos">Repos</span>
               <strong id="totalRepos">--</strong>
             </article>
             <article class="hero-stat">
-              <span class="hero-stat__label">Median Stars</span>
+              <span class="hero-stat__label" data-i18n="scatter.stats.medianStars">Median Stars</span>
               <strong id="medianStars">--</strong>
             </article>
             <article class="hero-stat">
-              <span class="hero-stat__label">Median Forks</span>
+              <span class="hero-stat__label" data-i18n="scatter.stats.medianForks">Median Forks</span>
               <strong id="medianForks">--</strong>
             </article>
           </div>
@@ -170,52 +170,52 @@
         <aside class="results-panel scatter-controls">
           <div class="results-header">
             <div>
-              <p class="results-header__eyebrow">Filters</p>
-              <h2>探索分布</h2>
-              <p class="results-header__description">
+              <p class="results-header__eyebrow" data-i18n="scatter.filters.eyebrow">Filters</p>
+              <h2 data-i18n="scatter.filters.title">探索分布</h2>
+              <p class="results-header__description" data-i18n="scatter.filters.description">
                 搜尋 repo、owner 或語言，快速定位散點圖上的專案。
               </p>
             </div>
           </div>
 
           <form class="scatter-search" id="scatterSearchForm">
-            <label class="search-box__label" for="scatterSearchInput">搜尋 repo / owner / language</label>
+            <label class="search-box__label" for="scatterSearchInput" data-i18n="scatter.search.label">搜尋 repo / owner / language</label>
             <div class="scatter-search__field">
-              <input id="scatterSearchInput" type="search" placeholder="例如 React、Python、freeCodeCamp" />
+              <input id="scatterSearchInput" type="search" placeholder="例如 React、Python、freeCodeCamp" data-i18n-placeholder="scatter.search.placeholder" />
             </div>
           </form>
 
           <div class="scatter-control-group">
             <div class="scatter-control-row">
-              <label class="search-box__label" for="minStarsRange">最低 stars</label>
+              <label class="search-box__label" for="minStarsRange" data-i18n="scatter.filters.minStars">最低 stars</label>
               <span id="minStarsValue">0</span>
             </div>
             <input id="minStarsRange" type="range" min="0" max="0" step="1000" value="0" />
           </div>
 
           <div class="scatter-control-group">
-            <span class="search-box__label">熱門語言（前 10）</span>
+            <span class="search-box__label" data-i18n="scatter.filters.languages">熱門語言（前 10）</span>
             <div class="scatter-chip-row" id="languageChips"></div>
-            <p class="scatter-control-hint">依目前收錄 repo 的主要語言數量排序，All 代表不套用語言篩選。</p>
+            <p class="scatter-control-hint" data-i18n="scatter.filters.languagesHint">依目前收錄 repo 的主要語言數量排序，All 代表不套用語言篩選。</p>
           </div>
 
           <div class="scatter-selected" id="selectedRepo">
-            <p class="results-header__eyebrow">Selected Repo</p>
-            <h3>點選圖上的 repo</h3>
-            <p>會顯示 Stars、Forks、語言和 GitHub 連結。</p>
+            <p class="results-header__eyebrow" data-i18n="scatter.selected.eyebrow">Selected Repo</p>
+            <h3 data-i18n="scatter.selected.emptyTitle">點選圖上的 repo</h3>
+            <p data-i18n="scatter.selected.emptyDescription">會顯示 Stars、Forks、語言和 GitHub 連結。</p>
           </div>
         </aside>
 
         <section class="results-panel scatter-panel">
           <div class="results-header scatter-header">
             <div>
-              <p class="results-header__eyebrow">Forks x Stars</p>
-              <h2 id="scatterHeadline">正在載入散點圖...</h2>
-              <p class="results-header__description" id="scatterSummary">
+              <p class="results-header__eyebrow" data-i18n="scatter.chart.eyebrow">Forks x Stars</p>
+              <h2 id="scatterHeadline" data-i18n="scatter.chart.loadingTitle">正在載入散點圖...</h2>
+              <p class="results-header__description" id="scatterSummary" data-i18n="scatter.chart.loadingDescription">
                 X 軸是 Stars，Y 軸是 Forks；兩軸使用 log scale，避免熱門專案把其他點擠在角落。
               </p>
             </div>
-            <a class="scatter-back-link" href="./index.html">回首頁</a>
+            <a class="scatter-back-link" href="./index.html" data-i18n="scatter.chart.backLink">回首頁</a>
           </div>
 
           <div class="scatter-stage" id="scatterStage">
@@ -231,14 +231,14 @@
           </div>
 
           <div class="scatter-quadrants" aria-label="Distribution guide">
-            <div><span class="scatter-dot scatter-dot--popular"></span>高人氣低 fork</div>
-            <div><span class="scatter-dot scatter-dot--technical"></span>高 fork 技術型專案</div>
-            <div><span class="scatter-dot"></span>一般分布</div>
+            <div><span class="scatter-dot scatter-dot--popular"></span><span data-i18n="scatter.legend.popular">高人氣低 fork</span></div>
+            <div><span class="scatter-dot scatter-dot--technical"></span><span data-i18n="scatter.legend.technical">高 fork 技術型專案</span></div>
+            <div><span class="scatter-dot"></span><span data-i18n="scatter.legend.balanced">一般分布</span></div>
           </div>
 
           <div class="empty-state hidden" id="scatterEmpty">
-            <h3>沒有符合條件的 repo</h3>
-            <p>請放寬搜尋字或最低 stars 篩選。</p>
+            <h3 data-i18n="scatter.empty.title">沒有符合條件的 repo</h3>
+            <p data-i18n="scatter.empty.description">請放寬搜尋字或最低 stars 篩選。</p>
           </div>
         </section>
       </main>
@@ -246,6 +246,6 @@
 
     <script src="./clarity.js"></script>
     <script src="./language-switcher.js"></script>
-    <script src="./scatterplot.js"></script>
+    <script src="./scatterplot.js?v=20260607"></script>
   </body>
 </html>

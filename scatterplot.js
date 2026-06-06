@@ -34,9 +34,15 @@ const languageChips = document.querySelector("#languageChips");
 const selectedRepo = document.querySelector("#selectedRepo");
 const themeToggle = document.querySelector("#themeToggle");
 const themeToggleLabel = document.querySelector("#themeToggleLabel");
+let scatterTranslations = window.gafyTranslations || {};
 
 function trackEvent(eventName) {
   window.trackClarityEvent?.(eventName);
+}
+
+function t(key, fallback, vars = {}) {
+  const template = scatterTranslations[key] || fallback;
+  return Object.entries(vars).reduce((result, [name, value]) => result.replaceAll(`{${name}}`, value), template);
 }
 
 function setTag(key, value) {
@@ -47,7 +53,7 @@ function applyTheme(theme) {
   const nextTheme = theme === "dark" ? "dark" : "light";
   document.documentElement.dataset.theme = nextTheme;
   themeToggle.setAttribute("aria-pressed", String(nextTheme === "dark"));
-  themeToggleLabel.textContent = nextTheme === "dark" ? "淺色" : "深色";
+  themeToggleLabel.textContent = nextTheme === "dark" ? t("theme.light", "Light") : t("theme.dark", "Dark");
   localStorage.setItem("gafy-theme", nextTheme);
   setTag("theme", nextTheme);
 }
@@ -62,7 +68,7 @@ function escapeHtml(value) {
 }
 
 function formatNumber(value) {
-  return new Intl.NumberFormat("zh-TW").format(Math.round(value || 0));
+  return new Intl.NumberFormat(document.documentElement.lang || "zh-Hant").format(Math.round(value || 0));
 }
 
 function median(values) {
@@ -137,7 +143,7 @@ function renderLanguageChips() {
   const hiddenCount = Math.max(0, allLanguages.length - visibleLanguages.length);
 
   languageChips.innerHTML = [
-    `<button class="scatter-chip${scatterState.selectedLanguage === "All" ? " is-active" : ""}" type="button" data-language="All">All</button>`,
+    `<button class="scatter-chip${scatterState.selectedLanguage === "All" ? " is-active" : ""}" type="button" data-language="All">${escapeHtml(t("scatter.filters.allLanguages", "All"))}</button>`,
     ...visibleLanguages.map(
       ([language, count]) =>
         `<button class="scatter-chip${scatterState.selectedLanguage === language ? " is-active" : ""}" type="button" data-language="${escapeHtml(language)}">${escapeHtml(
@@ -146,7 +152,9 @@ function renderLanguageChips() {
     ),
     allLanguages.length > 10
       ? `<button class="scatter-chip scatter-chip--more" type="button" data-language-toggle="true">${
-          scatterState.languagesExpanded ? "收合" : `更多 ${formatNumber(hiddenCount)}`
+          scatterState.languagesExpanded
+            ? escapeHtml(t("common.collapse", "收合"))
+            : escapeHtml(t("scatter.filters.moreLanguages", "更多 {count}", { count: formatNumber(hiddenCount) }))
         }</button>`
       : "",
   ].join("");
@@ -222,14 +230,14 @@ function renderAxes(group, domains) {
     x: (bounds.left + bounds.right) / 2,
     y: scatterState.chart.height - 22,
     "text-anchor": "middle",
-  });
+  }).textContent = t("scatter.chart.xAxis", "Stars (log scale)");
   addText(group, "Forks (log scale)", {
     class: "scatter-axis-label",
     x: 22,
     y: (bounds.top + bounds.bottom) / 2,
     transform: `rotate(-90 22 ${(bounds.top + bounds.bottom) / 2})`,
     "text-anchor": "middle",
-  });
+  }).textContent = t("scatter.chart.yAxis", "Forks (log scale)");
 }
 
 function renderReferenceLines(group, domains) {
@@ -251,8 +259,8 @@ function renderReferenceLines(group, domains) {
 
   group.appendChild(createSvgElement("line", { class: "scatter-reference-line", x1: medianStarX, x2: medianStarX, y1: bounds.top, y2: bounds.bottom }));
   group.appendChild(createSvgElement("line", { class: "scatter-reference-line", x1: bounds.left, x2: bounds.right, y1: medianForkY, y2: medianForkY }));
-  addText(group, "median stars", { class: "scatter-reference-label", x: medianStarX + 8, y: bounds.top + 18 });
-  addText(group, "median forks", { class: "scatter-reference-label", x: bounds.right - 94, y: medianForkY - 8 });
+  addText(group, t("scatter.chart.medianStars", "median stars"), { class: "scatter-reference-label", x: medianStarX + 8, y: bounds.top + 18 });
+  addText(group, t("scatter.chart.medianForks", "median forks"), { class: "scatter-reference-label", x: bounds.right - 94, y: medianForkY - 8 });
 }
 
 function getPointPosition(tool, domains) {
@@ -268,10 +276,12 @@ function renderScatterPlot() {
   const tools = scatterState.filteredTools;
   const hasData = tools.length > 0;
   scatterEmpty.classList.toggle("hidden", hasData);
-  scatterHeadline.textContent = hasData ? `${formatNumber(tools.length)} 個 repo 的 fork / star 分布` : "沒有符合條件的 repo";
+  scatterHeadline.textContent = hasData
+    ? t("scatter.chart.headline", "{count} 個 repo 的 fork / star 分布", { count: formatNumber(tools.length) })
+    : t("scatter.empty.title", "沒有符合條件的 repo");
   scatterSummary.textContent = hasData
-    ? "X 軸是 Stars，Y 軸是 Forks；兩軸使用 log scale，避免熱門專案把其他點擠在角落。"
-    : "請調整搜尋、語言或最低 stars 篩選。";
+    ? t("scatter.chart.loadingDescription", "X 軸是 Stars，Y 軸是 Forks；兩軸使用 log scale，避免熱門專案把其他點擠在角落。")
+    : t("scatter.empty.description", "請調整搜尋、語言或最低 stars 篩選。");
 
   const domains = getDomains(tools);
   const axisGroup = createSvgElement("g");
@@ -296,7 +306,7 @@ function renderScatterPlot() {
         "data-id": tool.id,
         tabindex: "0",
         role: "button",
-        "aria-label": `${tool.full_name}, ${formatNumber(tool.stars)} stars, ${formatNumber(tool.forks)} forks`,
+        "aria-label": `${tool.full_name}, ${t("scatter.selected.stars", "{count} stars", { count: formatNumber(tool.stars) })}, ${t("scatter.selected.forks", "{count} forks", { count: formatNumber(tool.forks) })}`,
       });
       point.addEventListener("mouseenter", (event) => showTooltip(event, tool));
       point.addEventListener("mousemove", (event) => moveTooltip(event));
@@ -318,7 +328,9 @@ function renderScatterPlot() {
 function showTooltip(event, tool) {
   scatterTooltip.innerHTML = `
     <strong>${escapeHtml(tool.full_name)}</strong>
-    <span>${formatNumber(tool.stars)} stars · ${formatNumber(tool.forks)} forks · ${escapeHtml(tool.language)}</span>
+    <span>${escapeHtml(t("scatter.selected.stars", "{count} stars", { count: formatNumber(tool.stars) }))} · ${escapeHtml(
+      t("scatter.selected.forks", "{count} forks", { count: formatNumber(tool.forks) })
+    )} · ${escapeHtml(tool.language)}</span>
   `;
   scatterTooltip.classList.remove("hidden");
   moveTooltip(event);
@@ -341,16 +353,16 @@ function selectRepo(id) {
   if (!tool) return;
   scatterState.selectedRepoId = id;
   selectedRepo.innerHTML = `
-    <p class="results-header__eyebrow">Selected Repo</p>
+    <p class="results-header__eyebrow">${escapeHtml(t("scatter.selected.eyebrow", "Selected Repo"))}</p>
     <h3>${escapeHtml(tool.full_name)}</h3>
-    <p>${escapeHtml(tool.description || "No description")}</p>
+    <p>${escapeHtml(tool.description || t("scatter.selected.noDescription", "No description"))}</p>
     <div class="scatter-selected__metrics">
-      <div class="scatter-selected__metric"><strong>${formatNumber(tool.stars)}</strong><span>Stars</span></div>
-      <div class="scatter-selected__metric"><strong>${formatNumber(tool.forks)}</strong><span>Forks</span></div>
-      <div class="scatter-selected__metric"><strong>${escapeHtml(tool.language)}</strong><span>Language</span></div>
-      <div class="scatter-selected__metric"><strong>${((tool.forks / Math.max(1, tool.stars)) * 100).toFixed(1)}%</strong><span>Fork ratio</span></div>
+      <div class="scatter-selected__metric"><strong>${formatNumber(tool.stars)}</strong><span>${escapeHtml(t("scatter.selected.metricStars", "Stars"))}</span></div>
+      <div class="scatter-selected__metric"><strong>${formatNumber(tool.forks)}</strong><span>${escapeHtml(t("scatter.selected.metricForks", "Forks"))}</span></div>
+      <div class="scatter-selected__metric"><strong>${escapeHtml(tool.language)}</strong><span>${escapeHtml(t("scatter.selected.metricLanguage", "Language"))}</span></div>
+      <div class="scatter-selected__metric"><strong>${((tool.forks / Math.max(1, tool.stars)) * 100).toFixed(1)}%</strong><span>${escapeHtml(t("scatter.selected.metricRatio", "Fork ratio"))}</span></div>
     </div>
-    <a class="scatter-selected__link" href="${escapeHtml(tool.html_url)}" target="_blank" rel="noopener noreferrer">開啟 GitHub</a>
+    <a class="scatter-selected__link" href="${escapeHtml(tool.html_url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(t("scatter.selected.openRepo", "開啟 GitHub"))}</a>
   `;
   renderScatterPlot();
   trackEvent("scatter_repo_selected");
@@ -367,7 +379,7 @@ async function loadScatterData() {
         ...tool,
         stars: Number(tool.stars || 0),
         forks: Number(tool.forks || 0),
-        language: tool.language || "Unknown",
+        language: tool.language || t("common.unknown", "Unknown"),
       }));
 
     const maxStars = Math.max(...scatterState.tools.map((tool) => tool.stars), 0);
@@ -380,8 +392,8 @@ async function loadScatterData() {
     setTag("scatter_has_data", scatterState.tools.length > 0 ? "true" : "false");
     trackEvent("scatter_loaded");
   } catch (error) {
-    scatterHeadline.textContent = "散點圖載入失敗";
-    scatterSummary.textContent = "請確認本機 server 已啟動，且 data/tools.db 可以被 /api/tools 讀取。";
+    scatterHeadline.textContent = t("scatter.error.title", "散點圖載入失敗");
+    scatterSummary.textContent = t("scatter.error.description", "請確認本機 server 已啟動，且 data/tools.db 可以被 /api/tools 讀取。");
     scatterEmpty.classList.remove("hidden");
   }
 }
@@ -418,3 +430,12 @@ themeToggle.addEventListener("click", () => {
 applyTheme(localStorage.getItem("gafy-theme") || "light");
 setTag("page_type", "scatterplot");
 loadScatterData();
+
+window.addEventListener("gafy:languagechange", (event) => {
+  scatterTranslations = event.detail.translations || {};
+  renderLanguageChips();
+  applyFilters();
+  if (scatterState.selectedRepoId) {
+    selectRepo(scatterState.selectedRepoId);
+  }
+});

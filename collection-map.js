@@ -20,13 +20,14 @@ const collectionRepoCountLabel = document.querySelector("#collectionRepoCountLab
 const collectionDetailState = document.querySelector("#collectionDetailState");
 const collectionDetailContent = document.querySelector("#collectionDetailContent");
 const collectionRepoGrid = document.querySelector("#collectionRepoGrid");
+let collectionTranslations = window.gafyTranslations || {};
 
 const COLLECTION_DEFINITIONS = [
   {
     id: "frontend-web-ui",
-    title: "前端與 Web UI",
-    description: "適合先從 UI、互動、dashboard 與網站呈現方式切入，快速建立前端產品感。",
-    audienceLabel: "適合拆 UI、看介面組成與前端實作的人",
+    titleKey: "collection.path.frontend.title",
+    descriptionKey: "collection.path.frontend.description",
+    audienceLabelKey: "collection.path.frontend.audience",
     tags: ["React", "Dashboard", "UI"],
     languages: ["javascript", "typescript", "html", "css"],
     topics: ["react", "nextjs", "vue", "frontend", "dashboard", "ui", "web", "website", "homepage", "tailwindcss"],
@@ -34,9 +35,9 @@ const COLLECTION_DEFINITIONS = [
   },
   {
     id: "python-automation",
-    title: "Python 與自動化",
-    description: "用 Python 腳本、工具與自動化專案建立實作感，適合想邊學邊做的人。",
-    audienceLabel: "適合想用 Python 快速做工具與自動化的人",
+    titleKey: "collection.path.python.title",
+    descriptionKey: "collection.path.python.description",
+    audienceLabelKey: "collection.path.python.audience",
     tags: ["Python", "Automation", "Scripts"],
     languages: ["python"],
     topics: ["python", "automation", "script", "scraping", "bot", "crawler", "tool"],
@@ -44,9 +45,9 @@ const COLLECTION_DEFINITIONS = [
   },
   {
     id: "ai-llm-agent",
-    title: "AI / LLM / Agent",
-    description: "聚焦在 LLM、agent 與 AI workflow，適合想理解新一代 AI 應用組裝方式的人。",
-    audienceLabel: "適合想快速看懂 agent、RAG 與 LLM 應用的人",
+    titleKey: "collection.path.ai.title",
+    descriptionKey: "collection.path.ai.description",
+    audienceLabelKey: "collection.path.ai.audience",
     tags: ["LLM", "Agent", "RAG"],
     languages: ["python", "typescript", "javascript"],
     topics: ["ai", "llm", "agent", "rag", "openai", "langchain", "chatbot", "transformers"],
@@ -54,9 +55,9 @@ const COLLECTION_DEFINITIONS = [
   },
   {
     id: "data-science-ml",
-    title: "資料科學與機器學習",
-    description: "從資料分析、模型實作到深度學習案例，整理成較容易進入的學習順序。",
-    audienceLabel: "適合想從資料處理一路看到模型與實作的人",
+    titleKey: "collection.path.data.title",
+    descriptionKey: "collection.path.data.description",
+    audienceLabelKey: "collection.path.data.audience",
     tags: ["Machine Learning", "Data Science", "Deep Learning"],
     languages: ["python", "jupyter notebook"],
     topics: ["machine-learning", "deep-learning", "data-science", "tensorflow", "pytorch", "nlp", "computer-vision"],
@@ -64,9 +65,9 @@ const COLLECTION_DEFINITIONS = [
   },
   {
     id: "developer-tools-cli",
-    title: "開發工具與 CLI",
-    description: "把工具型、終端機與開發流程相關 repo 整理成一條偏實務的學習路線。",
-    audienceLabel: "適合想提升開發效率、理解工具設計的人",
+    titleKey: "collection.path.devtools.title",
+    descriptionKey: "collection.path.devtools.description",
+    audienceLabelKey: "collection.path.devtools.audience",
     tags: ["CLI", "Dev Tools", "Productivity"],
     languages: ["go", "rust", "python", "shell", "typescript", "javascript"],
     topics: ["cli", "terminal", "tool", "developer-tools", "productivity", "shell"],
@@ -74,9 +75,9 @@ const COLLECTION_DEFINITIONS = [
   },
   {
     id: "open-source-starter",
-    title: "開源入門與教學型專案",
-    description: "挑出比較容易閱讀、帶有教學意圖或適合初學者的 repo，降低開源入門門檻。",
-    audienceLabel: "適合剛開始看開源 repo、不知道先讀哪個的人",
+    titleKey: "collection.path.opensource.title",
+    descriptionKey: "collection.path.opensource.description",
+    audienceLabelKey: "collection.path.opensource.audience",
     tags: ["Beginner", "Tutorial", "Docs"],
     languages: ["python", "javascript", "typescript"],
     topics: ["tutorial", "beginner", "docs", "guide", "education", "learning"],
@@ -84,9 +85,9 @@ const COLLECTION_DEFINITIONS = [
   },
   {
     id: "curated-resources",
-    title: "Awesome / Curated Resources",
-    description: "如果你還不確定要先學哪個單點專案，先看整理型資源會更快找到方向。",
-    audienceLabel: "適合先看資源清單、再決定深挖方向的人",
+    titleKey: "collection.path.curated.title",
+    descriptionKey: "collection.path.curated.description",
+    audienceLabelKey: "collection.path.curated.audience",
     tags: ["Awesome", "Resources", "Curated"],
     languages: ["markdown"],
     topics: ["awesome", "resources", "list", "curated", "collection"],
@@ -94,9 +95,9 @@ const COLLECTION_DEFINITIONS = [
   },
   {
     id: "build-your-own",
-    title: "Build-your-own / Learning-by-building",
-    description: "特別適合用『自己做一遍』的方式學習，從模仿、重建到理解底層思路。",
-    audienceLabel: "適合喜歡邊做邊學、想靠重建練功的人",
+    titleKey: "collection.path.build.title",
+    descriptionKey: "collection.path.build.description",
+    audienceLabelKey: "collection.path.build.audience",
     tags: ["Build Your Own", "From Scratch", "Practice"],
     languages: ["python", "javascript", "typescript", "go", "rust"],
     topics: ["build-your-own", "from-scratch", "practice", "clone", "recreate"],
@@ -108,6 +109,11 @@ const COLLECTION_DEFINITIONS = [
   normalizedTopics: definition.topics.map((item) => normalizeText(item)),
   normalizedKeywords: definition.keywords.map((item) => normalizeText(item)),
 }));
+
+function t(key, fallback, vars = {}) {
+  const template = collectionTranslations[key] || fallback;
+  return Object.entries(vars).reduce((result, [name, value]) => result.replaceAll(`{${name}}`, value), template);
+}
 
 function trackEvent(eventName) {
   window.trackClarityEvent?.(eventName);
@@ -127,14 +133,14 @@ function applyTheme(theme) {
 }
 
 function formatNumber(value) {
-  return new Intl.NumberFormat("zh-TW").format(value || 0);
+  return new Intl.NumberFormat(document.documentElement.lang || "zh-Hant").format(value || 0);
 }
 
 function formatDate(value) {
-  if (!value) return "未知";
+  if (!value) return t("common.unknown", "未知");
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return value;
-  return date.toLocaleDateString("zh-TW");
+  return date.toLocaleDateString(document.documentElement.lang || "zh-Hant");
 }
 
 function escapeHtml(value) {
@@ -224,11 +230,11 @@ function assignRole(tool, index) {
   const topics = tool.normalizedTopics;
 
   if (topics.includes("awesome") || text.includes("awesome") || text.includes("resources") || text.includes("list")) {
-    return "資源整理";
+    return t("collection.role.resources", "資源整理");
   }
 
   if (text.includes("tutorial") || text.includes("guide") || text.includes("beginner")) {
-    return "入門";
+    return t("collection.role.beginner", "入門");
   }
 
   if (
@@ -238,14 +244,14 @@ function assignRole(tool, index) {
     text.includes("demo") ||
     text.includes("starter")
   ) {
-    return "範例";
+    return t("collection.role.example", "範例");
   }
 
   if (index <= 2) {
-    return "核心案例";
+    return t("collection.role.core", "核心案例");
   }
 
-  return "進階參考";
+  return t("collection.role.advanced", "進階參考");
 }
 
 function buildReason(tool, definition, matchScore, role) {
@@ -257,23 +263,28 @@ function buildReason(tool, definition, matchScore, role) {
   const reasonParts = [];
 
   if (sharedTopics.length > 0) {
-    reasonParts.push(`命中 ${sharedTopics.join(" / ")} 這條學習主線`);
+    reasonParts.push(t("collection.reason.topicMatch", "命中 {topics} 這條學習主線", { topics: sharedTopics.join(" / ") }));
   }
 
   if ((tool.language || "").trim()) {
-    reasonParts.push(`主要語言是 ${tool.language}`);
+    reasonParts.push(t("collection.reason.language", "主要語言是 {language}", { language: tool.language }));
   }
 
   if (tool.homepage) {
-    reasonParts.push("可直接延伸看首頁或 demo");
+    reasonParts.push(t("collection.reason.homepage", "可直接延伸看首頁或 demo"));
   } else if ((tool.description || "").length > 80) {
-    reasonParts.push("描述內容較完整，較容易快速理解定位");
+    reasonParts.push(t("collection.reason.description", "描述內容較完整，較容易快速理解定位"));
   } else if ((tool.stars || 0) >= 10000) {
-    reasonParts.push("stars 高，適合作為代表案例");
+    reasonParts.push(t("collection.reason.stars", "stars 高，適合作為代表案例"));
   }
 
   if (reasonParts.length === 0) {
-    reasonParts.push(`這個 repo 在「${definition.title}」的規則匹配度高，適合作為 ${role} 來看`);
+    reasonParts.push(
+      t("collection.reason.default", "這個 repo 在「{title}」的規則匹配度高，適合作為 {role} 來看", {
+        title: t(definition.titleKey, definition.id),
+        role,
+      })
+    );
   }
 
   return `${reasonParts.slice(0, 2).join("，")}。`;
@@ -329,12 +340,12 @@ function buildCollections(tools) {
 
     return {
       id: definition.id,
-      title: definition.title,
-      description: definition.description,
-      audienceLabel: definition.audienceLabel,
+      title: t(definition.titleKey, definition.id),
+      description: t(definition.descriptionKey, definition.id),
+      audienceLabel: t(definition.audienceLabelKey, definition.id),
       tags: definition.tags,
       repoCount: matches.length,
-      featuredRepo: items[0]?.name || "未命名 repo",
+      featuredRepo: items[0]?.name || t("collection.common.untitledRepo", "未命名 repo"),
       totalStars,
       items,
     };
@@ -349,9 +360,14 @@ function renderHeroStats() {
   collectionTotalPaths.textContent = formatNumber(collectionState.collections.length);
   collectionTotalRepos.textContent = formatNumber(collectionState.tools.length);
   collectionHotPath.textContent = hottestCollection?.title || "--";
-  collectionOverviewSummary.textContent = `目前從 ${formatNumber(collectionState.tools.length)} 筆 repo 中整理出 ${formatNumber(
-    collectionState.collections.length
-  )} 條學習路徑，先選方向，再往下展開代表專案。`;
+  collectionOverviewSummary.textContent = t(
+    "collection.overview.summary",
+    "目前從 {repoCount} 筆 repo 中整理出 {pathCount} 條學習路徑，先選方向，再往下展開代表專案。",
+    {
+      repoCount: formatNumber(collectionState.tools.length),
+      pathCount: formatNumber(collectionState.collections.length),
+    }
+  );
 }
 
 function renderCollections() {
@@ -368,8 +384,8 @@ function renderCollections() {
       return `
         <button class="collection-card${isActive ? " is-active" : ""}" data-collection-id="${collection.id}" type="button">
           <div class="collection-card__top">
-            <span class="collection-card__eyebrow">Learning Path</span>
-            <span class="collection-card__count">${formatNumber(collection.repoCount)} repos</span>
+            <span class="collection-card__eyebrow">${escapeHtml(t("collection.card.eyebrow", "Learning Path"))}</span>
+            <span class="collection-card__count">${escapeHtml(t("collection.card.repoCount", "{count} repos", { count: formatNumber(collection.repoCount) }))}</span>
           </div>
           <div>
             <h3>${escapeHtml(collection.title)}</h3>
@@ -377,7 +393,7 @@ function renderCollections() {
           </div>
           <p class="collection-card__audience">${escapeHtml(collection.audienceLabel)}</p>
           <div class="collection-card__featured">
-            <span>代表 repo</span>
+            <span>${escapeHtml(t("collection.card.featured", "代表 repo"))}</span>
             <strong>${escapeHtml(collection.featuredRepo)}</strong>
           </div>
           <div class="collection-card__tags">
@@ -399,10 +415,12 @@ function renderDetail() {
   const collection = collectionState.collections.find((item) => item.id === collectionState.selectedId);
 
   if (!collection) {
-    collectionDetailTitle.textContent = "點一條路徑開始看";
-    collectionDetailDescription.textContent =
-      "先從上方選一張 collection 卡，下面就會展開代表 repo、角色標籤與推薦理由。";
-    collectionAudienceLabel.textContent = "學習導向";
+    collectionDetailTitle.textContent = t("collection.detail.title.empty", "點一條路徑開始看");
+    collectionDetailDescription.textContent = t(
+      "collection.detail.description.empty",
+      "先從上方選一張 collection 卡，下面就會展開代表 repo、角色標籤與推薦理由。"
+    );
+    collectionAudienceLabel.textContent = t("collection.detail.audience.default", "學習導向");
     collectionRepoCountLabel.textContent = "--";
     collectionDetailState.classList.remove("hidden");
     collectionDetailContent.classList.add("hidden");
@@ -413,7 +431,9 @@ function renderDetail() {
   collectionDetailTitle.textContent = collection.title;
   collectionDetailDescription.textContent = collection.description;
   collectionAudienceLabel.textContent = collection.audienceLabel;
-  collectionRepoCountLabel.textContent = `${formatNumber(collection.repoCount)} 個關聯 repo`;
+  collectionRepoCountLabel.textContent = t("collection.detail.repoCount", "{count} 個關聯 repo", {
+    count: formatNumber(collection.repoCount),
+  });
   collectionDetailState.classList.add("hidden");
   collectionDetailContent.classList.remove("hidden");
 
@@ -425,24 +445,24 @@ function renderDetail() {
           <div class="collection-repo-card__top">
             <div>
               <h4>${escapeHtml(item.name)}</h4>
-              <p class="collection-repo-card__owner">${escapeHtml(item.full_name || item.owner || "Unknown")}</p>
+              <p class="collection-repo-card__owner">${escapeHtml(item.full_name || item.owner || t("common.unknown", "Unknown"))}</p>
             </div>
             <span class="collection-role">${escapeHtml(item.collectionRole)}</span>
           </div>
           <p class="collection-repo-card__reason">${escapeHtml(item.reason)}</p>
           <div class="collection-repo-card__meta">
-            <span>${escapeHtml(item.language || "Unknown")}</span>
-            <span>${formatNumber(item.stars)} stars</span>
-            <span>更新於 ${formatDate(item.updated_at)}</span>
+            <span>${escapeHtml(item.language || t("common.unknown", "Unknown"))}</span>
+            <span>${escapeHtml(t("collection.repo.stars", "{count} stars", { count: formatNumber(item.stars) }))}</span>
+            <span>${escapeHtml(t("collection.repo.updated", "更新於 {date}", { date: formatDate(item.updated_at) }))}</span>
           </div>
           <div class="collection-repo-card__topics">
             ${topics.map((topic) => `<span class="collection-chip">${escapeHtml(topic)}</span>`).join("")}
           </div>
           <div class="collection-repo-card__actions">
-            <a class="card__link" href="${escapeHtml(item.html_url)}" target="_blank" rel="noreferrer">Open GitHub Repo</a>
+            <a class="card__link" href="${escapeHtml(item.html_url)}" target="_blank" rel="noreferrer">${escapeHtml(t("collection.repo.open", "Open GitHub Repo"))}</a>
             ${
               item.homepage
-                ? `<a class="card__link" href="${escapeHtml(item.homepage)}" target="_blank" rel="noreferrer">Homepage</a>`
+                ? `<a class="card__link" href="${escapeHtml(item.homepage)}" target="_blank" rel="noreferrer">${escapeHtml(t("collection.repo.homepage", "Homepage"))}</a>`
                 : ""
             }
           </div>
@@ -487,16 +507,16 @@ async function loadCollections() {
     collectionState.collections = [];
     renderHeroStats();
     renderCollections();
-    collectionDetailTitle.textContent = "目前無法整理學習地圖";
-    collectionDetailDescription.textContent = "請確認本機伺服器與資料庫可正常提供 /api/tools。";
-    collectionAudienceLabel.textContent = "資料載入失敗";
+    collectionDetailTitle.textContent = t("collection.error.title", "目前無法整理學習地圖");
+    collectionDetailDescription.textContent = t("collection.error.description", "請確認本機伺服器與資料庫可正常提供 /api/tools。");
+    collectionAudienceLabel.textContent = t("collection.error.badge", "資料載入失敗");
     collectionRepoCountLabel.textContent = "--";
     collectionDetailState.classList.remove("hidden");
     collectionDetailContent.classList.add("hidden");
     collectionDetailState.innerHTML = `
       <div class="collection-empty">
-        <strong>讀取資料失敗</strong>
-        <p>目前無法從 <code>/api/tools</code> 取得資料，因此還不能產生學習路徑。</p>
+        <strong>${escapeHtml(t("collection.error.stateTitle", "讀取資料失敗"))}</strong>
+        <p>${escapeHtml(t("collection.error.stateDescription", "目前無法從 /api/tools 取得資料，因此還不能產生學習路徑。"))}</p>
       </div>
     `;
   }
@@ -510,3 +530,11 @@ themeToggle.addEventListener("click", () => {
 
 applyTheme(localStorage.getItem("gafy-theme") || "light");
 loadCollections();
+
+window.addEventListener("gafy:languagechange", (event) => {
+  collectionTranslations = event.detail.translations || {};
+  collectionState.collections = buildCollections(collectionState.tools);
+  renderHeroStats();
+  renderCollections();
+  renderDetail();
+});

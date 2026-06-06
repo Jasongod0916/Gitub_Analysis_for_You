@@ -126,28 +126,29 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <div class="graph-sidebar__section">
             <div class="results-header graph-section-header">
               <div>
-                <p class="results-header__eyebrow">Explore</p>
-                <h2>探索專案關聯</h2>
-                <p class="results-header__description">
+                <p class="results-header__eyebrow" data-i18n="graph.sidebar.eyebrow">Explore</p>
+                <h2 data-i18n="graph.sidebar.title">探索專案關聯</h2>
+                <p class="results-header__description" data-i18n="graph.sidebar.description">
                   以專案、主題與語言的交集為基礎，查看彼此之間的連結。
                 </p>
               </div>
             </div>
 
             <form class="graph-search" id="graphSearchForm">
-              <label class="search-box__label" for="graphSearchInput">搜尋 repo / owner / topic</label>
+              <label class="search-box__label" for="graphSearchInput" data-i18n="graph.search.label">搜尋 repo / owner / topic</label>
               <div class="graph-search__field">
                 <input
                   id="graphSearchInput"
                   type="search"
                   placeholder="試試搜尋：Python、freeCodeCamp、system design"
+                  data-i18n-placeholder="graph.search.placeholder"
                   list="projectSuggestions"
                   autocomplete="off"
                 />
-                <button class="graph-search__button" type="submit">搜尋</button>
+                <button class="graph-search__button" type="submit" data-i18n="graph.search.button">搜尋</button>
               </div>
               <datalist id="projectSuggestions"></datalist>
-              <p class="graph-search__hint" id="graphSearchHint">
+              <p class="graph-search__hint" id="graphSearchHint" data-i18n="graph.search.hint">
                 可搜尋專案名稱、擁有者、語言與主題。
               </p>
             </form>
@@ -155,7 +156,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
           <div class="graph-sidebar__section">
             <div class="graph-filter-row">
-              <label class="search-box__label" for="graphNodeRange">關聯節點數</label>
+              <label class="search-box__label" for="graphNodeRange" data-i18n="graph.range.label">關聯節點數</label>
               <span class="graph-filter-row__value" id="graphNodeRangeValue">12 個關聯 repo</span>
             </div>
             <input id="graphNodeRange" type="range" min="1" max="41" step="1" value="12" />
@@ -168,8 +169,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <div class="graph-sidebar__section">
             <div class="graph-list__header">
               <div>
-                <p class="results-header__eyebrow">Related Repos</p>
-                <h3>關聯清單</h3>
+                <p class="results-header__eyebrow" data-i18n="graph.list.eyebrow">Related Repos</p>
+                <h3 data-i18n="graph.list.title">關聯清單</h3>
               </div>
               <span class="graph-list__meta" id="graphRelationCount">--</span>
             </div>
@@ -180,14 +181,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <section class="results-panel graph-stage-panel">
             <div class="results-header graph-stage-header">
               <div>
-                <p class="results-header__eyebrow">Visual Graph</p>
-              <h2 id="graphHeadline">正在整理關聯圖...</h2>
-              <p class="results-header__description" id="graphSummary">
+                <p class="results-header__eyebrow" data-i18n="graph.stage.eyebrow">Visual Graph</p>
+              <h2 id="graphHeadline" data-i18n="graph.stage.loadingTitle">正在整理關聯圖...</h2>
+              <p class="results-header__description" id="graphSummary" data-i18n="graph.stage.loadingDescription">
                 依 shared topics、language 與 owner 關係整理 repo 之間的連結。
               </p>
             </div>
               <div class="graph-stage-meta">
-                <a class="graph-back-link" href="./index.html">探索頁</a>
+                <a class="graph-back-link" href="./index.html" data-i18n="graph.stage.backLink">探索頁</a>
                 <div class="graph-stage-stats" aria-label="Current graph stats">
                   <span>Repos <strong id="graphTotalTools">--</strong></span>
                   <span>Nodes <strong id="graphVisibleNodes">--</strong></span>
@@ -197,27 +198,27 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             </div>
             <div class="graph-stage" id="graphStage">
               <div class="graph-legend">
-                <span><i class="graph-legend__dot graph-legend__dot--root"></i>目前 repo</span>
-                <span><i class="graph-legend__dot graph-legend__dot--neighbor"></i>關聯 repo</span>
+                <span><i class="graph-legend__dot graph-legend__dot--root"></i><span data-i18n="graph.legend.root">目前 repo</span></span>
+                <span><i class="graph-legend__dot graph-legend__dot--neighbor"></i><span data-i18n="graph.legend.neighbor">關聯 repo</span></span>
               </div>
               <svg class="graph-canvas" id="graphCanvas" viewBox="0 0 960 720" preserveAspectRatio="xMidYMid meet"></svg>
               <div class="graph-node-menu hidden" id="graphNodeMenu">
-                <button type="button" data-action="expand">展開</button>
+                <button type="button" data-action="expand" data-i18n="graph.menu.expand">展開</button>
               </div>
               <div class="graph-stage-controls" aria-label="Graph view controls">
                 <button class="graph-stage__control" id="graphZoomIn" type="button" aria-label="放大">+</button>
                 <button class="graph-stage__control" id="graphZoomOut" type="button" aria-label="縮小">-</button>
-                <button class="graph-stage__reset" id="graphResetView" type="button">預設</button>
+                <button class="graph-stage__reset" id="graphResetView" type="button" data-i18n="graph.controls.reset">預設</button>
               </div>
-              <div class="graph-stage__loading" id="graphLoading">正在載入 repo 關聯圖...</div>
+              <div class="graph-stage__loading" id="graphLoading" data-i18n="graph.stage.loadingOverlay">正在載入 repo 關聯圖...</div>
             </div>
           </section>
 
           <aside class="results-panel graph-detail-panel">
             <div class="graph-detail" id="graphDetail">
-              <p class="results-header__eyebrow">Selected Repo</p>
-              <h2>選擇一個專案...</h2>
-              <p class="results-header__description">
+              <p class="results-header__eyebrow" data-i18n="graph.detail.eyebrow">Selected Repo</p>
+              <h2 data-i18n="graph.detail.emptyTitle">選擇一個專案...</h2>
+              <p class="results-header__description" data-i18n="graph.detail.emptyDescription">
                 點選左側或圖中的節點後，這裡會顯示專案摘要與關聯資訊。
               </p>
             </div>
@@ -229,6 +230,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     <script src="./clarity.js"></script>
     <script src="./language-switcher.js"></script>
-    <script src="./network-graph.js"></script>
+    <script src="./network-graph.js?v=20260607"></script>
   </body>
 </html>

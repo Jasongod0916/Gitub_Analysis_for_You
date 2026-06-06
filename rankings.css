@@ -265,6 +265,17 @@
   }
 }
 
+@media (max-width: 1180px) {
+  .rankings-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .chart-grid {
+    grid-template-columns: minmax(220px, 0.7fr) minmax(0, 1.3fr);
+    align-items: center;
+  }
+}
+
 @media (max-width: 680px) {
   .chart-grid {
     grid-template-columns: 1fr;
@@ -277,6 +288,7 @@
   .leaderboard-row {
     grid-template-columns: 1fr;
     gap: 12px;
+    padding: 16px;
   }
 
   .leaderboard-row__rank {
@@ -285,10 +297,13 @@
   }
 
   .leaderboard-row__metrics {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     justify-content: start;
   }
 
   .leaderboard-metric {
+    min-width: 0;
     text-align: left;
   }
 
@@ -299,6 +314,20 @@
 
   .ranking-link {
     width: 100%;
+  }
+}
+
+@media (max-width: 460px) {
+  .leaderboard-row__metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .language-item {
+    grid-template-columns: 16px minmax(0, 1fr);
+  }
+
+  .language-count {
+    grid-column: 2;
   }
 }
 

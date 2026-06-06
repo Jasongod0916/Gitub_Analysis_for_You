@@ -103,12 +103,18 @@ const graphZoomOut = document.querySelector("#graphZoomOut");
 const graphResetView = document.querySelector("#graphResetView");
 const themeToggle = document.querySelector("#themeToggle");
 const themeToggleLabel = document.querySelector("#themeToggleLabel");
+let graphTranslations = window.gafyTranslations || {};
 const GRAPH_DEFAULT_SCALE = 2.52;
 const GRAPH_ZOOM_IN_FACTOR = 1.08;
 const GRAPH_ZOOM_OUT_FACTOR = 1 / GRAPH_ZOOM_IN_FACTOR;
 
 function trackEvent(eventName) {
   window.trackClarityEvent?.(eventName);
+}
+
+function t(key, fallback, vars = {}) {
+  const template = graphTranslations[key] || fallback;
+  return Object.entries(vars).reduce((result, [name, value]) => result.replaceAll(`{${name}}`, value), template);
 }
 
 function setTag(key, value) {
@@ -119,7 +125,7 @@ function applyTheme(theme) {
   const nextTheme = theme === "dark" ? "dark" : "light";
   document.documentElement.dataset.theme = nextTheme;
   themeToggle.setAttribute("aria-pressed", String(nextTheme === "dark"));
-  themeToggleLabel.textContent = nextTheme === "dark" ? "淺色" : "深色";
+  themeToggleLabel.textContent = nextTheme === "dark" ? t("theme.light", "Light") : t("theme.dark", "Dark");
   localStorage.setItem("gafy-theme", nextTheme);
   setTag("theme", nextTheme);
 }
@@ -134,14 +140,14 @@ function escapeHtml(value) {
 }
 
 function formatNumber(value) {
-  return new Intl.NumberFormat("zh-TW").format(value || 0);
+  return new Intl.NumberFormat(document.documentElement.lang || "zh-Hant").format(value || 0);
 }
 
 function formatDate(value) {
-  if (!value) return "未知";
+  if (!value) return t("common.unknown", "未知");
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return value;
-  return date.toLocaleDateString("zh-TW");
+  return date.toLocaleDateString(document.documentElement.lang || "zh-Hant");
 }
 
 function normalizeText(value) {
@@ -283,7 +289,7 @@ function buildReasons(first, second, sharedTopics, sharedTokens) {
       .sort((a, b) => getTopicWeight(b) - getTopicWeight(a))
       .slice(0, 3)
       .join("、");
-    reasons.push(`共享主題：${topicNames}`);
+    reasons.push(t("graph.reason.sharedTopics", "共享主題：{topics}", { topics: topicNames }));
   }
 
   if (
@@ -291,15 +297,15 @@ function buildReasons(first, second, sharedTopics, sharedTokens) {
     first.normalizedLanguage === second.normalizedLanguage &&
     first.normalizedLanguage !== "unknown"
   ) {
-    reasons.push(`同語言：${titleCaseLanguage(first.language)}`);
+    reasons.push(t("graph.reason.sameLanguage", "同語言：{language}", { language: titleCaseLanguage(first.language) }));
   }
 
   if (first.normalizedOwner && first.normalizedOwner === second.normalizedOwner) {
-    reasons.push(`同 owner：${first.owner}`);
+    reasons.push(t("graph.reason.sameOwner", "同 owner：{owner}", { owner: first.owner }));
   }
 
   if (sharedTokens.length) {
-    reasons.push(`描述交集：${sharedTokens.slice(0, 3).join("、")}`);
+    reasons.push(t("graph.reason.sharedDescription", "描述交集：{tokens}", { tokens: sharedTokens.slice(0, 3).join("、") }));
   }
 
   return reasons;
@@ -382,7 +388,7 @@ function getFallbackNeighbors(rootTool, scoredTools, targetCount) {
     fallback.push({
       tool,
       score: relation.score || 0.8,
-      reasons: relation.reasons.length ? relation.reasons : ["熱門鄰近節點"],
+      reasons: relation.reasons.length ? relation.reasons : [t("graph.reason.popularNeighbor", "熱門鄰近節點")],
       sharedTopics: relation.sharedTopics,
     });
   }
@@ -639,25 +645,25 @@ function renderFocusTopics() {
 
   graphFocusTopics.innerHTML = topics.length
     ? topics.map((topic) => `<span class="graph-chip">${escapeHtml(topic)}</span>`).join("")
-    : `<span class="graph-chip">目前沒有可用 topic</span>`;
+    : `<span class="graph-chip">${escapeHtml(t("graph.topics.none", "目前沒有可用 topic"))}</span>`;
 }
 
 function renderRelationList() {
   const neighbors = graphState.visibleNodes.filter((node) => !node.isRoot);
-  graphRelationCount.textContent = `${neighbors.length} 個關聯 repo`;
+  graphRelationCount.textContent = t("graph.list.count", "{count} 個關聯 repo", { count: formatNumber(neighbors.length) });
 
   graphRelationList.innerHTML = neighbors
     .sort((a, b) => b.score - a.score || (b.tool.stars || 0) - (a.tool.stars || 0))
     .map((node, index) => {
-      const reason = node.reasons[0] || "描述或主題相近";
+      const reason = node.reasons[0] || t("graph.reason.similar", "描述或主題相近");
       return `
         <button class="graph-list__item" type="button" data-node-id="${node.tool.id}">
           <div>
             <h4>#${index + 1} ${escapeHtml(node.tool.name)}</h4>
             <div class="graph-list__meta-row">
-              <span>${escapeHtml(node.tool.owner || "Unknown")}</span>
+              <span>${escapeHtml(node.tool.owner || t("common.unknown", "Unknown"))}</span>
               <span>${escapeHtml(titleCaseLanguage(node.tool.language))}</span>
-              <span>${formatNumber(node.tool.stars)} stars</span>
+              <span>${escapeHtml(t("graph.repo.stars", "{count} stars", { count: formatNumber(node.tool.stars) }))}</span>
             </div>
           </div>
           <div class="graph-list__reason">${escapeHtml(reason)}</div>
@@ -730,45 +736,45 @@ function renderDetail() {
   const languageLegend = getVisibleLanguageLegend();
   const description =
     tool.description ||
-    "目前資料庫沒有提供這個 repo 的描述內容，可以先透過 topics、language 與 owner 觀察它的鄰近位置。";
+    t("graph.detail.noDescription", "目前資料庫沒有提供這個 repo 的描述內容，可以先透過 topics、language 與 owner 觀察它的鄰近位置。");
 
   graphDetail.innerHTML = `
-    <p class="results-header__eyebrow">Selected Repo</p>
+    <p class="results-header__eyebrow">${escapeHtml(t("graph.detail.eyebrow", "Selected Repo"))}</p>
     <h2>${escapeHtml(tool.name)}</h2>
-    <p class="graph-detail__owner">${escapeHtml(tool.full_name)}${tool.homepage ? " · 有首頁" : ""}</p>
+    <p class="graph-detail__owner">${escapeHtml(tool.full_name)}${tool.homepage ? ` · ${escapeHtml(t("graph.detail.hasHomepage", "有首頁"))}` : ""}</p>
     <p class="graph-detail__description">${escapeHtml(description)}</p>
 
     <div class="graph-detail__metrics">
       <div class="graph-detail__metric">
         <strong>${formatNumber(tool.stars)}</strong>
-        <span>Stars</span>
+        <span>${escapeHtml(t("graph.detail.metric.stars", "Stars"))}</span>
       </div>
       <div class="graph-detail__metric">
         <strong>${formatNumber(tool.forks)}</strong>
-        <span>Forks</span>
+        <span>${escapeHtml(t("graph.detail.metric.forks", "Forks"))}</span>
       </div>
       <div class="graph-detail__metric graph-detail__metric--date">
         <strong>${formatDate(tool.updated_at)}</strong>
-        <span>Updated</span>
+        <span>${escapeHtml(t("graph.detail.metric.updated", "Updated"))}</span>
       </div>
     </div>
 
     <div class="graph-detail__actions">
-      <a class="card__link graph-repo-link" href="${escapeHtml(tool.html_url)}" target="_blank" rel="noreferrer">Open GitHub Repo</a>
+      <a class="card__link graph-repo-link" href="${escapeHtml(tool.html_url)}" target="_blank" rel="noreferrer">${escapeHtml(t("graph.detail.openRepo", "Open GitHub Repo"))}</a>
       ${
         tool.homepage
-          ? `<a class="card__link" href="${escapeHtml(tool.homepage)}" target="_blank" rel="noreferrer">Homepage</a>`
+          ? `<a class="card__link" href="${escapeHtml(tool.homepage)}" target="_blank" rel="noreferrer">${escapeHtml(t("graph.detail.homepage", "Homepage"))}</a>`
           : ""
       }
     </div>
 
     <div class="graph-detail__list">
       <div class="graph-detail__card">
-        <h3>顏色怎麼判斷</h3>
-        <p>預設用同一個青綠色系，會把目前畫面中的 repo 依 stars 分成五段；越熱門越深、外框也越重。開啟語言分色後，其他節點會改依 language 分組顯示。</p>
+        <h3>${escapeHtml(t("graph.detail.color.title", "顏色怎麼判斷"))}</h3>
+        <p>${escapeHtml(t("graph.detail.color.description", "預設用同一個青綠色系，會把目前畫面中的 repo 依 stars 分成五段；越熱門越深、外框也越重。開啟語言分色後，其他節點會改依 language 分組顯示。"))}</p>
         <label class="graph-toggle">
           <input id="graphColorModeToggle" type="checkbox" ${graphState.colorByLanguage ? "checked" : ""} />
-          <span>依程式語言分色</span>
+          <span>${escapeHtml(t("graph.detail.color.toggle", "依程式語言分色"))}</span>
         </label>
         <div class="graph-language-legend">
           ${
@@ -787,33 +793,33 @@ function renderDetail() {
               : `
                 <span class="graph-language-legend__item">
                   <i style="background:${STAR_COLOR_STEPS[0]}"></i>
-                  低 stars
+                  ${escapeHtml(t("graph.detail.color.lowStars", "低 stars"))}
                 </span>
                 <span class="graph-language-legend__item">
                   <i style="background:${STAR_COLOR_STEPS[2]}"></i>
-                  中 stars
+                  ${escapeHtml(t("graph.detail.color.midStars", "中 stars"))}
                 </span>
                 <span class="graph-language-legend__item">
                   <i style="background:${STAR_COLOR_STEPS[4]}"></i>
-                  高 stars
+                  ${escapeHtml(t("graph.detail.color.highStars", "高 stars"))}
                 </span>
               `
           }
         </div>
       </div>
       <div class="graph-detail__card">
-        <h3>距離怎麼判斷</h3>
-        <p>節點越近，代表 repo 越相似。系統會先看 shared topics，再補上同 language、同 owner 和描述關鍵字交集；共同訊號越多，邊的權重越高，排版時也會被拉得更近。</p>
+        <h3>${escapeHtml(t("graph.detail.distance.title", "距離怎麼判斷"))}</h3>
+        <p>${escapeHtml(t("graph.detail.distance.description", "節點越近，代表 repo 越相似。系統會先看 shared topics，再補上同 language、同 owner 和描述關鍵字交集；共同訊號越多，邊的權重越高，排版時也會被拉得更近。"))}</p>
       </div>
       <div class="graph-detail__card">
-        <h3>主要關聯線索</h3>
+        <h3>${escapeHtml(t("graph.detail.clues.title", "主要關聯線索"))}</h3>
         <div class="graph-detail__topics">
           ${
             highlightTopics.length
               ? highlightTopics
                   .map((topic) => `<span class="graph-detail__topic">${escapeHtml(topic)}</span>`)
                   .join("")
-              : `<span class="graph-detail__topic">尚未找到明顯主題</span>`
+              : `<span class="graph-detail__topic">${escapeHtml(t("graph.detail.clues.none", "尚未找到明顯主題"))}</span>`
           }
         </div>
       </div>
@@ -830,12 +836,14 @@ function renderDetail() {
 function renderHeadline() {
   const neighbors = graphState.visibleNodes.filter((node) => !node.isRoot);
   const topNeighbor = neighbors[0];
-  graphHeadline.textContent = `${graphState.rootTool.name} 的關聯圖`;
+  graphHeadline.textContent = t("graph.headline.title", "{name} 的關聯圖", { name: graphState.rootTool.name });
   graphSummary.innerHTML = topNeighbor
-    ? `中心：${escapeHtml(graphState.rootTool.name)}<br>最接近：${escapeHtml(
-        topNeighbor.tool.name
-      )}<br><strong>滾輪縮放，左鍵查看資訊，右鍵可重新展開。</strong>`
-    : `中心：${escapeHtml(graphState.rootTool.name)}<br>目前沒有足夠的相似 repo 可展開<br><strong>滾輪縮放，左鍵查看資訊，右鍵可重新展開。</strong>`;
+    ? `${escapeHtml(t("graph.headline.center", "中心：{name}", { name: graphState.rootTool.name }))}<br>${escapeHtml(
+        t("graph.headline.closest", "最接近：{name}", { name: topNeighbor.tool.name })
+      )}<br><strong>${escapeHtml(t("graph.headline.instructions", "滾輪縮放，左鍵查看資訊，右鍵可重新展開。"))}</strong>`
+    : `${escapeHtml(t("graph.headline.center", "中心：{name}", { name: graphState.rootTool.name }))}<br>${escapeHtml(
+        t("graph.headline.noNeighbors", "目前沒有足夠的相似 repo 可展開")
+      )}<br><strong>${escapeHtml(t("graph.headline.instructions", "滾輪縮放，左鍵查看資訊，右鍵可重新展開。"))}</strong>`;
 }
 
 function renderCanvas() {
@@ -876,8 +884,8 @@ function renderCanvas() {
       const tooltipLines = [
         node.tool.name,
         node.tool.full_name,
-        `${titleCaseLanguage(node.tool.language)} · ${formatNumber(node.tool.stars)} stars`,
-        node.reasons?.[0] || "左鍵查看資訊，右鍵展開關聯圖",
+        `${titleCaseLanguage(node.tool.language)} · ${t("graph.repo.stars", "{count} stars", { count: formatNumber(node.tool.stars) })}`,
+        node.reasons?.[0] || t("graph.tooltip.default", "左鍵查看資訊，右鍵展開關聯圖"),
       ];
       return `
         <g class="graph-node${node.isRoot ? " graph-node--root" : ""}${
@@ -1092,13 +1100,13 @@ async function loadGraph() {
   } catch (error) {
     graphLoading.hidden = false;
     graphLoading.textContent =
-      "關聯圖載入失敗。請先確認本機 server 已經啟動，而且 data/tools.db 有有效資料。";
-    graphHeadline.textContent = "關聯圖暫時無法載入";
-    graphSummary.textContent = "目前無法從 /api/tools 取得 repo 資料。";
+      t("graph.error.loading", "關聯圖載入失敗。請先確認本機 server 已經啟動，而且 data/tools.db 有有效資料。");
+    graphHeadline.textContent = t("graph.error.headline", "關聯圖暫時無法載入");
+    graphSummary.textContent = t("graph.error.summary", "目前無法從 /api/tools 取得 repo 資料。");
     graphDetail.innerHTML = `
-      <p class="results-header__eyebrow">Selected Repo</p>
-      <h2>讀取失敗</h2>
-      <p class="results-header__description">請確認 server 與資料庫都正常，再重新整理頁面。</p>
+      <p class="results-header__eyebrow">${escapeHtml(t("graph.detail.eyebrow", "Selected Repo"))}</p>
+      <h2>${escapeHtml(t("graph.error.detailTitle", "讀取失敗"))}</h2>
+      <p class="results-header__description">${escapeHtml(t("graph.error.detailDescription", "請確認 server 與資料庫都正常，再重新整理頁面。"))}</p>
     `;
   }
 }
@@ -1107,7 +1115,11 @@ graphSearchForm.addEventListener("submit", (event) => {
   event.preventDefault();
   const nextTool = findBestTool(graphSearchInput.value);
   if (!nextTool) {
-    graphSearchHint.textContent = `找不到「${graphSearchInput.value.trim()}」對應的 repo，可試試 owner、language 或 topic。`;
+    graphSearchHint.textContent = t(
+      "graph.search.notFound",
+      "找不到「{query}」對應的 repo，可試試 owner、language 或 topic。",
+      { query: graphSearchInput.value.trim() }
+    );
     return;
   }
 
@@ -1120,7 +1132,7 @@ graphNodeRange.addEventListener("input", (event) => {
   graphState.visibleRange = Number(event.target.value);
   setTag("graph_visible_range", String(graphState.visibleRange));
   trackEvent("graph_range_changed");
-  graphNodeRangeValue.textContent = `${graphState.visibleRange} 個關聯 repo`;
+  graphNodeRangeValue.textContent = t("graph.list.count", "{count} 個關聯 repo", { count: formatNumber(graphState.visibleRange) });
 
   if (graphState.rootTool) {
     focusTool(graphState.rootTool, { preserveQuery: true });
@@ -1184,7 +1196,15 @@ window.addEventListener("resize", () => {
 });
 
 graphNodeRange.value = String(graphState.visibleRange);
-graphNodeRangeValue.textContent = `${graphState.visibleRange} 個關聯 repo`;
+graphNodeRangeValue.textContent = t("graph.list.count", "{count} 個關聯 repo", { count: formatNumber(graphState.visibleRange) });
 applyTheme(localStorage.getItem("gafy-theme") || "light");
 setTag("page_type", "network-graph");
 loadGraph();
+
+window.addEventListener("gafy:languagechange", (event) => {
+  graphTranslations = event.detail.translations || {};
+  graphNodeRangeValue.textContent = t("graph.list.count", "{count} 個關聯 repo", { count: formatNumber(graphState.visibleRange) });
+  if (graphState.rootTool) {
+    renderEverything();
+  }
+});

@@ -906,6 +906,30 @@ body {
   border-color: rgba(255, 138, 31, 0.12);
 }
 
+@media (max-width: 1480px) {
+  .graph-topbar {
+    grid-template-columns: 1fr;
+    align-items: start;
+    gap: 14px;
+  }
+
+  .graph-brand {
+    width: 100%;
+  }
+
+  .graph-topnav {
+    justify-self: start;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 8px;
+  }
+
+  .header-actions--graph {
+    justify-self: start;
+    flex-wrap: wrap;
+  }
+}
+
 @media (max-width: 1240px) {
   .graph-layout {
     grid-template-columns: minmax(240px, 280px) minmax(0, 1fr) minmax(260px, 300px);

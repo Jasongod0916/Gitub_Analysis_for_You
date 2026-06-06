@@ -145,21 +145,21 @@
               </button>
             </div>
           </div>
-          <h1>從 666 個 repo 裡，直接進入整理好的學習路徑</h1>
-          <p class="hero__description">
+          <h1 data-i18n="collection.hero.title">從 666 個 repo 裡，直接進入整理好的學習路徑</h1>
+          <p class="hero__description" data-i18n="collection.hero.description">
             這頁不是另一個搜尋結果，而是先幫你把資料整理成可理解的主題路徑。先選方向，再看每條路徑最值得先讀、接著看與延伸看的代表專案。
           </p>
           <div class="hero__stats" id="collectionHeroStats">
             <article class="hero-stat">
-              <span class="hero-stat__label">學習路徑</span>
+              <span class="hero-stat__label" data-i18n="collection.stats.paths">學習路徑</span>
               <strong id="collectionTotalPaths">--</strong>
             </article>
             <article class="hero-stat">
-              <span class="hero-stat__label">收錄 repo</span>
+              <span class="hero-stat__label" data-i18n="collection.stats.repos">收錄 repo</span>
               <strong id="collectionTotalRepos">--</strong>
             </article>
             <article class="hero-stat">
-              <span class="hero-stat__label">熱門路徑</span>
+              <span class="hero-stat__label" data-i18n="collection.stats.hotPath">熱門路徑</span>
               <strong id="collectionHotPath">--</strong>
             </article>
           </div>
@@ -170,39 +170,39 @@
         <section class="results-panel collection-overview-panel">
           <div class="results-header collection-section-header">
             <div>
-              <p class="results-header__eyebrow">Collection Map</p>
-              <h2>先選一條路徑，再開始深入</h2>
-              <p class="results-header__description" id="collectionOverviewSummary">
+              <p class="results-header__eyebrow" data-i18n="collection.overview.eyebrow">Collection Map</p>
+              <h2 data-i18n="collection.overview.title">先選一條路徑，再開始深入</h2>
+              <p class="results-header__description" id="collectionOverviewSummary" data-i18n="collection.overview.description">
                 依學習方向自動整理目前資料庫中的代表 repo，讓你不必從 666 筆資料裡自己猜該從哪裡開始。
               </p>
             </div>
           </div>
           <div class="collection-grid" id="collectionGrid"></div>
           <div class="empty-state hidden" id="collectionOverviewEmpty">
-            <h3>目前還無法產生學習路徑</h3>
-            <p>請確認 `/api/tools` 能正常回傳資料，或稍後重新整理頁面。</p>
+            <h3 data-i18n="collection.overview.empty.title">目前還無法產生學習路徑</h3>
+            <p data-i18n="collection.overview.empty.description">請確認 `/api/tools` 能正常回傳資料，或稍後重新整理頁面。</p>
           </div>
         </section>
 
         <section class="results-panel collection-detail-panel" id="collectionDetailPanel">
           <div class="results-header collection-detail-header">
             <div>
-              <p class="results-header__eyebrow">Path Detail</p>
-              <h2 id="collectionDetailTitle">點一條路徑開始看</h2>
-              <p class="results-header__description" id="collectionDetailDescription">
+              <p class="results-header__eyebrow" data-i18n="collection.detail.eyebrow">Path Detail</p>
+              <h2 id="collectionDetailTitle" data-i18n="collection.detail.title.empty">點一條路徑開始看</h2>
+              <p class="results-header__description" id="collectionDetailDescription" data-i18n="collection.detail.description.empty">
                 先從上方選一張 collection 卡，下面就會展開這條路徑的觀看順序、代表 repo 與推薦理由。
               </p>
             </div>
             <div class="collection-detail__meta">
-              <span id="collectionAudienceLabel">學習導向</span>
+              <span id="collectionAudienceLabel" data-i18n="collection.detail.audience.default">學習導向</span>
               <span id="collectionRepoCountLabel">--</span>
             </div>
           </div>
 
           <div class="collection-detail__state" id="collectionDetailState">
             <div class="collection-empty">
-              <strong>還沒選路徑</strong>
-              <p>從上方挑一張學習地圖卡片，我會在這裡展開代表 repo、角色標籤與推薦理由。</p>
+              <strong data-i18n="collection.detail.empty.title">還沒選路徑</strong>
+              <p data-i18n="collection.detail.empty.description">從上方挑一張學習地圖卡片，我會在這裡展開代表 repo、角色標籤與推薦理由。</p>
             </div>
           </div>
 
@@ -210,8 +210,8 @@
             <section class="collection-repos-section">
               <div class="results-header collection-subheader">
                 <div>
-                  <p class="results-header__eyebrow">Representative Repos</p>
-                  <h3>代表專案清單</h3>
+                  <p class="results-header__eyebrow" data-i18n="collection.repos.eyebrow">Representative Repos</p>
+                  <h3 data-i18n="collection.repos.title">代表專案清單</h3>
                 </div>
               </div>
               <div class="collection-repo-grid" id="collectionRepoGrid"></div>
@@ -223,6 +223,6 @@
 
     <script src="./clarity.js"></script>
     <script src="./language-switcher.js"></script>
-    <script src="./collection-map.js"></script>
+    <script src="./collection-map.js?v=20260607"></script>
   </body>
 </html>
